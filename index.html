@@ -165,18 +165,16 @@
             padding-bottom: 0.5rem;
         }
 
+        /* Profil Resmi Tasarımı */
         .profile-img {
-            width: 80px;
-            height: 80px;
+            width: 85px;
+            height: 85px;
             border-radius: 50%;
-            background-color: var(--accent-color);
+            object-fit: cover; /* Resmin ezilmeden sığmasını sağlar */
+            display: block;
             margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.5rem;
+            border: 3px solid var(--border-color);
+            background-color: var(--bg-color);
         }
 
         .social-links a {
@@ -237,7 +235,7 @@
         <sidebar>
             <div class="sidebar-widget">
                 <h3 class="widget-title">Hakkımda</h3>
-                <div class="profile-img">G</div>
+                <img src="pp.jpg" alt="Profil Resmi" class="profile-img">
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
                     Merhaba! Ben bir yazılım ve teknoloji meraklısıyım. Burada öğrendiğim yeni teknolojileri ve deneyimlerimi paylaşıyorum.
                 </p>
