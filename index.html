@@ -73,72 +73,112 @@
             gap: 2rem;
         }
 
-        /* Form Stilleri - KÜÇÜK ve ALTA TAŞINDI */
-        .write-form {
+        /* Yönetici Butonu - SADECE GİRİŞ YAPINCA GÖRÜNÜR */
+        .admin-controls {
+            display: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .admin-controls.visible {
+            display: block;
+        }
+        
+        .write-redirect {
+            background: linear-gradient(135deg, var(--accent-color), #ec4899);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .write-redirect:hover {
+            transform: translateY(-2px);
+        }
+        
+        .admin-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .admin-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Giriş Paneli */
+        .login-panel {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 280px;
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 1rem;
-            margin-top: 2rem;
-            box-shadow: var(--card-shadow);
-            max-width: 100%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 1001;
         }
-
-        .write-form h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 0.75rem;
-        }
-
-        .form-group label {
+        
+        .login-panel.visible {
             display: block;
-            margin-bottom: 0.25rem;
-            font-weight: 600;
-            font-size: 0.85rem;
+            animation: slideIn 0.3s ease;
         }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-panel input {
             width: 100%;
             padding: 0.5rem;
+            margin-bottom: 0.5rem;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: inherit;
-            font-size: 0.85rem;
         }
-
-        .form-group textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        .submit-btn {
+        
+        .login-panel button {
             background-color: var(--accent-color);
             color: white;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.85rem;
+            width: 100%;
         }
-
-        .submit-btn:hover {
-            background-color: var(--accent-hover);
-        }
-
-        .form-note {
-            font-size: 0.7rem;
+        
+        .login-panel .logout-btn {
+            background-color: #ef4444;
             margin-top: 0.5rem;
-            color: var(--text-muted);
         }
 
         /* Kategori Filtreleme */
@@ -246,6 +286,21 @@
             object-fit: cover;
         }
 
+        .how-to {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .how-to summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -275,11 +330,11 @@
             font-size: 2rem;
             cursor: pointer;
         }
-
+        
         .toast {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 20px;
             background-color: var(--accent-color);
             color: white;
             padding: 0.75rem 1.25rem;
@@ -287,12 +342,6 @@
             display: none;
             z-index: 1100;
             font-size: 0.85rem;
-        }
-
-        /* Yazılar ve form sıralaması için düzen */
-        .main-content {
-            display: flex;
-            flex-direction: column;
         }
 
         @media (max-width: 768px) {
@@ -311,48 +360,30 @@
 </header>
 
 <div class="container">
-    <div class="main-content">
-        <!-- YAZILAR ÜSTTE -->
-        <div>
-            <!-- Kategori Filtreleri -->
-            <div class="category-filters">
-                <button class="filter-btn active" data-category="all">Tümü</button>
-                <button class="filter-btn" data-category="edebiyat">✒️ Edebiyat</button>
-                <button class="filter-btn" data-category="siir">📜 Şiir</button>
-                <button class="filter-btn" data-category="gunluk">📓 Günlük</button>
-            </div>
-
-            <!-- Yazıların Listeleneceği Alan -->
-            <div class="blog-posts" id="posts">
-                <div class="loading">📖 Yazılar yükleniyor...</div>
-            </div>
+    <main>
+        <!-- Admin Kontrolleri - SADECE GİRİŞ YAPINCA GÖRÜNÜR -->
+        <div class="admin-controls" id="adminControls">
+            <a href="https://github.com/esakbas/esakbas.github.io/issues/new" target="_blank" class="write-redirect">
+                ✍️ Yeni Yazı Yaz
+            </a>
+            <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem;">
+                💡 İpucu: Etiket (Labels) kısmından kategori seçmeyi unutmayın!
+            </p>
         </div>
 
-        <!-- YAZI EKLEME FORMU ALTA KÜÇÜK BOYUTTA -->
-        <div class="write-form">
-            <h3>✍️ Yeni Yazı Ekle</h3>
-            <div class="form-group">
-                <label>Başlık</label>
-                <input type="text" id="postTitle" placeholder="Yazınızın başlığı...">
-            </div>
-            <div class="form-group">
-                <label>Kategori</label>
-                <select id="postCategory">
-                    <option value="edebiyat">✒️ Edebiyat</option>
-                    <option value="siir">📜 Şiir</option>
-                    <option value="gunluk">📓 Günlük</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>İçerik (Markdown destekli)</label>
-                <textarea id="postContent" placeholder="Yazınızı buraya yazın..."></textarea>
-            </div>
-            <button class="submit-btn" onclick="createPost()">📤 Yayınla</button>
-            <div class="form-note">
-                Not: GitHub Issue olarak kaydedilir. Token gerekir.
-            </div>
+        <!-- Kategori Filtreleri -->
+        <div class="category-filters">
+            <button class="filter-btn active" data-category="all">Tümü</button>
+            <button class="filter-btn" data-category="edebiyat">✒️ Edebiyat</button>
+            <button class="filter-btn" data-category="siir">📜 Şiir</button>
+            <button class="filter-btn" data-category="gunluk">📓 Günlük</button>
         </div>
-    </div>
+
+        <!-- Yazıların Listeleneceği Alan -->
+        <div class="blog-posts" id="posts">
+            <div class="loading">📖 Yazılar yükleniyor...</div>
+        </div>
+    </main>
 
     <aside>
         <div class="sidebar-widget">
@@ -374,6 +405,20 @@
     </aside>
 </div>
 
+<!-- Gizli Yönetici Butonu (Herkes görür ama tıklayınca şifre sorar) -->
+<div class="admin-toggle" id="adminToggleBtn">
+    🔒
+</div>
+
+<!-- Giriş Paneli -->
+<div class="login-panel" id="loginPanel">
+    <div id="loginContent">
+        <h4 style="margin-bottom: 0.5rem;">🔐 Yönetici Girişi</h4>
+        <input type="password" id="adminPassword" placeholder="Şifre" onkeypress="if(event.key==='Enter') login()">
+        <button onclick="login()">Giriş Yap</button>
+    </div>
+</div>
+
 <!-- Modal -->
 <div id="postModal" class="modal">
     <div class="modal-content">
@@ -385,72 +430,80 @@
 <div id="toast" class="toast"></div>
 
 <script>
-    const GITHUB_TOKEN = '';
+    // ============= KONFİGÜRASYON =============
+    const ADMIN_PASSWORD = "hindiba2024";  // 🔑 Kendi şifrenizi buraya yazın!
     const REPO_OWNER = 'esakbas';
     const REPO_NAME = 'esakbas.github.io';
     
     let allPosts = [];
     let currentFilter = 'all';
-
-    function getToken() {
-        let token = localStorage.getItem('github_token');
-        if (!token) {
-            token = prompt('GitHub yazı ekleme için kişisel erişim tokenınızı girin:\n\nToken oluşturmak için: GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)\nGerekli izin: "repo"');
-            if (token) {
-                localStorage.setItem('github_token', token);
-            }
+    let isAdminLoggedIn = false;
+    
+    // ============= YÖNETİCİ GİRİŞ SİSTEMİ =============
+    const adminToggleBtn = document.getElementById('adminToggleBtn');
+    const loginPanel = document.getElementById('loginPanel');
+    const adminControls = document.getElementById('adminControls');
+    
+    adminToggleBtn.addEventListener('click', () => {
+        if (isAdminLoggedIn) {
+            // Çıkış yap
+            logout();
+        } else {
+            // Giriş panelini göster
+            loginPanel.classList.toggle('visible');
         }
-        return token;
+    });
+    
+    window.login = function() {
+        const password = document.getElementById('adminPassword').value;
+        if (password === ADMIN_PASSWORD) {
+            isAdminLoggedIn = true;
+            sessionStorage.setItem('hindiba_admin', 'true');
+            adminControls.classList.add('visible');
+            loginPanel.classList.remove('visible');
+            showToast('✅ Hoş geldiniz! Yazı ekleyebilirsiniz.', 'success');
+            document.getElementById('adminPassword').value = '';
+        } else {
+            showToast('❌ Hatalı şifre!', 'error');
+            document.getElementById('adminPassword').value = '';
+        }
+    };
+    
+    window.logout = function() {
+        isAdminLoggedIn = false;
+        sessionStorage.removeItem('hindiba_admin');
+        adminControls.classList.remove('visible');
+        loginPanel.classList.remove('visible');
+        showToast('🔒 Çıkış yapıldı', 'success');
+    };
+    
+    function showToast(message, type) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.style.backgroundColor = type === 'error' ? '#ef4444' : '#10b981';
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
     }
-
-    async function createPost() {
-        const title = document.getElementById('postTitle').value;
-        const category = document.getElementById('postCategory').value;
-        const content = document.getElementById('postContent').value;
-        
-        if (!title || !content) {
-            showToast('Lütfen başlık ve içerik girin!', 'error');
-            return;
-        }
-        
-        const token = getToken();
-        if (!token) {
-            showToast('GitHub token gerekli!', 'error');
-            return;
-        }
-        
-        const labels = [category];
-        const issueBody = `## ${title}\n\n**Kategori:** ${category}\n\n---\n\n${content}\n\n---\n*Bu yazı Hindiba blogundan oluşturulmuştur.*`;
-        
-        try {
-            const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Accept': 'application/vnd.github.v3+json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    title: title,
-                    body: issueBody,
-                    labels: labels
-                })
-            });
-            
-            if (response.ok) {
-                showToast('Yazınız başarıyla yayınlandı! 🎉', 'success');
-                document.getElementById('postTitle').value = '';
-                document.getElementById('postContent').value = '';
-                loadPosts();
-            } else {
-                const error = await response.json();
-                showToast('Hata: ' + error.message, 'error');
-            }
-        } catch (err) {
-            showToast('Bağlantı hatası: ' + err.message, 'error');
+    
+    // Sayfa yüklenince session kontrolü
+    function checkSession() {
+        const savedSession = sessionStorage.getItem('hindiba_admin');
+        if (savedSession === 'true') {
+            isAdminLoggedIn = true;
+            adminControls.classList.add('visible');
         }
     }
     
+    // Tıklama dışında paneli kapatma
+    document.addEventListener('click', function(event) {
+        if (!loginPanel.contains(event.target) && !adminToggleBtn.contains(event.target)) {
+            loginPanel.classList.remove('visible');
+        }
+    });
+    
+    // ============= YAZILARI LİSTELE (HERKESE AÇIK) =============
     async function loadPosts() {
         const container = document.getElementById('posts');
         container.innerHTML = '<div class="loading">📖 Yazılar yükleniyor...</div>';
@@ -459,7 +512,9 @@
             const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues?state=all&per_page=100`);
             const issues = await response.json();
             
+            // Sadece etiketi olan issue'ları göster (blog yazıları)
             allPosts = issues.filter(issue => issue.labels && issue.labels.length > 0);
+            
             updateCategoryCounts();
             displayPosts();
             
@@ -523,8 +578,6 @@
         
         let content = post.body || '';
         content = content.replace(/^## .*\n/, '');
-        content = content.replace(/\*\*Kategori:\*\* .*\n/, '');
-        content = content.replace(/---\n\*Bu yazı.*\*$/, '');
         content = markdownToHtml(content);
         
         modalBody.innerHTML = `
@@ -535,7 +588,8 @@
             ${content}
             <hr style="margin: 1rem 0;">
             <p style="color: var(--text-muted); font-size: 0.85rem;">
-                💬 Yorum yapmak için: <a href="${post.html_url}" target="_blank">GitHub'da görüntüle</a>
+                💬 Yorum yapmak veya düzenlemek için: 
+                <a href="${post.html_url}" target="_blank">GitHub'da aç</a>
             </p>
         `;
         
@@ -552,7 +606,7 @@
         html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
         html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
         html = html.split('\n\n').map(para => {
-            if (para.startsWith('<h') || para.startsWith('<pre')) return para;
+            if (para.startsWith('<h') || para.startsWith('<pre') || para.startsWith('<ul')) return para;
             return `<p>${para.replace(/\n/g, '<br>')}</p>`;
         }).join('');
         return html;
@@ -564,16 +618,7 @@
         return div.innerHTML;
     }
     
-    function showToast(message, type) {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.style.backgroundColor = type === 'error' ? '#ef4444' : '#10b981';
-        toast.style.display = 'block';
-        setTimeout(() => {
-            toast.style.display = 'none';
-        }, 3000);
-    }
-    
+    // Filtre butonları
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -583,10 +628,13 @@
         });
     });
     
+    // Modal kapatma
     const modal = document.getElementById('postModal');
     document.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
     window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
     
+    // Başlat
+    checkSession();
     loadPosts();
 </script>
 
