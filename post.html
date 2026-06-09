@@ -6,26 +6,19 @@
 <title>Yazı</title>
 
 <style>
-body {
-    font-family: Arial;
+body{
+    font-family:Arial;
     background:#0f172a;
     color:#f8fafc;
-    line-height:1.8;
     padding:2rem;
+    line-height:1.8;
 }
-.container {
+.container{
     max-width:800px;
     margin:auto;
 }
-a { color:#4f46e5; }
-pre {
-    background:#1e293b;
-    padding:1rem;
-    border-radius:10px;
-    overflow:auto;
-}
+a{color:#4f46e5}
 </style>
-
 </head>
 
 <body>
@@ -41,22 +34,23 @@ pre {
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script>
-const params = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(location.search);
 const file = params.get("file");
 
-async function loadPost() {
-    if (!file) {
-        document.getElementById("content").innerHTML = "Dosya bulunamadı.";
-        return;
-    }
+async function load(){
 
-    const res = await fetch(file);
-    const md = await res.text();
-
-    document.getElementById("content").innerHTML = marked.parse(md);
+if(!file){
+document.getElementById("content").innerHTML="Dosya yok";
+return;
 }
 
-loadPost();
+const md = await fetch(file).then(r => r.text());
+
+document.getElementById("content").innerHTML = marked.parse(md);
+
+}
+
+load();
 </script>
 
 </body>
