@@ -14,7 +14,7 @@
             --accent-color: #4f46e5;
             --accent-hover: #4338ca;
             --border-color: #e5e7eb;
-            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -26,15 +26,13 @@
                 --accent-color: #6366f1;
                 --accent-hover: #818cf8;
                 --border-color: #334155;
-                --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
             }
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s, color 0.3s;
+            box-sizing: border-box;
         }
 
         body {
@@ -48,12 +46,12 @@
         header {
             background-color: var(--container-bg);
             border-bottom: 1px solid var(--border-color);
-            padding: 3rem 1rem;
+            padding: 2rem 1rem;
             text-align: center;
         }
 
         header h1 {
-            font-size: 2.7rem;
+            font-size: 2.5rem;
             font-weight: 800;
             background: linear-gradient(to right, var(--accent-color), #ec4899);
             -webkit-background-clip: text;
@@ -63,10 +61,11 @@
         header p {
             color: var(--text-muted);
             font-style: italic;
+            font-size: 0.9rem;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
             display: grid;
@@ -74,67 +73,179 @@
             gap: 2rem;
         }
 
+        /* Form Stilleri - KÜÇÜK ve ALTA TAŞINDI */
+        .write-form {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 2rem;
+            box-shadow: var(--card-shadow);
+            max-width: 100%;
+        }
+
+        .write-form h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .form-note {
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        /* Kategori Filtreleme */
+        .category-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .filter-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
         .blog-posts {
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         .post-card {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 2rem;
-            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
             transition: transform 0.2s;
         }
 
         .post-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .post-meta {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 0.75rem;
+            transform: translateY(-2px);
         }
 
         .post-category {
-            color: var(--accent-color);
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
             font-weight: 600;
-            text-transform: uppercase;
+            margin-bottom: 0.75rem;
         }
 
+        .category-edebiyat { background: #8b5cf6; color: white; }
+        .category-siir { background: #ec4899; color: white; }
+        .category-gunluk { background: #10b981; color: white; }
+
         .post-title {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
         }
 
         .post-excerpt {
             color: var(--text-muted);
-            margin-bottom: 1.5rem;
-        }
-
-        .read-more-btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: white;
-            padding: 0.5rem 1.25rem;
-            border-radius: 6px;
-            text-decoration: none;
-            cursor: pointer;
-            border: none;
+            margin-bottom: 1rem;
             font-size: 0.9rem;
         }
 
-        .read-more-btn:hover {
-            background-color: var(--accent-hover);
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
         }
 
-        /* Modal stilleri */
+        .sidebar-widget {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .widget-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .profile-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            object-fit: cover;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -155,12 +266,6 @@
             max-width: 800px;
             border-radius: 16px;
             position: relative;
-            animation: modalFadeIn 0.3s;
-        }
-
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .close-modal {
@@ -168,80 +273,26 @@
             right: 1.5rem;
             top: 1rem;
             font-size: 2rem;
-            font-weight: bold;
             cursor: pointer;
-            color: var(--text-muted);
         }
 
-        .close-modal:hover {
-            color: var(--accent-color);
-        }
-
-        .modal-body {
-            margin-top: 1rem;
-            line-height: 1.8;
-        }
-
-        .modal-body h1 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .modal-body h2 {
-            font-size: 1.4rem;
-            margin: 1rem 0;
-        }
-
-        .modal-body p {
-            margin: 1rem 0;
-        }
-
-        .modal-body pre {
-            background-color: var(--bg-color);
-            padding: 1rem;
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.75rem 1.25rem;
             border-radius: 8px;
-            overflow-x: auto;
+            display: none;
+            z-index: 1100;
+            font-size: 0.85rem;
         }
 
-        .modal-body code {
-            background-color: var(--bg-color);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-muted);
-        }
-
-        aside {
+        /* Yazılar ve form sıralaması için düzen */
+        .main-content {
             display: flex;
             flex-direction: column;
-            gap: 2rem;
-        }
-
-        .sidebar-widget {
-            background-color: var(--container-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--card-shadow);
-        }
-
-        .widget-title {
-            font-weight: 700;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0.5rem;
-        }
-
-        .profile-img {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            margin-bottom: 1rem;
-            object-fit: cover;
         }
 
         @media (max-width: 768px) {
@@ -260,26 +311,64 @@
 </header>
 
 <div class="container">
+    <div class="main-content">
+        <!-- YAZILAR ÜSTTE -->
+        <div>
+            <!-- Kategori Filtreleri -->
+            <div class="category-filters">
+                <button class="filter-btn active" data-category="all">Tümü</button>
+                <button class="filter-btn" data-category="edebiyat">✒️ Edebiyat</button>
+                <button class="filter-btn" data-category="siir">📜 Şiir</button>
+                <button class="filter-btn" data-category="gunluk">📓 Günlük</button>
+            </div>
 
-    <main class="blog-posts" id="posts">
-        <div class="loading">📖 Yazılar yükleniyor...</div>
-    </main>
+            <!-- Yazıların Listeleneceği Alan -->
+            <div class="blog-posts" id="posts">
+                <div class="loading">📖 Yazılar yükleniyor...</div>
+            </div>
+        </div>
+
+        <!-- YAZI EKLEME FORMU ALTA KÜÇÜK BOYUTTA -->
+        <div class="write-form">
+            <h3>✍️ Yeni Yazı Ekle</h3>
+            <div class="form-group">
+                <label>Başlık</label>
+                <input type="text" id="postTitle" placeholder="Yazınızın başlığı...">
+            </div>
+            <div class="form-group">
+                <label>Kategori</label>
+                <select id="postCategory">
+                    <option value="edebiyat">✒️ Edebiyat</option>
+                    <option value="siir">📜 Şiir</option>
+                    <option value="gunluk">📓 Günlük</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>İçerik (Markdown destekli)</label>
+                <textarea id="postContent" placeholder="Yazınızı buraya yazın..."></textarea>
+            </div>
+            <button class="submit-btn" onclick="createPost()">📤 Yayınla</button>
+            <div class="form-note">
+                Not: GitHub Issue olarak kaydedilir. Token gerekir.
+            </div>
+        </div>
+    </div>
 
     <aside>
         <div class="sidebar-widget">
             <h3 class="widget-title">Hakkımda</h3>
-            <img src="pp.jpg" class="profile-img" alt="Profil" onerror="this.src='https://via.placeholder.com/85'">
-            <p style="color: var(--text-muted); font-size: 0.9rem;">
-                Merhaba! Burada yazılarımı paylaşıyorum.
+            <img src="pp.jpg" class="profile-img" alt="Profil" onerror="this.src='https://via.placeholder.com/70'">
+            <p style="color: var(--text-muted); font-size: 0.85rem;">
+                Merhaba! Burada anılarımı, şiirlerimi ve günlüklerimi paylaşıyorum.
             </p>
         </div>
 
         <div class="sidebar-widget">
             <h3 class="widget-title">Kategoriler</h3>
-            <ul style="list-style:none; color: var(--text-muted); font-size:0.9rem;">
-                <li>✒️ Edebiyat</li>
-                <li>📜 Şiir</li>
-                <li>📓 Günlük</li>
+            <ul style="list-style:none; font-size:0.85rem;">
+                <li id="cat-edebiyat-count">✒️ Edebiyat (0)</li>
+                <li id="cat-siir-count">📜 Şiir (0)</li>
+                <li id="cat-gunluk-count">📓 Günlük (0)</li>
             </ul>
         </div>
     </aside>
@@ -289,187 +378,215 @@
 <div id="postModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
-        <div class="modal-body" id="modalBody">
-            <div class="loading">Yükleniyor...</div>
-        </div>
+        <div class="modal-body" id="modalBody"></div>
     </div>
 </div>
 
-<script>
-    const username = "esakbas";
-    const repo = "esakbas.github.io";
-    const folder = "posts";
+<div id="toast" class="toast"></div>
 
-    // Basit Markdown dönüştürücü
-    function markdownToHtml(md) {
-        let html = md;
-        
-        // Kod blokları (```)
-        html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-        
-        // Başlıklar
-        html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
-        html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
-        html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
-        
-        // Kalın
-        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        
-        // İtalik
-        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-        
-        // Linkler
-        html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
-        
-        // Paragraflar
-        html = html.split('\n\n').map(para => {
-            if (para.startsWith('<h') || para.startsWith('<pre') || para.startsWith('<ul') || para.startsWith('<ol')) {
-                return para;
+<script>
+    const GITHUB_TOKEN = '';
+    const REPO_OWNER = 'esakbas';
+    const REPO_NAME = 'esakbas.github.io';
+    
+    let allPosts = [];
+    let currentFilter = 'all';
+
+    function getToken() {
+        let token = localStorage.getItem('github_token');
+        if (!token) {
+            token = prompt('GitHub yazı ekleme için kişisel erişim tokenınızı girin:\n\nToken oluşturmak için: GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)\nGerekli izin: "repo"');
+            if (token) {
+                localStorage.setItem('github_token', token);
             }
-            return `<p>${para.replace(/\n/g, '<br>')}</p>`;
-        }).join('');
-        
-        // Listeler
-        html = html.replace(/^\s*-\s(.*)$/gm, '<li>$1</li>');
-        html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
-        
-        return html;
+        }
+        return token;
     }
 
-    async function loadPosts() {
-        const container = document.getElementById("posts");
+    async function createPost() {
+        const title = document.getElementById('postTitle').value;
+        const category = document.getElementById('postCategory').value;
+        const content = document.getElementById('postContent').value;
+        
+        if (!title || !content) {
+            showToast('Lütfen başlık ve içerik girin!', 'error');
+            return;
+        }
+        
+        const token = getToken();
+        if (!token) {
+            showToast('GitHub token gerekli!', 'error');
+            return;
+        }
+        
+        const labels = [category];
+        const issueBody = `## ${title}\n\n**Kategori:** ${category}\n\n---\n\n${content}\n\n---\n*Bu yazı Hindiba blogundan oluşturulmuştur.*`;
         
         try {
-            const api = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`;
-            const res = await fetch(api);
-            
-            if (!res.ok) {
-                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-            }
-            
-            const data = await res.json();
-            
-            // Sadece .md dosyaları
-            const posts = data.filter(f => f.name && f.name.endsWith(".md")).reverse();
-            
-            if (posts.length === 0) {
-                container.innerHTML = '<div class="post-card"><p>📭 Henüz hiç yazı yok. İlk yazını eklemek için posts/ klasörüne bir .md dosyası ekleyin.</p></div>';
-                return;
-            }
-            
-            container.innerHTML = "";
-            
-            for (const post of posts) {
-                try {
-                    const mdResponse = await fetch(post.download_url);
-                    const md = await mdResponse.text();
-                    
-                    // Başlık: İlk satır (# Başlık)
-                    const lines = md.split("\n");
-                    let title = "Başlıksız Yazı";
-                    let excerpt = "";
-                    
-                    for (let i = 0; i < lines.length; i++) {
-                        if (lines[i].startsWith("# ")) {
-                            title = lines[i].replace("# ", "").trim();
-                            // Özet: Başlıktan sonraki ilk boş olmayan satır
-                            for (let j = i + 1; j < lines.length; j++) {
-                                if (lines[j].trim() && !lines[j].startsWith("#")) {
-                                    excerpt = lines[j].trim().substring(0, 120);
-                                    if (excerpt.length === 120) excerpt += "...";
-                                    break;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    
-                    // Eğer özet bulunamadıysa
-                    if (!excerpt) {
-                        const textWithoutTitle = md.replace(/^# .*\n/, "").trim();
-                        excerpt = textWithoutTitle.substring(0, 120).replace(/\n/g, " ");
-                        if (excerpt.length === 120) excerpt += "...";
-                    }
-                    
-                    const card = document.createElement("article");
-                    card.className = "post-card";
-                    
-                    card.innerHTML = `
-                        <div class="post-meta">
-                            <span class="post-category">📄 Blog</span>
-                            <span>📅 ${new Date().toLocaleDateString('tr-TR')}</span>
-                        </div>
-                        <h2 class="post-title">${escapeHtml(title)}</h2>
-                        <p class="post-excerpt">${escapeHtml(excerpt)}</p>
-                        <button class="read-more-btn" data-url="${post.download_url}">Devamını Oku</button>
-                    `;
-                    
-                    container.appendChild(card);
-                } catch (err) {
-                    console.error("Post yüklenirken hata:", post.name, err);
-                }
-            }
-            
-            // Modal açma işlemleri
-            document.querySelectorAll('.read-more-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const url = btn.getAttribute('data-url');
-                    await openModal(url);
-                });
+            const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title: title,
+                    body: issueBody,
+                    labels: labels
+                })
             });
             
-        } catch (error) {
-            console.error("LoadPosts hatası:", error);
-            container.innerHTML = `
-                <div class="post-card">
-                    <p>⚠️ Yazılar yüklenirken hata oluştu.</p>
-                    <p style="font-size:0.85rem; margin-top:0.5rem;">Detay: ${error.message}</p>
-                    <p style="font-size:0.85rem; margin-top:0.5rem;">Repo kontrolü: github.com/${username}/${repo}/${folder} klasörü var mı?</p>
-                </div>
-            `;
+            if (response.ok) {
+                showToast('Yazınız başarıyla yayınlandı! 🎉', 'success');
+                document.getElementById('postTitle').value = '';
+                document.getElementById('postContent').value = '';
+                loadPosts();
+            } else {
+                const error = await response.json();
+                showToast('Hata: ' + error.message, 'error');
+            }
+        } catch (err) {
+            showToast('Bağlantı hatası: ' + err.message, 'error');
         }
     }
     
-    // XSS koruması için
+    async function loadPosts() {
+        const container = document.getElementById('posts');
+        container.innerHTML = '<div class="loading">📖 Yazılar yükleniyor...</div>';
+        
+        try {
+            const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues?state=all&per_page=100`);
+            const issues = await response.json();
+            
+            allPosts = issues.filter(issue => issue.labels && issue.labels.length > 0);
+            updateCategoryCounts();
+            displayPosts();
+            
+        } catch (err) {
+            container.innerHTML = `<div class="post-card">⚠️ Yazılar yüklenemedi: ${err.message}</div>`;
+        }
+    }
+    
+    function updateCategoryCounts() {
+        const counts = {
+            edebiyat: allPosts.filter(p => p.labels.some(l => l.name === 'edebiyat')).length,
+            siir: allPosts.filter(p => p.labels.some(l => l.name === 'siir')).length,
+            gunluk: allPosts.filter(p => p.labels.some(l => l.name === 'gunluk')).length
+        };
+        
+        document.getElementById('cat-edebiyat-count').innerHTML = `✒️ Edebiyat (${counts.edebiyat})`;
+        document.getElementById('cat-siir-count').innerHTML = `📜 Şiir (${counts.siir})`;
+        document.getElementById('cat-gunluk-count').innerHTML = `📓 Günlük (${counts.gunluk})`;
+    }
+    
+    function displayPosts() {
+        const container = document.getElementById('posts');
+        let filtered = allPosts;
+        
+        if (currentFilter !== 'all') {
+            filtered = allPosts.filter(post => post.labels.some(l => l.name === currentFilter));
+        }
+        
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="post-card">📭 Bu kategoride henüz yazı yok.</div>';
+            return;
+        }
+        
+        container.innerHTML = filtered.map(post => {
+            const category = post.labels[0]?.name || 'edebiyat';
+            const categoryName = category === 'edebiyat' ? 'Edebiyat' : category === 'siir' ? 'Şiir' : 'Günlük';
+            const categoryIcon = category === 'edebiyat' ? '✒️' : category === 'siir' ? '📜' : '📓';
+            
+            const content = post.body || '';
+            const excerpt = content.split('\n').slice(0, 3).join(' ').substring(0, 150) + '...';
+            const date = new Date(post.created_at).toLocaleDateString('tr-TR');
+            
+            return `
+                <article class="post-card">
+                    <div class="post-category category-${category}">${categoryIcon} ${categoryName}</div>
+                    <h2 class="post-title">${escapeHtml(post.title)}</h2>
+                    <div class="post-meta">📅 ${date} | 💬 ${post.comments} yorum</div>
+                    <p class="post-excerpt">${escapeHtml(excerpt)}</p>
+                    <button class="read-more-btn" onclick='openModal(${JSON.stringify(post).replace(/'/g, "&#39;")})'>Devamını Oku →</button>
+                </article>
+            `;
+        }).join('');
+    }
+    
+    function openModal(post) {
+        const modal = document.getElementById('postModal');
+        const modalBody = document.getElementById('modalBody');
+        
+        const category = post.labels[0]?.name || 'edebiyat';
+        const categoryName = category === 'edebiyat' ? 'Edebiyat' : category === 'siir' ? 'Şiir' : 'Günlük';
+        
+        let content = post.body || '';
+        content = content.replace(/^## .*\n/, '');
+        content = content.replace(/\*\*Kategori:\*\* .*\n/, '');
+        content = content.replace(/---\n\*Bu yazı.*\*$/, '');
+        content = markdownToHtml(content);
+        
+        modalBody.innerHTML = `
+            <div class="post-category category-${category}" style="margin-bottom: 1rem;">${categoryName}</div>
+            <h1>${escapeHtml(post.title)}</h1>
+            <div class="post-meta">📅 ${new Date(post.created_at).toLocaleDateString('tr-TR')}</div>
+            <hr style="margin: 1rem 0;">
+            ${content}
+            <hr style="margin: 1rem 0;">
+            <p style="color: var(--text-muted); font-size: 0.85rem;">
+                💬 Yorum yapmak için: <a href="${post.html_url}" target="_blank">GitHub'da görüntüle</a>
+            </p>
+        `;
+        
+        modal.style.display = 'block';
+    }
+    
+    function markdownToHtml(md) {
+        let html = md;
+        html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+        html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+        html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+        html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+        html = html.split('\n\n').map(para => {
+            if (para.startsWith('<h') || para.startsWith('<pre')) return para;
+            return `<p>${para.replace(/\n/g, '<br>')}</p>`;
+        }).join('');
+        return html;
+    }
+    
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
     
-    async function openModal(fileUrl) {
-        const modal = document.getElementById('postModal');
-        const modalBody = document.getElementById('modalBody');
-        
-        modal.style.display = 'block';
-        modalBody.innerHTML = '<div class="loading">📖 Yazı yükleniyor...</div>';
-        
-        try {
-            const res = await fetch(fileUrl);
-            if (!res.ok) throw new Error('Yazı okunamadı');
-            const md = await res.text();
-            const html = markdownToHtml(md);
-            modalBody.innerHTML = html;
-        } catch (err) {
-            modalBody.innerHTML = `<p>❌ Yazı yüklenirken hata: ${err.message}</p>`;
-        }
+    function showToast(message, type) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.style.backgroundColor = type === 'error' ? '#ef4444' : '#10b981';
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
     }
     
-    // Modal kapatma
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.category;
+            displayPosts();
+        });
+    });
+    
     const modal = document.getElementById('postModal');
-    const closeBtn = document.querySelector('.close-modal');
+    document.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
     
-    closeBtn.onclick = function() {
-        modal.style.display = 'none';
-    }
-    
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    }
-    
-    // Sayfa yüklendiğinde çalıştır
     loadPosts();
 </script>
 
