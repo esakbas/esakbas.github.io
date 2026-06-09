@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yazı</title>
+
+<style>
+body {
+    font-family: Arial;
+    background:#0f172a;
+    color:#f8fafc;
+    line-height:1.8;
+    padding:2rem;
+}
+.container {
+    max-width:800px;
+    margin:auto;
+}
+a { color:#4f46e5; }
+pre {
+    background:#1e293b;
+    padding:1rem;
+    border-radius:10px;
+    overflow:auto;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<a href="index.html">← Geri</a>
+
+<div id="content">Yükleniyor...</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const file = params.get("file");
+
+async function loadPost() {
+    if (!file) {
+        document.getElementById("content").innerHTML = "Dosya bulunamadı.";
+        return;
+    }
+
+    const res = await fetch(file);
+    const md = await res.text();
+
+    document.getElementById("content").innerHTML = marked.parse(md);
+}
+
+loadPost();
+</script>
+
+</body>
+</html>
