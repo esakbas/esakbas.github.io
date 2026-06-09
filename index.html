@@ -125,10 +125,94 @@
             padding: 0.5rem 1.25rem;
             border-radius: 6px;
             text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
         }
 
         .read-more-btn:hover {
             background-color: var(--accent-hover);
+        }
+
+        /* Modal stilleri */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: var(--container-bg);
+            margin: 3rem auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 16px;
+            position: relative;
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 1.5rem;
+            top: 1rem;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .close-modal:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-body {
+            margin-top: 1rem;
+            line-height: 1.8;
+        }
+
+        .modal-body h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body h2 {
+            font-size: 1.4rem;
+            margin: 1rem 0;
+        }
+
+        .modal-body p {
+            margin: 1rem 0;
+        }
+
+        .modal-body pre {
+            background-color: var(--bg-color);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .modal-body code {
+            background-color: var(--bg-color);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
         }
 
         aside {
@@ -157,6 +241,7 @@
             height: 85px;
             border-radius: 50%;
             margin-bottom: 1rem;
+            object-fit: cover;
         }
 
         @media (max-width: 768px) {
@@ -176,13 +261,14 @@
 
 <div class="container">
 
-    <main class="blog-posts" id="posts"></main>
+    <main class="blog-posts" id="posts">
+        <div class="loading">📖 Yazılar yükleniyor...</div>
+    </main>
 
     <aside>
-
         <div class="sidebar-widget">
             <h3 class="widget-title">Hakkımda</h3>
-            <img src="pp.jpg" class="profile-img">
+            <img src="pp.jpg" class="profile-img" alt="Profil" onerror="this.src='https://via.placeholder.com/85'">
             <p style="color: var(--text-muted); font-size: 0.9rem;">
                 Merhaba! Burada yazılarımı paylaşıyorum.
             </p>
@@ -196,60 +282,195 @@
                 <li>📓 Günlük</li>
             </ul>
         </div>
-
     </aside>
+</div>
 
+<!-- Modal -->
+<div id="postModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-body" id="modalBody">
+            <div class="loading">Yükleniyor...</div>
+        </div>
+    </div>
 </div>
 
 <script>
-const username = "esakbas";
-const repo = "esakbas.github.io";
-const folder = "posts";
+    const username = "esakbas";
+    const repo = "esakbas.github.io";
+    const folder = "posts";
 
-async function loadPosts(){
+    // Basit Markdown dönüştürücü
+    function markdownToHtml(md) {
+        let html = md;
+        
+        // Kod blokları (```)
+        html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+        
+        // Başlıklar
+        html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+        html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+        html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+        
+        // Kalın
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        
+        // İtalik
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        
+        // Linkler
+        html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+        
+        // Paragraflar
+        html = html.split('\n\n').map(para => {
+            if (para.startsWith('<h') || para.startsWith('<pre') || para.startsWith('<ul') || para.startsWith('<ol')) {
+                return para;
+            }
+            return `<p>${para.replace(/\n/g, '<br>')}</p>`;
+        }).join('');
+        
+        // Listeler
+        html = html.replace(/^\s*-\s(.*)$/gm, '<li>$1</li>');
+        html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+        
+        return html;
+    }
 
-const api = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`;
-
-const res = await fetch(api);
-const data = await res.json();
-
-const container = document.getElementById("posts");
-
-// sadece md dosyaları
-const posts = data.filter(f => f.name.endsWith(".md")).reverse();
-
-for(const post of posts){
-
-const md = await fetch(post.download_url).then(r => r.text());
-
-// başlık = ilk satır (# Title)
-const title = md.split("\n")[0].replace("#","").trim();
-
-// kısa özet = sonraki satırlar
-const excerpt = md.split("\n").slice(1,3).join(" ");
-
-const card = document.createElement("article");
-card.className = "post-card";
-
-card.innerHTML = `
-<div class="post-meta">
-    <span class="post-category">📄 Blog</span>
-</div>
-
-<h2 class="post-title">${title}</h2>
-<p class="post-excerpt">${excerpt}</p>
-
-<a class="read-more-btn" href="post.html?file=${post.download_url}">
-    Devamını Oku
-</a>
-`;
-
-container.appendChild(card);
-}
-
-}
-
-loadPosts();
+    async function loadPosts() {
+        const container = document.getElementById("posts");
+        
+        try {
+            const api = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`;
+            const res = await fetch(api);
+            
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
+            
+            const data = await res.json();
+            
+            // Sadece .md dosyaları
+            const posts = data.filter(f => f.name && f.name.endsWith(".md")).reverse();
+            
+            if (posts.length === 0) {
+                container.innerHTML = '<div class="post-card"><p>📭 Henüz hiç yazı yok. İlk yazını eklemek için posts/ klasörüne bir .md dosyası ekleyin.</p></div>';
+                return;
+            }
+            
+            container.innerHTML = "";
+            
+            for (const post of posts) {
+                try {
+                    const mdResponse = await fetch(post.download_url);
+                    const md = await mdResponse.text();
+                    
+                    // Başlık: İlk satır (# Başlık)
+                    const lines = md.split("\n");
+                    let title = "Başlıksız Yazı";
+                    let excerpt = "";
+                    
+                    for (let i = 0; i < lines.length; i++) {
+                        if (lines[i].startsWith("# ")) {
+                            title = lines[i].replace("# ", "").trim();
+                            // Özet: Başlıktan sonraki ilk boş olmayan satır
+                            for (let j = i + 1; j < lines.length; j++) {
+                                if (lines[j].trim() && !lines[j].startsWith("#")) {
+                                    excerpt = lines[j].trim().substring(0, 120);
+                                    if (excerpt.length === 120) excerpt += "...";
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    
+                    // Eğer özet bulunamadıysa
+                    if (!excerpt) {
+                        const textWithoutTitle = md.replace(/^# .*\n/, "").trim();
+                        excerpt = textWithoutTitle.substring(0, 120).replace(/\n/g, " ");
+                        if (excerpt.length === 120) excerpt += "...";
+                    }
+                    
+                    const card = document.createElement("article");
+                    card.className = "post-card";
+                    
+                    card.innerHTML = `
+                        <div class="post-meta">
+                            <span class="post-category">📄 Blog</span>
+                            <span>📅 ${new Date().toLocaleDateString('tr-TR')}</span>
+                        </div>
+                        <h2 class="post-title">${escapeHtml(title)}</h2>
+                        <p class="post-excerpt">${escapeHtml(excerpt)}</p>
+                        <button class="read-more-btn" data-url="${post.download_url}">Devamını Oku</button>
+                    `;
+                    
+                    container.appendChild(card);
+                } catch (err) {
+                    console.error("Post yüklenirken hata:", post.name, err);
+                }
+            }
+            
+            // Modal açma işlemleri
+            document.querySelectorAll('.read-more-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const url = btn.getAttribute('data-url');
+                    await openModal(url);
+                });
+            });
+            
+        } catch (error) {
+            console.error("LoadPosts hatası:", error);
+            container.innerHTML = `
+                <div class="post-card">
+                    <p>⚠️ Yazılar yüklenirken hata oluştu.</p>
+                    <p style="font-size:0.85rem; margin-top:0.5rem;">Detay: ${error.message}</p>
+                    <p style="font-size:0.85rem; margin-top:0.5rem;">Repo kontrolü: github.com/${username}/${repo}/${folder} klasörü var mı?</p>
+                </div>
+            `;
+        }
+    }
+    
+    // XSS koruması için
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    async function openModal(fileUrl) {
+        const modal = document.getElementById('postModal');
+        const modalBody = document.getElementById('modalBody');
+        
+        modal.style.display = 'block';
+        modalBody.innerHTML = '<div class="loading">📖 Yazı yükleniyor...</div>';
+        
+        try {
+            const res = await fetch(fileUrl);
+            if (!res.ok) throw new Error('Yazı okunamadı');
+            const md = await res.text();
+            const html = markdownToHtml(md);
+            modalBody.innerHTML = html;
+        } catch (err) {
+            modalBody.innerHTML = `<p>❌ Yazı yüklenirken hata: ${err.message}</p>`;
+        }
+    }
+    
+    // Modal kapatma
+    const modal = document.getElementById('postModal');
+    const closeBtn = document.querySelector('.close-modal');
+    
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+    }
+    
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+    
+    // Sayfa yüklendiğinde çalıştır
+    loadPosts();
 </script>
 
 </body>
