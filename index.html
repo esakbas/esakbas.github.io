@@ -1,239 +1,161 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hindiba | Hatıra Defteri</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hindiba | Hatıra Defteri</title>
 
-    <style>
-        :root {
-            --bg-color: #f8f9fa;
-            --container-bg: #ffffff;
-            --text-main: #212529;
-            --text-muted: #6c757d;
-            --accent-color: #4f46e5;
-            --accent-hover: #4338ca;
-            --border-color: #e5e7eb;
-            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
+<style>
+:root {
+    --bg:#f8f9fa;
+    --card:#fff;
+    --text:#212529;
+    --muted:#6c757d;
+    --accent:#4f46e5;
+    --border:#e5e7eb;
+}
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #0f172a;
-                --container-bg: #1e293b;
-                --text-main: #f8fafc;
-                --text-muted: #94a3b8;
-                --accent-color: #6366f1;
-                --accent-hover: #818cf8;
-                --border-color: #334155;
-                --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            }
-        }
+@media (prefers-color-scheme: dark) {
+:root {
+    --bg:#0f172a;
+    --card:#1e293b;
+    --text:#f8fafc;
+    --muted:#94a3b8;
+    --border:#334155;
+}
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.3s, color 0.3s;
-        }
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+    font-family:Arial;
+    background:var(--bg);
+    color:var(--text);
+}
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.7;
-            padding-bottom: 3rem;
-        }
+header{
+    text-align:center;
+    padding:3rem 1rem;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+}
 
-        header {
-            background-color: var(--container-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 3rem 1rem;
-            text-align: center;
-        }
+header h1{
+    font-size:2.5rem;
+    background:linear-gradient(90deg,var(--accent),#ec4899);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
 
-        header h1 {
-            font-size: 2.7rem;
-            font-weight: 800;
-            background: linear-gradient(to right, var(--accent-color), #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+.container{
+    max-width:1100px;
+    margin:2rem auto;
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:2rem;
+    padding:0 1rem;
+}
 
-        header p {
-            color: var(--text-muted);
-            font-style: italic;
-        }
+.posts{
+    display:flex;
+    flex-direction:column;
+    gap:1.5rem;
+}
 
-        .container {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-        }
+.post{
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:1.5rem;
+    border-radius:12px;
+}
 
-        .blog-posts {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
+.title{font-size:1.4rem;font-weight:bold;margin:0.5rem 0}
+.excerpt{color:var(--muted);margin-bottom:1rem}
 
-        .post-card {
-            background-color: var(--container-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: var(--card-shadow);
-            transition: transform 0.2s;
-        }
+.btn{
+    background:var(--accent);
+    color:#fff;
+    padding:0.5rem 1rem;
+    border-radius:6px;
+    text-decoration:none;
+}
 
-        .post-card:hover {
-            transform: translateY(-4px);
-        }
+aside{
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+}
 
-        .post-meta {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 0.75rem;
-        }
+.box{
+    background:var(--card);
+    padding:1rem;
+    border:1px solid var(--border);
+    border-radius:12px;
+}
 
-        .post-category {
-            color: var(--accent-color);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .post-title {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .post-excerpt {
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-        }
-
-        .read-more-btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: white;
-            padding: 0.5rem 1.25rem;
-            border-radius: 6px;
-            text-decoration: none;
-        }
-
-        .read-more-btn:hover {
-            background-color: var(--accent-hover);
-        }
-
-        aside {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .sidebar-widget {
-            background-color: var(--container-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--card-shadow);
-        }
-
-        .widget-title {
-            font-weight: 700;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0.5rem;
-        }
-
-        .profile-img {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            margin-bottom: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+.muted{color:var(--muted);font-size:0.9rem}
+</style>
 </head>
 
 <body>
 
 <header>
-    <h1>Hindiba 🌟</h1>
-    <p>Seneler sonra burası, bir hatıra defteri olacak...</p>
+<h1>Hindiba 🌿</h1>
+<p style="color:var(--muted)">Hatıra defteri</p>
 </header>
 
 <div class="container">
 
-    <!-- BLOG LİSTE ALANI -->
-    <main class="blog-posts" id="posts"></main>
+<main class="posts" id="posts"></main>
 
-    <!-- SIDEBAR -->
-    <aside>
+<aside>
+<div class="box">
+<h3>Hakkımda</h3>
+<p class="muted">Burada yazılar paylaşıyorum.</p>
+</div>
 
-        <div class="sidebar-widget">
-            <h3 class="widget-title">Hakkımda</h3>
-            <img src="pp.jpg" class="profile-img">
-            <p style="color: var(--text-muted); font-size: 0.9rem;">
-                Merhaba! Burada yazılarımı paylaşıyorum.
-            </p>
-        </div>
-
-        <div class="sidebar-widget">
-            <h3 class="widget-title">Kategoriler</h3>
-            <ul style="list-style:none; color: var(--text-muted); font-size:0.9rem;">
-                <li>✒️ Edebiyat</li>
-                <li>📜 Şiir</li>
-                <li>📓 Günlük</li>
-            </ul>
-        </div>
-
-    </aside>
+<div class="box">
+<h3>Kategoriler</h3>
+<p class="muted">Edebiyat / Şiir / Günlük</p>
+</div>
+</aside>
 
 </div>
 
 <script>
-async function loadPosts() {
+const username = "esakbas";
+const repo = "esakbas.github.io";
+const folder = "posts";
 
-    const posts = [
-        {
-            file: "posts/ilk-yazi.md",
-            title: "Sıfırdan Başlayanların Gece Notları",
-            date: "9 Haziran 2026",
-            category: "✒️ Edebiyat",
-            excerpt: "Zaman akıp giderken geride bıraktığımız izlerin ne kadarı bize ait?"
-        }
-    ];
+async function loadPosts(){
 
-    const container = document.getElementById("posts");
+const url = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`;
+const res = await fetch(url);
+const data = await res.json();
 
-    posts.forEach(post => {
-        const card = document.createElement("article");
-        card.className = "post-card";
+const container = document.getElementById("posts");
 
-        card.innerHTML = `
-            <div class="post-meta">
-                <span class="post-category">${post.category}</span>
-                <span>${post.date}</span>
-            </div>
-            <h2 class="post-title">${post.title}</h2>
-            <p class="post-excerpt">${post.excerpt}</p>
-            <a class="read-more-btn" href="${post.file}">Devamını Oku</a>
-        `;
+const posts = data.filter(f => f.name.endsWith(".md")).reverse();
 
-        container.appendChild(card);
-    });
+for(const post of posts){
+
+const md = await fetch(post.download_url).then(r => r.text());
+
+const title = md.split("\n")[0].replace("#","").trim();
+const excerpt = md.split("\n").slice(1,3).join(" ");
+
+const card = document.createElement("div");
+card.className = "post";
+
+card.innerHTML = `
+<div class="muted">📄 ${post.name}</div>
+<div class="title">${title}</div>
+<div class="excerpt">${excerpt}</div>
+<a class="btn" href="post.html?file=${post.download_url}">Devamını Oku</a>
+`;
+
+container.appendChild(card);
+}
+
 }
 
 loadPosts();
