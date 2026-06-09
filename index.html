@@ -357,6 +357,14 @@
             -webkit-text-fill-color: transparent;
         }
 
+        /* İnce çizgi */
+        .profile-divider {
+            width: 40px;
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 0.75rem auto;
+        }
+
         .profile-location {
             color: var(--text-muted);
             font-size: 0.85rem;
@@ -672,10 +680,11 @@
     </main>
 
     <aside>
-        <!-- Profil Kartı - Tam Ortalanmış -->
+        <!-- Profil Kartı - Tam Ortalanmış + İnce Çizgi -->
         <div class="sidebar-widget profile-card">
             <img src="pp.jpg" class="profile-img" alt="Profil" onerror="this.src='https://via.placeholder.com/100'">
             <div class="profile-name">Eşref Akbaş</div>
+            <div class="profile-divider"></div>
             <div class="profile-location">
                 <i class="fas fa-map-marker-alt"></i> Kurdistanî
             </div>
