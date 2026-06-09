@@ -202,36 +202,51 @@
 </div>
 
 <script>
-async function loadPosts() {
+const username = "esakbas";
+const repo = "esakbas.github.io";
+const folder = "posts";
 
-    const posts = [
-        {
-            file: "posts/ilk-yazi.md",
-            title: "Sıfırdan Başlayanların Gece Notları",
-            date: "9 Haziran 2026",
-            category: "✒️ Edebiyat",
-            excerpt: "Zaman akıp giderken geride bıraktığımız izlerin ne kadarı bize ait?"
-        }
-    ];
+async function loadPosts(){
 
-    const container = document.getElementById("posts");
+const api = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`;
 
-    posts.forEach(post => {
-        const card = document.createElement("article");
-        card.className = "post-card";
+const res = await fetch(api);
+const data = await res.json();
 
-        card.innerHTML = `
-            <div class="post-meta">
-                <span class="post-category">${post.category}</span>
-                <span>${post.date}</span>
-            </div>
-            <h2 class="post-title">${post.title}</h2>
-            <p class="post-excerpt">${post.excerpt}</p>
-            <a class="read-more-btn" href="post.html?file=${post.file}">Devamını Oku</a>
-        `;
+const container = document.getElementById("posts");
 
-        container.appendChild(card);
-    });
+// sadece md dosyaları
+const posts = data.filter(f => f.name.endsWith(".md")).reverse();
+
+for(const post of posts){
+
+const md = await fetch(post.download_url).then(r => r.text());
+
+// başlık = ilk satır (# Title)
+const title = md.split("\n")[0].replace("#","").trim();
+
+// kısa özet = sonraki satırlar
+const excerpt = md.split("\n").slice(1,3).join(" ");
+
+const card = document.createElement("article");
+card.className = "post-card";
+
+card.innerHTML = `
+<div class="post-meta">
+    <span class="post-category">📄 Blog</span>
+</div>
+
+<h2 class="post-title">${title}</h2>
+<p class="post-excerpt">${excerpt}</p>
+
+<a class="read-more-btn" href="post.html?file=${post.download_url}">
+    Devamını Oku
+</a>
+`;
+
+container.appendChild(card);
+}
+
 }
 
 loadPosts();
