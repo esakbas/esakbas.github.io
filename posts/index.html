@@ -4,24 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hindiba | Hatıra Defteri</title>
+
     <style>
-        /* Modern CSS Değişkenleri (Renk Paleti ve Temalar) */
         :root {
             --bg-color: #f8f9fa;
             --container-bg: #ffffff;
             --text-main: #212529;
             --text-muted: #6c757d;
-            --accent-color: #4f46e5; /* Modern İndigo Mavisi */
+            --accent-color: #4f46e5;
             --accent-hover: #4338ca;
             --border-color: #e5e7eb;
             --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        /* Kullanıcının cihazı koyu modda ise otomatik aktif olacak renkler */
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #0f172a; /* Slate 900 */
-                --container-bg: #1e293b; /* Slate 800 */
+                --bg-color: #0f172a;
+                --container-bg: #1e293b;
                 --text-main: #f8fafc;
                 --text-muted: #94a3b8;
                 --accent-color: #6366f1;
@@ -39,14 +38,13 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.7;
             padding-bottom: 3rem;
         }
 
-        /* Üst Bilgi / Header */
         header {
             background-color: var(--container-bg);
             border-bottom: 1px solid var(--border-color);
@@ -57,8 +55,6 @@
         header h1 {
             font-size: 2.7rem;
             font-weight: 800;
-            letter-spacing: -0.05em;
-            margin-bottom: 0.75rem;
             background: linear-gradient(to right, var(--accent-color), #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -66,11 +62,9 @@
 
         header p {
             color: var(--text-muted);
-            font-size: 1.1rem;
             font-style: italic;
         }
 
-        /* Ana Sayfa Düzeni (Grid) */
         .container {
             max-width: 1100px;
             margin: 2rem auto;
@@ -80,7 +74,6 @@
             gap: 2rem;
         }
 
-        /* Blog Yazıları Alanı */
         .blog-posts {
             display: flex;
             flex-direction: column;
@@ -93,27 +86,25 @@
             border-radius: 12px;
             padding: 2rem;
             box-shadow: var(--card-shadow);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
         }
 
         .post-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
         .post-meta {
             font-size: 0.85rem;
             color: var(--text-muted);
-            margin-bottom: 0.75rem;
             display: flex;
             gap: 1rem;
+            margin-bottom: 0.75rem;
         }
 
         .post-category {
             color: var(--accent-color);
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
         .post-title {
@@ -134,17 +125,13 @@
             padding: 0.5rem 1.25rem;
             border-radius: 6px;
             text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: background-color 0.2s;
         }
 
         .read-more-btn:hover {
             background-color: var(--accent-hover);
         }
 
-        /* Yan Panel / Sidebar */
-        sidebar {
+        aside {
             display: flex;
             flex-direction: column;
             gap: 2rem;
@@ -159,103 +146,98 @@
         }
 
         .widget-title {
-            font-size: 1.1rem;
             font-weight: 700;
             margin-bottom: 1rem;
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 0.5rem;
         }
 
-        /* Profil Resmi Tasarımı */
         .profile-img {
             width: 85px;
             height: 85px;
             border-radius: 50%;
-            object-fit: cover;
-            display: block;
             margin-bottom: 1rem;
-            border: 3px solid var(--border-color);
-            background-color: var(--bg-color);
         }
 
-        .social-links a {
-            color: var(--accent-color);
-            text-decoration: none;
-            display: inline-block;
-            margin-right: 10px;
-            font-size: 0.9rem;
-        }
-
-        .social-links a:hover {
-            text-decoration: underline;
-        }
-
-        /* Mobil Uyumluluk */
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
             }
-            header h1 {
-                font-size: 2.2rem;
-            }
         }
     </style>
 </head>
+
 <body>
 
-    <header>
-        <h1>Hindiba 🌟</h1>
-        <p>Seneler sonra burası, ölü bir insanın hatıra defteri olacak...</p>
-    </header>
+<header>
+    <h1>Hindiba 🌟</h1>
+    <p>Seneler sonra burası, bir hatıra defteri olacak...</p>
+</header>
 
-    <div class="container">
-        <main class="blog-posts">
-            
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="post-category">✒️ Edebiyat</span>
-                    <span class="post-date">9 Haziran 2026</span>
-                </div>
-                <h2 class="post-title">Sıfırdan Başlayanların Gece Notları</h2>
-                <p class="post-excerpt">Zaman akıp giderken geride bıraktığımız izlerin ne kadarı bize ait? Kendi ellerimizle inşa ettiğimiz bu dijital evrende, geleceğe fırlatılmış küçük birer şişe gibiyiz. Satırların arasında kaybolmak üzerine...</p>
-                <a href="yazi1.html" class="read-more-btn">Devamını Oku</a>
-            </article>
+<div class="container">
 
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="post-category">📜 Şiir</span>
-                    <span class="post-date">8 Haziran 2026</span>
-                </div>
-                <h2 class="post-title">Rüzgarın Getirdiği Cümleler</h2>
-                <p class="post-excerpt">Karanlık çöktüğünde ve şehir sustuğunda, sadece kelimelerin sesi kalır geriye. İç sesimizin kağıda dökülmüş, en yalın ve en savunmasız hali...</p>
-                <a href="yazi2.html" class="read-more-btn">Devamını Oku</a>
-            </article>
+    <!-- BLOG LİSTE ALANI -->
+    <main class="blog-posts" id="posts"></main>
 
-        </main>
+    <!-- SIDEBAR -->
+    <aside>
 
-        <sidebar>
-            <div class="sidebar-widget">
-                <h3 class="widget-title">Hakkımda</h3>
-                <img src="pp.jpg" alt="Profil Resmi" class="profile-img">
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
-                    Merhaba! Ben bir yazılım ve teknoloji meraklısıyım. Burada öğrendiğim yeni teknolojileri ve deneyimlerimi paylaşıyorum.
-                </p>
-                <div class="social-links">
-                    <a href="https://github.com" target="_blank">GitHub</a>
-                    <a href="https://twitter.com" target="_blank">Twitter</a>
-                </div>
+        <div class="sidebar-widget">
+            <h3 class="widget-title">Hakkımda</h3>
+            <img src="pp.jpg" class="profile-img">
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+                Merhaba! Burada yazılarımı paylaşıyorum.
+            </p>
+        </div>
+
+        <div class="sidebar-widget">
+            <h3 class="widget-title">Kategoriler</h3>
+            <ul style="list-style:none; color: var(--text-muted); font-size:0.9rem;">
+                <li>✒️ Edebiyat</li>
+                <li>📜 Şiir</li>
+                <li>📓 Günlük</li>
+            </ul>
+        </div>
+
+    </aside>
+
+</div>
+
+<script>
+async function loadPosts() {
+
+    const posts = [
+        {
+            file: "posts/ilk-yazi.md",
+            title: "Sıfırdan Başlayanların Gece Notları",
+            date: "9 Haziran 2026",
+            category: "✒️ Edebiyat",
+            excerpt: "Zaman akıp giderken geride bıraktığımız izlerin ne kadarı bize ait?"
+        }
+    ];
+
+    const container = document.getElementById("posts");
+
+    posts.forEach(post => {
+        const card = document.createElement("article");
+        card.className = "post-card";
+
+        card.innerHTML = `
+            <div class="post-meta">
+                <span class="post-category">${post.category}</span>
+                <span>${post.date}</span>
             </div>
+            <h2 class="post-title">${post.title}</h2>
+            <p class="post-excerpt">${post.excerpt}</p>
+            <a class="read-more-btn" href="${post.file}">Devamını Oku</a>
+        `;
 
-            <div class="sidebar-widget">
-                <h3 class="widget-title">Kategoriler</h3>
-                <ul style="list-style: none; font-size: 0.9rem; color: var(--text-muted);">
-                    <li style="margin-bottom: 0.5rem;">✒️ Edebiyat (1)</li>
-                    <li style="margin-bottom: 0.5rem;">📜 Şiir (1)</li>
-                    <li style="margin-bottom: 0.5rem;">📓 Günlük (0)</li>
-                </ul>
-            </div>
-        </sidebar>
-    </div>
+        container.appendChild(card);
+    });
+}
+
+loadPosts();
+</script>
 
 </body>
 </html>
