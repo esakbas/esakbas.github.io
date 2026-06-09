@@ -227,11 +227,6 @@
             border-color: transparent;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         .post-category {
             display: inline-flex;
             align-items: center;
@@ -318,7 +313,7 @@
             color: var(--accent-color);
         }
 
-        /* Profil Kartı - Tam Ortalanmış */
+        /* Profil Kartı */
         .profile-card {
             text-align: center;
         }
@@ -357,12 +352,13 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* İnce çizgi */
+        /* Çizgi - 100px genişlik, 2px kalınlık */
         .profile-divider {
-            width: 40px;
-            height: 1px;
-            background-color: var(--border-color);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
             margin: 0.75rem auto;
+            border-radius: 2px;
         }
 
         .profile-location {
@@ -375,7 +371,7 @@
             gap: 0.3rem;
         }
 
-        /* Sosyal Medya - Çizgisiz */
+        /* Sosyal Medya */
         .social-links {
             display: flex;
             gap: 1.2rem;
@@ -680,7 +676,7 @@
     </main>
 
     <aside>
-        <!-- Profil Kartı - Tam Ortalanmış + İnce Çizgi -->
+        <!-- Profil Kartı -->
         <div class="sidebar-widget profile-card">
             <img src="pp.jpg" class="profile-img" alt="Profil" onerror="this.src='https://via.placeholder.com/100'">
             <div class="profile-name">Eşref Akbaş</div>
@@ -721,7 +717,6 @@
             </ul>
         </div>
 
-        <!-- Takip Et - Instagram ve X logosu -->
         <div class="sidebar-widget">
             <div class="widget-title">
                 <i class="fas fa-share-alt"></i> Takip Et
