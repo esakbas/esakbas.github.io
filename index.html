@@ -51,7 +51,6 @@
             padding-bottom: 3rem;
         }
 
-        /* Modern Header */
         header {
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             padding: 3rem 1rem;
@@ -107,7 +106,6 @@
             gap: 2rem;
         }
 
-        /* Arama Kutusu */
         .search-section {
             margin-bottom: 1.5rem;
         }
@@ -142,7 +140,6 @@
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
 
-        /* Admin Kontrolleri */
         .admin-controls {
             display: none;
             margin-bottom: 1.5rem;
@@ -174,7 +171,6 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        /* Kategori Filtreleri */
         .category-filters {
             display: flex;
             gap: 0.75rem;
@@ -209,7 +205,6 @@
             border-color: transparent;
         }
 
-        /* Blog Kartları */
         .blog-posts {
             display: flex;
             flex-direction: column;
@@ -296,7 +291,6 @@
             gap: 0.6rem;
         }
 
-        /* Sidebar */
         .sidebar-widget {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
@@ -324,7 +318,7 @@
             color: var(--accent-color);
         }
 
-        /* Profil Kartı - Simetrik ve Modern */
+        /* Profil Kartı - Tam Ortalanmış */
         .profile-card {
             text-align: center;
         }
@@ -347,11 +341,13 @@
         .profile-name {
             font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             transition: all 0.3s;
             display: inline-block;
             cursor: pointer;
             letter-spacing: 1px;
+            text-align: center;
+            width: 100%;
         }
 
         .profile-name:hover {
@@ -361,44 +357,22 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .profile-stats {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin: 1rem 0;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            background-color: var(--bg-color);
-            padding: 0.3rem 0.8rem;
-            border-radius: 50px;
-        }
-
-        .stat-item i {
-            font-size: 0.8rem;
-        }
-
-        .profile-bio {
+        .profile-location {
             color: var(--text-muted);
             font-size: 0.85rem;
-            margin-top: 0.8rem;
-            font-style: italic;
-            border-top: 1px solid var(--border-color);
-            padding-top: 0.8rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
         }
 
-        /* Sosyal Medya İkonları */
+        /* Sosyal Medya - Çizgisiz */
         .social-links {
             display: flex;
             gap: 1.2rem;
             justify-content: center;
-            margin-top: 0.5rem;
+            margin-top: 0;
         }
 
         .social-links a {
@@ -412,17 +386,22 @@
             height: 40px;
             border-radius: 50%;
             background-color: var(--bg-color);
+            text-decoration: none;
         }
 
         .social-links a:hover {
             transform: translateY(-3px);
-            color: white;
         }
 
-        .social-links a:nth-child(1):hover { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: white; }
-        .social-links a:nth-child(2):hover { background: #1DA1F2; color: white; }
+        .social-links a:nth-child(1):hover { 
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); 
+            color: white; 
+        }
+        .social-links a:nth-child(2):hover { 
+            background: #000000; 
+            color: white; 
+        }
 
-        /* Okuma Süresi */
         .reading-time {
             font-size: 0.7rem;
             color: var(--text-muted);
@@ -431,7 +410,6 @@
             gap: 0.2rem;
         }
 
-        /* Popüler Yazılar */
         .popular-posts {
             list-style: none;
         }
@@ -460,7 +438,6 @@
             color: var(--accent-color);
         }
 
-        /* Skeleton Loading */
         .skeleton-card {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
@@ -494,7 +471,6 @@
             50% { opacity: 0.5; }
         }
 
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -514,7 +490,6 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
-        /* Yönetici Butonu */
         .admin-toggle {
             position: fixed;
             bottom: 20px;
@@ -538,7 +513,6 @@
             transform: scale(1.1);
         }
 
-        /* Giriş Paneli */
         .login-panel {
             display: none;
             position: fixed;
@@ -584,7 +558,6 @@
             margin-top: 0.5rem;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -648,15 +621,6 @@
             header h1 {
                 font-size: 2rem;
             }
-            
-            .profile-stats {
-                gap: 0.8rem;
-            }
-            
-            .stat-item {
-                font-size: 0.7rem;
-                padding: 0.2rem 0.6rem;
-            }
         }
     </style>
 </head>
@@ -670,7 +634,6 @@
 
 <div class="container">
     <main>
-        <!-- Arama Kutusu -->
         <div class="search-section">
             <div class="search-box">
                 <i class="fas fa-search"></i>
@@ -678,7 +641,6 @@
             </div>
         </div>
 
-        <!-- Admin Kontrolleri -->
         <div class="admin-controls" id="adminControls">
             <a href="https://github.com/esakbas/esakbas.github.io/issues/new" target="_blank" class="write-redirect">
                 <i class="fas fa-pen-fancy"></i> Yeni Yazı Yaz
@@ -688,7 +650,6 @@
             </p>
         </div>
 
-        <!-- Kategori Filtreleri -->
         <div class="category-filters">
             <button class="filter-btn active" data-category="all"><i class="fas fa-globe"></i> Tümü</button>
             <button class="filter-btn" data-category="edebiyat"><i class="fas fa-book"></i> Edebiyat</button>
@@ -696,7 +657,6 @@
             <button class="filter-btn" data-category="gunluk"><i class="fas fa-journal-whills"></i> Günlük</button>
         </div>
 
-        <!-- Yazılar -->
         <div class="blog-posts" id="posts">
             <div class="skeleton-card">
                 <div class="skeleton-title"></div>
@@ -712,23 +672,15 @@
     </main>
 
     <aside>
-        <!-- Profil Kartı - Simetrik ve Modern -->
+        <!-- Profil Kartı - Tam Ortalanmış -->
         <div class="sidebar-widget profile-card">
             <img src="pp.jpg" class="profile-img" alt="Profil" onerror="this.src='https://via.placeholder.com/100'">
-            <div class="profile-name" id="profileName">Eşref Akbaş</div>
-            
-            <!-- İstatistikler - Simetrik -->
-            <div class="profile-stats">
-                <span class="stat-item"><i class="fas fa-calendar-alt"></i> 2024'ten beri</span>
-                <span class="stat-item"><i class="fas fa-mountain"></i> Bağrımdan kopanlar...</span>
-            </div>
-            
-            <div class="profile-bio">
-                <i class="fas fa-map-marker-alt"></i> Türkiye
+            <div class="profile-name">Eşref Akbaş</div>
+            <div class="profile-location">
+                <i class="fas fa-map-marker-alt"></i> Kurdistanî
             </div>
         </div>
 
-        <!-- İstatistikler -->
         <div class="sidebar-widget">
             <div class="widget-title">
                 <i class="fas fa-chart-line"></i> Blog İstatistikleri
@@ -740,7 +692,6 @@
             </ul>
         </div>
 
-        <!-- Kategoriler -->
         <div class="sidebar-widget">
             <div class="widget-title">
                 <i class="fas fa-tags"></i> Kategoriler
@@ -752,7 +703,6 @@
             </ul>
         </div>
 
-        <!-- Son Yazılar -->
         <div class="sidebar-widget">
             <div class="widget-title">
                 <i class="fas fa-clock"></i> Son Yazılar
@@ -762,7 +712,7 @@
             </ul>
         </div>
 
-        <!-- Takip Et - Sadece Instagram ve Twitter -->
+        <!-- Takip Et - Instagram ve X logosu -->
         <div class="sidebar-widget">
             <div class="widget-title">
                 <i class="fas fa-share-alt"></i> Takip Et
@@ -775,12 +725,10 @@
     </aside>
 </div>
 
-<!-- Yönetici Butonu -->
 <div class="admin-toggle" id="adminToggleBtn">
     <i class="fas fa-lock"></i>
 </div>
 
-<!-- Giriş Paneli -->
 <div class="login-panel" id="loginPanel">
     <div id="loginContent">
         <h4 style="margin-bottom: 0.8rem;"><i class="fas fa-shield-alt"></i> Yönetici Girişi</h4>
@@ -789,7 +737,6 @@
     </div>
 </div>
 
-<!-- Modal -->
 <div id="postModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
@@ -800,7 +747,6 @@
 <div id="toast" class="toast"></div>
 
 <script>
-    // ============= KONFİGÜRASYON =============
     const ADMIN_PASSWORD = "hindiba2024";
     const REPO_OWNER = 'esakbas';
     const REPO_NAME = 'esakbas.github.io';
@@ -810,7 +756,6 @@
     let currentSearch = '';
     let isAdminLoggedIn = false;
     
-    // ============= YARDIMCI FONKSİYONLAR =============
     function showToast(message, type = 'success') {
         const toast = document.getElementById('toast');
         toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
@@ -837,7 +782,6 @@
         }
     }
     
-    // ============= YÖNETİCİ GİRİŞİ =============
     const adminToggleBtn = document.getElementById('adminToggleBtn');
     const loginPanel = document.getElementById('loginPanel');
     const adminControls = document.getElementById('adminControls');
@@ -890,7 +834,6 @@
         }
     });
     
-    // ============= YAZILARI LİSTELE =============
     async function loadPosts() {
         const container = document.getElementById('posts');
         container.innerHTML = `
@@ -1024,7 +967,7 @@
                     <a href="${post.html_url}" target="_blank" style="color: var(--accent-color);">GitHub'da aç</a>
                 </p>
                 <div style="display: flex; gap: 0.5rem;">
-                    <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}', '_blank')" style="background: #1DA1F2; color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fab fa-twitter"></i> Paylaş</button>
+                    <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}', '_blank')" style="background: #000000; color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fab fa-twitter"></i> Paylaş</button>
                     <button onclick="navigator.clipboard.writeText(window.location.href); showToast('Link kopyalandı!')" style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fas fa-link"></i> Kopyala</button>
                 </div>
             </div>
@@ -1055,14 +998,12 @@
         return div.innerHTML;
     }
     
-    // Arama
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
         currentSearch = e.target.value;
         displayPosts();
     });
     
-    // Filtre butonları
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -1072,21 +1013,10 @@
         });
     });
     
-    // Profil ismi hover efekti
-    const profileName = document.getElementById('profileName');
-    profileName.addEventListener('mouseenter', () => {
-        profileName.style.transform = 'scale(1.05)';
-    });
-    profileName.addEventListener('mouseleave', () => {
-        profileName.style.transform = 'scale(1)';
-    });
-    
-    // Modal kapatma
     const modal = document.getElementById('postModal');
     document.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
     window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
     
-    // Başlat
     checkSession();
     loadPosts();
 </script>
