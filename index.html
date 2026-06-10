@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hindiba | Eşref Akbaş - Hatıra Defteri</title>
     <meta name="description" content="Eşref Akbaş'ın kişisel blogu - Edebiyat, şiir ve günlük yazıları">
-
+    
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -51,7 +51,6 @@
             padding-bottom: 3rem;
         }
 
-        /* Modern Header */
         header {
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             padding: 3rem 1rem;
@@ -107,7 +106,6 @@
             gap: 2rem;
         }
 
-        /* Arama Kutusu */
         .search-section {
             margin-bottom: 1.5rem;
         }
@@ -142,7 +140,6 @@
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
 
-        /* Kategori Filtreleri - Modern */
         .category-filters {
             display: flex;
             gap: 0.75rem;
@@ -178,7 +175,6 @@
             border-color: transparent;
         }
 
-        /* Blog Kartları - Modern */
         .blog-posts {
             display: flex;
             flex-direction: column;
@@ -211,11 +207,10 @@
             margin-bottom: 1rem;
         }
 
-        /* Kategori Renkleri */
         .category-edebiyat { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
         .category-siir { background: linear-gradient(135deg, #ec4899, #db2777); color: white; }
         .category-gunluk { background: linear-gradient(135deg, #10b981, #059669); color: white; }
-        .category-bir-cumle { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; } /* Turuncu tonu */
+        .category-bir-cumle { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
 
         .post-title {
             font-size: 1.3rem;
@@ -261,7 +256,6 @@
             gap: 0.6rem;
         }
 
-        /* Sidebar */
         .sidebar-widget {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
@@ -289,8 +283,12 @@
             color: var(--accent-color);
         }
 
-        /* Profil Kartı */
+        /* PROFİL KARTI - FLEXBOX İLE GARANTİLİ ORTALAMA */
         .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
         }
 
@@ -303,6 +301,9 @@
             border: 3px solid var(--accent-color);
             transition: transform 0.3s;
             cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .profile-img:hover {
@@ -314,9 +315,11 @@
             font-weight: 700;
             margin-bottom: 0.75rem;
             transition: all 0.3s;
-            display: inline-block;
             cursor: pointer;
             letter-spacing: 1px;
+            text-align: center;
+            display: block;
+            width: 100%;
         }
 
         .profile-name:hover {
@@ -332,6 +335,7 @@
             background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
             margin: 0.75rem auto;
             border-radius: 2px;
+            display: block;
         }
 
         .profile-location {
@@ -342,9 +346,9 @@
             align-items: center;
             justify-content: center;
             gap: 0.3rem;
+            width: 100%;
         }
 
-        /* Sosyal Medya */
         .social-links {
             display: flex;
             gap: 1.2rem;
@@ -379,7 +383,14 @@
             color: white; 
         }
 
-        /* Son Yazılar */
+        .reading-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
         .popular-posts {
             list-style: none;
         }
@@ -408,7 +419,6 @@
             color: var(--accent-color);
         }
 
-        /* Skeleton Loading */
         .skeleton-card {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
@@ -442,15 +452,6 @@
             50% { opacity: 0.5; }
         }
 
-        .reading-time {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.2rem;
-        }
-
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -493,7 +494,6 @@
             transform: rotate(90deg);
         }
 
-        /* Scroll Bar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -544,7 +544,6 @@
         </div>
 
         <div class="blog-posts" id="posts">
-            <!-- Skeleton Loading -->
             <div class="skeleton-card">
                 <div class="skeleton-title"></div>
                 <div class="skeleton-text"></div>
@@ -559,6 +558,7 @@
     </main>
 
     <aside>
+        <!-- PROFİL KARTI - FLEXBOX İLE ORTALANMIŞ -->
         <div class="sidebar-widget profile-card">
             <img src="pp.jpg" class="profile-img" alt="Profil" onerror="this.src='https://via.placeholder.com/100'">
             <div class="profile-name">Eşref Akbaş</div>
@@ -611,7 +611,6 @@
     </aside>
 </div>
 
-<!-- Modal -->
 <div id="postModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
@@ -627,7 +626,6 @@
     let currentFilter = 'all';
     let currentSearch = '';
     
-    // Okuma süresi hesaplama
     function calculateReadingTime(content) {
         const wordsPerMinute = 200;
         const words = content.split(/\s+/).length;
@@ -635,7 +633,6 @@
         return minutes < 1 ? 1 : minutes;
     }
     
-    // GitHub'dan yazıları çek
     async function loadPosts() {
         const container = document.getElementById('posts');
         container.innerHTML = `
@@ -658,7 +655,6 @@
         }
     }
     
-    // Kategori sayılarını güncelle
     function updateCategoryCounts() {
         const counts = {
             edebiyat: allPosts.filter(p => p.labels.some(l => l.name === 'edebiyat')).length,
@@ -674,7 +670,6 @@
         document.getElementById('totalPosts').innerText = allPosts.length;
     }
     
-    // Son 5 yazıyı sidebar'da göster
     function updateRecentPosts() {
         const recent = [...allPosts].sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0,5);
         const container = document.getElementById('recentPosts');
@@ -692,7 +687,6 @@
         `).join('');
     }
     
-    // Yazıları listele
     function displayPosts() {
         const container = document.getElementById('posts');
         let filtered = allPosts;
@@ -716,7 +710,6 @@
         
         container.innerHTML = filtered.map(post => {
             let category = post.labels[0]?.name || 'edebiyat';
-            // Kategori adını düzenle (kebab-case'ten normal metne)
             let categoryName = '';
             let categoryIcon = '';
             
@@ -750,7 +743,6 @@
         }).join('');
     }
     
-    // Modal aç
     function openModal(post) {
         const modal = document.getElementById('postModal');
         const modalBody = document.getElementById('modalBody');
@@ -792,7 +784,6 @@
         modal.style.display = 'block';
     }
     
-    // Basit Markdown dönüştürücü
     function markdownToHtml(md) {
         let html = md;
         html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
@@ -815,14 +806,12 @@
         return div.innerHTML;
     }
     
-    // Arama
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
         currentSearch = e.target.value;
         displayPosts();
     });
     
-    // Filtre butonları
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -832,12 +821,10 @@
         });
     });
     
-    // Modal kapatma
     const modal = document.getElementById('postModal');
     document.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
     window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
     
-    // Sayfa açılınca yüklenenler
     loadPosts();
 </script>
 
