@@ -283,6 +283,7 @@
             color: var(--accent-color);
         }
 
+        /* PROFİL KARTI - FLEXBOX İLE GARANTİLİ ORTALAMA */
         .profile-card {
             display: flex;
             flex-direction: column;
@@ -522,7 +523,7 @@
 
 <header>
     <h1><i class="fas fa-feather-alt"></i> Hindiba</h1>
-    <p>Belki de şimdiye kadar ardından söylenebilecek en zarif benzetme "Hindiba" idi…</p>
+    <p>Belki de şimdiye kadar ardından söylenebilecek en zarif benzetme “Hindiba” idi…</p>
 </header>
 
 <div class="container">
@@ -557,6 +558,7 @@
     </main>
 
     <aside>
+        <!-- PROFİL KARTI - FLEXBOX İLE ORTALANMIŞ -->
         <div class="sidebar-widget profile-card">
             <img src="pp.jpg" class="profile-img" alt="Profil" onerror="this.src='https://via.placeholder.com/100'">
             <div class="profile-name">Eşref Akbaş</div>
@@ -677,21 +679,12 @@
             return;
         }
         
-        // Post'ları window objesinde sakla
-        window.recentPostsData = recent;
-        
-        container.innerHTML = recent.map((post, index) => `
+        container.innerHTML = recent.map(post => `
             <li>
                 <i class="fas fa-angle-right"></i>
-                <a href="#" onclick="openRecentPost(${index}); return false;">${escapeHtml(post.title)}</a>
+                <a href="#" onclick="openModal(${JSON.stringify(post).replace(/'/g, "&#39;")}); return false;">${escapeHtml(post.title)}</a>
             </li>
         `).join('');
-    }
-    
-    function openRecentPost(index) {
-        if (window.recentPostsData && window.recentPostsData[index]) {
-            openModal(window.recentPostsData[index]);
-        }
     }
     
     function displayPosts() {
@@ -715,10 +708,7 @@
             return;
         }
         
-        // Filtrelenmiş post'ları window objesinde sakla
-        window.filteredPostsData = filtered;
-        
-        container.innerHTML = filtered.map((post, index) => {
+        container.innerHTML = filtered.map(post => {
             let category = post.labels[0]?.name || 'edebiyat';
             let categoryName = '';
             let categoryIcon = '';
@@ -745,18 +735,12 @@
                         <span class="reading-time"><i class="far fa-clock"></i> ${readTime} dk okuma</span>
                     </div>
                     <p class="post-excerpt">${escapeHtml(excerpt)}</p>
-                    <button class="read-more-btn" onclick="openFilteredPost(${index})">
+                    <button class="read-more-btn" onclick='openModal(${JSON.stringify(post).replace(/'/g, "&#39;")})'>
                         Devamını Oku <i class="fas fa-arrow-right"></i>
                     </button>
                 </article>
             `;
         }).join('');
-    }
-    
-    function openFilteredPost(index) {
-        if (window.filteredPostsData && window.filteredPostsData[index]) {
-            openModal(window.filteredPostsData[index]);
-        }
     }
     
     function openModal(post) {
@@ -798,13 +782,6 @@
         `;
         
         modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function closeModal() {
-        const modal = document.getElementById('postModal');
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
     }
     
     function markdownToHtml(md) {
@@ -845,14 +822,8 @@
     });
     
     const modal = document.getElementById('postModal');
-    document.querySelector('.close-modal').onclick = closeModal;
-    window.onclick = (e) => { if (e.target === modal) closeModal(); };
-    
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.style.display === 'block') {
-            closeModal();
-        }
-    });
+    document.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
     
     loadPosts();
 </script>
