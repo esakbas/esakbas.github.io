@@ -6,42 +6,10 @@
     <title>Hindiba | Eşref Akbaş - Hatıra Defteri</title>
     <meta name="description" content="Eşref Akbaş'ın kişisel blogu - Edebiyat, şiir ve günlük yazıları">
     
-    <!-- PWA Meta Tags -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4f46e5">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Hindiba | Eşref Akbaş">
-    <meta property="og:description" content="Edebiyat, şiir ve günlük yazıları">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://esakbas.github.io">
-    <meta property="og:image" content="https://esakbas.github.io/og-image.jpg">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Hindiba | Eşref Akbaş">
-    <meta name="twitter:description" content="Edebiyat, şiir ve günlük yazıları">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://esakbas.github.io">
-    
-    <!-- Font Awesome (Lazy Load) -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
-    
-    <!-- Firebase SDK (Lazy Load) -->
-    <script type="module">
-        // Firebase'i sadece ihtiyaç duyulduğunda yükle
-        if ('serviceWorker' in navigator) {
-            import('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
-            import('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js');
-        }
-    </script>
-    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
-        /* ========================================
-                   TEMEL DEĞİŞKENLER
-                ======================================== */
         :root {
             --bg-color: #f8f9fa;
             --container-bg: #ffffff;
@@ -53,18 +21,20 @@
             --card-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.05);
             --gradient-start: #4f46e5;
             --gradient-end: #ec4899;
-            --transition-speed: 0.3s;
-            --border-radius: 20px;
         }
 
-        [data-theme="dark"] {
-            --bg-color: #0f172a;
-            --container-bg: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-color: #6366f1;
-            --accent-hover: #818cf8;
-            --border-color: #334155;
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0f172a;
+                --container-bg: #1e293b;
+                --text-main: #f8fafc;
+                --text-muted: #94a3b8;
+                --accent-color: #6366f1;
+                --accent-hover: #818cf8;
+                --border-color: #334155;
+                --gradient-start: #6366f1;
+                --gradient-end: #f43f5e;
+            }
         }
 
         * {
@@ -79,12 +49,8 @@
             color: var(--text-main);
             line-height: 1.7;
             padding-bottom: 3rem;
-            transition: background-color var(--transition-speed), color var(--transition-speed);
         }
 
-        /* ========================================
-                   HEADER
-                ======================================== */
         header {
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             padding: 3rem 1rem;
@@ -103,11 +69,10 @@
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
             background-size: cover;
             opacity: 0.3;
-            pointer-events: none;
         }
 
         header h1 {
-            font-size: clamp(2rem, 5vw, 3rem);
+            font-size: 3rem;
             font-weight: 800;
             color: white;
             position: relative;
@@ -115,9 +80,9 @@
         }
 
         header p {
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255,255,255,0.9);
             font-style: italic;
-            font-size: clamp(0.9rem, 1.5vw, 1rem);
+            font-size: 1rem;
             position: relative;
             animation: fadeInUp 0.8s ease;
         }
@@ -132,23 +97,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ========================================
-                   READING PROGRESS
-                ======================================== */
-        .reading-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
-            z-index: 999;
-            transition: width 0.1s;
-            width: 0%;
-        }
-
-        /* ========================================
-                   CONTAINER
-                ======================================== */
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -158,16 +106,6 @@
             gap: 2rem;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-        }
-
-        /* ========================================
-                   SEARCH
-                ======================================== */
         .search-section {
             margin-bottom: 1.5rem;
         }
@@ -183,7 +121,6 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
-            pointer-events: none;
         }
 
         .search-box input {
@@ -194,7 +131,7 @@
             background-color: var(--container-bg);
             color: var(--text-main);
             font-size: 0.9rem;
-            transition: all var(--transition-speed);
+            transition: all 0.3s;
         }
 
         .search-box input:focus {
@@ -203,9 +140,6 @@
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
 
-        /* ========================================
-                   CATEGORY FILTERS
-                ======================================== */
         .category-filters {
             display: flex;
             gap: 0.75rem;
@@ -222,7 +156,11 @@
             color: var(--text-muted);
             font-size: 0.85rem;
             font-weight: 500;
-            transition: all var(--transition-speed);
+            transition: all 0.3s;
+        }
+
+        .filter-btn i {
+            margin-right: 0.3rem;
         }
 
         .filter-btn:hover {
@@ -237,9 +175,6 @@
             border-color: transparent;
         }
 
-        /* ========================================
-                   POST CARDS
-                ======================================== */
         .blog-posts {
             display: flex;
             flex-direction: column;
@@ -249,9 +184,9 @@
         .post-card {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
+            border-radius: 20px;
             padding: 1.8rem;
-            transition: all var(--transition-speed);
+            transition: all 0.3s;
             cursor: pointer;
         }
 
@@ -281,7 +216,6 @@
             font-size: 1.3rem;
             margin-bottom: 0.75rem;
             font-weight: 700;
-            line-height: 1.4;
         }
 
         .post-meta {
@@ -315,20 +249,180 @@
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
-            transition: gap var(--transition-speed);
+            transition: gap 0.3s;
         }
 
         .read-more-btn:hover {
             gap: 0.6rem;
         }
 
-        /* ========================================
-                   SKELETON LOADING
-                ======================================== */
+        .sidebar-widget {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar-widget:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .widget-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .widget-title i {
+            color: var(--accent-color);
+        }
+
+        /* PROFİL KARTI - FLEXBOX İLE GARANTİLİ ORTALAMA */
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+            transition: transform 0.3s;
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .profile-name:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .profile-divider {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            margin: 0.75rem auto;
+            border-radius: 2px;
+            display: block;
+        }
+
+        .profile-location {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            width: 100%;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-top: 0;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-3px);
+        }
+
+        .social-links a:nth-child(1):hover { 
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); 
+            color: white; 
+        }
+        .social-links a:nth-child(2):hover { 
+            background: #000000; 
+            color: white; 
+        }
+
+        .reading-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .popular-posts {
+            list-style: none;
+        }
+
+        .popular-posts li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .popular-posts li i {
+            color: var(--accent-color);
+            font-size: 0.8rem;
+        }
+
+        .popular-posts li a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .popular-posts li a:hover {
+            color: var(--accent-color);
+        }
+
         .skeleton-card {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
+            border-radius: 20px;
             padding: 1.8rem;
             animation: pulse 1.5s ease-in-out infinite;
         }
@@ -358,225 +452,6 @@
             50% { opacity: 0.5; }
         }
 
-        /* ========================================
-                   SIDEBAR
-                ======================================== */
-        .sidebar-widget {
-            background-color: var(--container-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            transition: all var(--transition-speed);
-        }
-
-        .sidebar-widget:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--card-shadow);
-        }
-
-        .widget-title {
-            font-weight: 700;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .widget-title i {
-            color: var(--accent-color);
-        }
-
-        /* Profile Card */
-        .profile-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .profile-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 1rem;
-            object-fit: cover;
-            border: 3px solid var(--accent-color);
-            transition: transform var(--transition-speed);
-            cursor: pointer;
-        }
-
-        .profile-img:hover {
-            transform: scale(1.05);
-        }
-
-        .profile-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            transition: all var(--transition-speed);
-            cursor: pointer;
-            letter-spacing: 1px;
-        }
-
-        .profile-name:hover {
-            transform: scale(1.05);
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .profile-divider {
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
-            margin: 0.75rem auto;
-            border-radius: 2px;
-        }
-
-        .profile-location {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.3rem;
-        }
-
-        /* Social Links */
-        .social-links {
-            display: flex;
-            gap: 1.2rem;
-            justify-content: center;
-            margin-top: 0;
-        }
-
-        .social-links a {
-            color: var(--text-muted);
-            font-size: 1.5rem;
-            transition: all var(--transition-speed);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--bg-color);
-            text-decoration: none;
-        }
-
-        .social-links a:hover {
-            transform: translateY(-3px);
-        }
-
-        .social-links a:nth-child(1):hover {
-            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
-            color: white;
-        }
-        .social-links a:nth-child(2):hover {
-            background: #000000;
-            color: white;
-        }
-        .social-links a:nth-child(3):hover {
-            background: #333;
-            color: white;
-        }
-
-        /* Lists */
-        .stat-list, .popular-posts {
-            list-style: none;
-        }
-
-        .stat-list li, .popular-posts li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .stat-list li:last-child, .popular-posts li:last-child {
-            border-bottom: none;
-        }
-
-        .stat-list li i, .popular-posts li i {
-            color: var(--accent-color);
-            width: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .popular-posts li a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: color var(--transition-speed);
-        }
-
-        .popular-posts li a:hover {
-            color: var(--accent-color);
-        }
-
-        /* ========================================
-                   FLOATING ACTIONS
-                ======================================== */
-        .floating-actions {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 100;
-        }
-
-        .floating-actions button {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-            transition: all var(--transition-speed);
-        }
-
-        .floating-actions button:hover {
-            transform: scale(1.1);
-        }
-
-        .back-to-top {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all var(--transition-speed);
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (max-width: 768px) {
-            .floating-actions {
-                bottom: 20px;
-                right: 20px;
-            }
-
-            .floating-actions button {
-                width: 45px;
-                height: 45px;
-                font-size: 1rem;
-            }
-        }
-
-        /* ========================================
-                   MODAL
-                ======================================== */
         .modal {
             display: none;
             position: fixed;
@@ -585,7 +460,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0,0,0,0.8);
             backdrop-filter: blur(5px);
             overflow-y: auto;
         }
@@ -602,123 +477,23 @@
         }
 
         @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .close-modal {
             position: absolute;
             right: 1.5rem;
             top: 1rem;
-            font-size: 2rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            transition: transform var(--transition-speed);
-            background: none;
-            border: none;
-            color: var(--text-main);
+            transition: transform 0.3s;
         }
 
         .close-modal:hover {
             transform: rotate(90deg);
         }
 
-        .modal-body img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            margin: 1rem 0;
-        }
-
-        .modal-body blockquote {
-            border-left: 4px solid var(--accent-color);
-            padding-left: 1rem;
-            margin: 1rem 0;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        .modal-body pre {
-            background: var(--bg-color);
-            padding: 1rem;
-            border-radius: 12px;
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
-
-        .modal-body code {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-
-        .post-stats {
-            display: flex;
-            gap: 1.5rem;
-            margin: 1rem 0;
-            padding: 0.5rem 0;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .post-stats span {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        @media (max-width: 768px) {
-            .modal-content {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-
-            .post-stats {
-                flex-wrap: wrap;
-                gap: 0.75rem;
-            }
-        }
-
-        /* ========================================
-                   TOAST
-                ======================================== */
-        .toast {
-            position: fixed;
-            bottom: 160px;
-            right: 30px;
-            background: var(--container-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 9999;
-            max-width: 350px;
-        }
-
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .toast i {
-            margin-right: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .toast {
-                bottom: 80px;
-                right: 20px;
-                left: 20px;
-                max-width: none;
-            }
-        }
-
-        /* ========================================
-                   SCROLLBAR
-                ======================================== */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -732,58 +507,13 @@
             border-radius: 10px;
         }
 
-        /* ========================================
-                   RESPONSIVE
-                ======================================== */
-        @media (max-width: 480px) {
-            .category-filters {
-                gap: 0.5rem;
-            }
-
-            .filter-btn {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.75rem;
-            }
-
-            .post-card {
-                padding: 1.2rem;
-            }
-
-            .post-title {
-                font-size: 1.1rem;
-            }
-        }
-
-        /* ========================================
-                   ADMIN BUTTON
-                ======================================== */
-        .admin-btn {
-            position: fixed;
-            bottom: 100px;
-            right: 20px;
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            z-index: 999;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .admin-btn:hover {
-            transform: scale(1.05);
-        }
-
         @media (max-width: 768px) {
-            .admin-btn {
-                bottom: 80px;
-                right: 20px;
-                padding: 8px 16px;
-                font-size: 0.8rem;
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2rem;
             }
         }
     </style>
@@ -791,990 +521,312 @@
 
 <body>
 
-    <!-- Reading Progress -->
-    <div class="reading-progress" id="readingProgress" role="progressbar" aria-label="Okuma ilerlemesi"></div>
+<header>
+    <h1><i class="fas fa-feather-alt"></i> Hindiba</h1>
+    <p>Belki de şimdiye kadar ardından söylenebilecek en zarif benzetme “Hindiba” idi…</p>
+</header>
 
-    <!-- Header -->
-    <header>
-        <h1><i class="fas fa-feather-alt" aria-hidden="true"></i> Hindiba</h1>
-        <p>Belki de şimdiye kadar ardından söylenebilecek en zarif benzetme "Hindiba" idi…</p>
-    </header>
-
-    <!-- Container -->
-    <div class="container">
-        <!-- Main Content -->
-        <main>
-            <div class="search-section">
-                <div class="search-box">
-                    <i class="fas fa-search" aria-hidden="true"></i>
-                    <input type="text" id="searchInput" placeholder="Yazılarda ara... (Başlık veya içerik)" aria-label="Yazı ara">
-                </div>
+<div class="container">
+    <main>
+        <div class="search-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Yazılarda ara... (Başlık veya içerik)">
             </div>
-
-            <div class="category-filters" id="categoryFilters" role="tablist" aria-label="Kategori filtreleri"></div>
-
-            <div class="blog-posts" id="posts" role="feed" aria-label="Blog yazıları">
-                <div class="skeleton-card">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-text"></div>
-                    <div class="skeleton-text short"></div>
-                </div>
-                <div class="skeleton-card">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-text"></div>
-                    <div class="skeleton-text short"></div>
-                </div>
-            </div>
-
-            <div id="loader" style="text-align: center; padding: 2rem; display: none;">
-                <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--accent-color);" aria-hidden="true"></i>
-                <span style="display: block; margin-top: 0.5rem; color: var(--text-muted);">Daha fazla yazı yükleniyor...</span>
-            </div>
-        </main>
-
-        <!-- Sidebar -->
-        <aside>
-            <!-- Profile Card -->
-            <div class="sidebar-widget profile-card">
-                <img src="pp.jpg" class="profile-img" alt="Eşref Akbaş profil fotoğrafı" 
-                     onerror="this.src='https://ui-avatars.com/api/?name=Eşref+Akbaş&background=4f46e5&color=fff&size=128'">
-                <div class="profile-name">Eşref Akbaş</div>
-                <div class="profile-divider"></div>
-                <div class="profile-location">
-                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i> Wan
-                </div>
-            </div>
-
-            <!-- Blog Statistics -->
-            <div class="sidebar-widget">
-                <div class="widget-title">
-                    <i class="fas fa-chart-line" aria-hidden="true"></i> Blog İstatistikleri
-                </div>
-                <ul class="stat-list">
-                    <li><i class="fas fa-pen-fancy" aria-hidden="true"></i> Toplam Yazı: <span id="totalPosts">0</span></li>
-                    <li><i class="fas fa-tags" aria-hidden="true"></i> Kategori Sayısı: <span id="totalCategories">0</span></li>
-                    <li><i class="fas fa-clock" aria-hidden="true"></i> Son Güncelleme: <span id="lastUpdate">-</span></li>
-                </ul>
-            </div>
-
-            <!-- Categories -->
-            <div class="sidebar-widget">
-                <div class="widget-title">
-                    <i class="fas fa-tags" aria-hidden="true"></i> Kategoriler
-                </div>
-                <ul class="stat-list" id="categoryList"></ul>
-            </div>
-
-            <!-- Recent Posts -->
-            <div class="sidebar-widget">
-                <div class="widget-title">
-                    <i class="fas fa-clock" aria-hidden="true"></i> Son Yazılar
-                </div>
-                <ul class="popular-posts" id="recentPosts">
-                    <li><i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Yükleniyor...</li>
-                </ul>
-            </div>
-
-            <!-- Social Links -->
-            <div class="sidebar-widget">
-                <div class="widget-title">
-                    <i class="fas fa-share-alt" aria-hidden="true"></i> Takip Et
-                </div>
-                <div class="social-links">
-                    <a href="https://www.instagram.com/esrefakbs" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                        <i class="fab fa-instagram" aria-hidden="true"></i>
-                    </a>
-                    <a href="https://x.com/esrefakbs" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                        <i class="fab fa-twitter" aria-hidden="true"></i>
-                    </a>
-                    <a href="https://github.com/esakbas" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                        <i class="fab fa-github" aria-hidden="true"></i>
-                    </a>
-                </div>
-            </div>
-        </aside>
-    </div>
-
-    <!-- Floating Actions -->
-    <div class="floating-actions">
-        <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Sayfa başına dön">
-            <i class="fas fa-arrow-up" aria-hidden="true"></i>
-        </button>
-        <button onclick="toggleTheme()" aria-label="Tema değiştir">
-            <i class="fas fa-moon" id="themeIcon" aria-hidden="true"></i>
-        </button>
-    </div>
-
-    <!-- Admin Button -->
-    <button class="admin-btn" onclick="adminApprove()" aria-label="Admin onay paneli">
-        <i class="fas fa-shield-alt" aria-hidden="true"></i> Admin
-    </button>
-
-    <!-- Modal -->
-    <div id="postModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <div class="modal-content">
-            <button class="close-modal" id="closeModal" aria-label="Kapat">&times;</button>
-            <div class="modal-body" id="modalBody"></div>
         </div>
+
+        <div class="category-filters">
+            <button class="filter-btn active" data-category="all"><i class="fas fa-globe"></i> Tümü</button>
+            <button class="filter-btn" data-category="edebiyat"><i class="fas fa-book"></i> Edebiyat</button>
+            <button class="filter-btn" data-category="siir"><i class="fas fa-feather-alt"></i> Şiir</button>
+            <button class="filter-btn" data-category="gunluk"><i class="fas fa-journal-whills"></i> Günlük</button>
+            <button class="filter-btn" data-category="bir-cumle"><i class="fas fa-quote-left"></i> Bir Cümle</button>
+        </div>
+
+        <div class="blog-posts" id="posts">
+            <div class="skeleton-card">
+                <div class="skeleton-title"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-title"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+        </div>
+    </main>
+
+    <aside>
+        <!-- PROFİL KARTI - FLEXBOX İLE ORTALANMIŞ -->
+        <div class="sidebar-widget profile-card">
+            <img src="pp.jpg" class="profile-img" alt="Profil" onerror="this.src='https://via.placeholder.com/100'">
+            <div class="profile-name">Eşref Akbaş</div>
+            <div class="profile-divider"></div>
+            <div class="profile-location">
+                <i class="fas fa-map-marker-alt"></i> Wan
+            </div>
+        </div>
+
+        <div class="sidebar-widget">
+            <div class="widget-title">
+                <i class="fas fa-chart-line"></i> Blog İstatistikleri
+            </div>
+            <ul style="list-style:none; font-size:0.85rem;">
+                <li><i class="fas fa-pen-fancy"></i> Toplam Yazı: <span id="totalPosts">0</span></li>
+                <li><i class="fas fa-tags"></i> Kategori Sayısı: 4</li>
+            </ul>
+        </div>
+
+        <div class="sidebar-widget">
+            <div class="widget-title">
+                <i class="fas fa-tags"></i> Kategoriler
+            </div>
+            <ul style="list-style:none; font-size:0.85rem;">
+                <li id="cat-edebiyat-count"><i class="fas fa-book"></i> Edebiyat (0)</li>
+                <li id="cat-siir-count"><i class="fas fa-feather-alt"></i> Şiir (0)</li>
+                <li id="cat-gunluk-count"><i class="fas fa-journal-whills"></i> Günlük (0)</li>
+                <li id="cat-bir-cumle-count"><i class="fas fa-quote-left"></i> Bir Cümle (0)</li>
+            </ul>
+        </div>
+
+        <div class="sidebar-widget">
+            <div class="widget-title">
+                <i class="fas fa-clock"></i> Son Yazılar
+            </div>
+            <ul class="popular-posts" id="recentPosts">
+                <li><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</li>
+            </ul>
+        </div>
+
+        <div class="sidebar-widget">
+            <div class="widget-title">
+                <i class="fas fa-share-alt"></i> Takip Et
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/esrefakbs" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://x.com/esrefakbs" target="_blank"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<div id="postModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-body" id="modalBody"></div>
     </div>
-
-    <!-- Toast -->
-    <div class="toast" id="toast" role="alert" aria-live="polite">
-        <i class="fas fa-check-circle" style="color: #10b981;" aria-hidden="true"></i>
-        <span id="toastMessage">İşlem başarılı!</span>
-    </div>
-
-    <script>
-        /**
-         * ============================================================
-         * KONFİGÜRASYON
-         * ============================================================
-         */
-        const CONFIG = {
-            REPO_OWNER: 'esakbas',
-            REPO_NAME: 'esakbas.github.io',
-            POSTS_PER_PAGE: 10,
-            CACHE_DURATION: 5 * 60 * 1000,
-        };
-
-        /**
-         * ============================================================
-         * STATE YÖNETİMİ
-         * ============================================================
-         */
-        const state = {
-            allPosts: [],
-            filteredPosts: [],
-            currentFilter: 'all',
-            currentSearch: '',
-            currentPage: 1,
-            isLoading: false,
-            hasMore: true,
-            darkMode: localStorage.getItem('darkMode') === 'true',
-        };
-
-        /**
-         * ============================================================
-         * YARDIMCI FONKSİYONLAR
-         * ============================================================
-         */
-
-        // Güvenli hash fonksiyonu
-        async function secureHash(str) {
-            const msgBuffer = new TextEncoder().encode(str);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        // Admin şifresi kontrolü (SHA-256 hash)
-        // Gerçek şifre: "HindibaAdmin2024!"
-        const ADMIN_PASSWORD_HASH = "d6a5f1d29e3c7a8b9f4e6d1c2a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c";
-
-        async function checkPassword(input) {
-            const hash = await secureHash(input);
-            return hash === ADMIN_PASSWORD_HASH;
-        }
-
-        function calculateReadingTime(content) {
-            const words = content?.split(/\s+/).length || 0;
-            return Math.max(1, Math.ceil(words / 200));
-        }
-
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function getCategoryInfo(category) {
-            const map = {
-                'edebiyat': { name: 'Edebiyat', icon: 'fa-book', color: 'category-edebiyat' },
-                'siir': { name: 'Şiir', icon: 'fa-feather-alt', color: 'category-siir' },
-                'gunluk': { name: 'Günlük', icon: 'fa-journal-whills', color: 'category-gunluk' },
-                'bir-cumle': { name: 'Bir Cümle', icon: 'fa-quote-left', color: 'category-bir-cumle' }
-            };
-            return map[category] || { name: category, icon: 'fa-tag', color: '' };
-        }
-
-        function formatDate(date) {
-            return new Date(date).toLocaleDateString('tr-TR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-        }
-
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            const icon = toast.querySelector('i');
-
-            toastMessage.textContent = message;
-
-            const icons = {
-                success: 'fa-check-circle',
-                error: 'fa-exclamation-circle',
-                info: 'fa-info-circle'
-            };
-
-            const colors = {
-                success: '#10b981',
-                error: '#ef4444',
-                info: '#3b82f6'
-            };
-
-            icon.className = `fas ${icons[type] || icons.info}`;
-            icon.style.color = colors[type] || colors.info;
-
-            toast.classList.add('show');
-            clearTimeout(toast.timeout);
-            toast.timeout = setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        function copyLink() {
-            const url = window.location.href;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(url)
-                    .then(() => showToast('Link kopyalandı!', 'success'))
-                    .catch(() => showToast('Link kopyalanamadı', 'error'));
-            } else {
-                // Fallback
-                const input = document.createElement('input');
-                input.value = url;
-                document.body.appendChild(input);
-                input.select();
-                try {
-                    document.execCommand('copy');
-                    showToast('Link kopyalandı!', 'success');
-                } catch (e) {
-                    showToast('Link kopyalanamadı', 'error');
-                }
-                document.body.removeChild(input);
-            }
-        }
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        /**
-         * ============================================================
-         * MARKDOWN İŞLEME (Geliştirilmiş)
-         * ============================================================
-         */
-        function markdownToHtml(md) {
-            if (!md) return '';
-
-            let html = md;
-
-            // Code blocks
-            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
-                return `<pre><code class="language-${lang || 'text'}">${escapeHtml(code.trim())}</code></pre>`;
-            });
-
-            // Headers
-            html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
-            html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
-            html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
-
-            // Lists
-            html = html.replace(/^- (.*$)/gm, '<li>$1</li>');
-            html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
-
-            // Blockquotes
-            html = html.replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>');
-
-            // Bold & Italic
-            html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
-            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-
-            // Links & Images
-            html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-            html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" loading="lazy" decoding="async">');
-
-            // Paragraphs
-            html = html.split('\n\n').map(para => {
-                if (para.trim() === '') return '';
-                if (para.startsWith('<') || para.startsWith('```')) return para;
-                return `<p>${para.replace(/\n/g, '<br>')}</p>`;
-            }).join('');
-
-            return html;
-        }
-
-        /**
-         * ============================================================
-         * API İSTEKLERİ
-         * ============================================================
-         */
-        async function fetchPosts() {
-            try {
-                const cacheKey = `github_posts_${CONFIG.REPO_OWNER}_${CONFIG.REPO_NAME}`;
-                const cached = localStorage.getItem(cacheKey);
-
-                if (cached) {
-                    try {
-                        const { data, timestamp } = JSON.parse(cached);
-                        if (Date.now() - timestamp < CONFIG.CACHE_DURATION) {
-                            return data;
-                        }
-                    } catch (e) {
-                        // Cache bozuksa devam et
-                    }
-                }
-
-                const response = await fetch(
-                    `https://api.github.com/repos/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/issues?state=all&per_page=100`, {
-                        headers: {
-                            'Accept': 'application/vnd.github.v3+json',
-                        }
-                    }
-                );
-
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-                const data = await response.json();
-                const posts = data.filter(issue => issue.labels && issue.labels.length > 0);
-
-                localStorage.setItem(cacheKey, JSON.stringify({
-                    data: posts,
-                    timestamp: Date.now()
-                }));
-
-                return posts;
-
-            } catch (error) {
-                console.error('Yazılar yüklenirken hata:', error);
-                showToast('Yazılar yüklenirken bir hata oluştu', 'error');
-                return [];
-            }
-        }
-
-        /**
-         * ============================================================
-         * RENDER FONKSİYONLARI
-         * ============================================================
-         */
-
-        function renderCategories() {
-            const categories = {};
-            state.allPosts.forEach(post => {
-                post.labels.forEach(label => {
-                    categories[label.name] = (categories[label.name] || 0) + 1;
-                });
-            });
-
-            const filterContainer = document.getElementById('categoryFilters');
-            let filterHtml = `
-                <button class="filter-btn active" data-category="all" role="tab" aria-selected="true">
-                    <i class="fas fa-globe" aria-hidden="true"></i> Tümü (${state.allPosts.length})
-                </button>
-            `;
-
-            Object.entries(categories).forEach(([category, count]) => {
-                const info = getCategoryInfo(category);
-                filterHtml += `
-                    <button class="filter-btn" data-category="${category}" role="tab" aria-selected="false">
-                        <i class="fas ${info.icon}" aria-hidden="true"></i> ${info.name} (${count})
-                    </button>
-                `;
-            });
-
-            filterContainer.innerHTML = filterHtml;
-
-            const categoryList = document.getElementById('categoryList');
-            categoryList.innerHTML = Object.entries(categories).map(([category, count]) => {
-                const info = getCategoryInfo(category);
-                return `<li><i class="fas ${info.icon}" aria-hidden="true"></i> ${info.name} (${count})</li>`;
-            }).join('');
-
-            document.getElementById('totalCategories').textContent = Object.keys(categories).length;
-
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-btn').forEach(b => {
-                        b.classList.remove('active');
-                        b.setAttribute('aria-selected', 'false');
-                    });
-                    btn.classList.add('active');
-                    btn.setAttribute('aria-selected', 'true');
-                    state.currentFilter = btn.dataset.category;
-                    state.currentPage = 1;
-                    state.hasMore = true;
-                    renderPosts();
-                });
-            });
-        }
-
-        function renderPosts() {
-            const container = document.getElementById('posts');
-
-            let filtered = state.allPosts;
-
-            if (state.currentFilter !== 'all') {
-                filtered = filtered.filter(post =>
-                    post.labels.some(l => l.name === state.currentFilter)
-                );
-            }
-
-            if (state.currentSearch) {
-                const searchLower = state.currentSearch.toLowerCase();
-                filtered = filtered.filter(post =>
-                    post.title.toLowerCase().includes(searchLower) ||
-                    (post.body && post.body.toLowerCase().includes(searchLower))
-                );
-            }
-
-            state.filteredPosts = filtered;
-
-            const start = 0;
-            const end = state.currentPage * CONFIG.POSTS_PER_PAGE;
-            const pagePosts = filtered.slice(start, end);
-
-            state.hasMore = end < filtered.length;
-
-            if (filtered.length === 0 && state.currentPage === 1) {
-                container.innerHTML = `
-                    <div class="post-card">
-                        <i class="fas fa-search" style="font-size: 2rem; display: block; margin-bottom: 1rem;" aria-hidden="true"></i>
-                        <p style="text-align: center;">Bu kriterlere uygun yazı bulunamadı.</p>
-                    </div>
-                `;
-                document.getElementById('loader').style.display = 'none';
-                return;
-            }
-
-            if (state.currentPage === 1) {
-                container.innerHTML = '';
-            }
-
-            const postsHtml = pagePosts.slice((state.currentPage - 1) * CONFIG.POSTS_PER_PAGE).map(post => {
-                const category = post.labels[0]?.name || 'edebiyat';
-                const info = getCategoryInfo(category);
-                const content = post.body || '';
-                const excerpt = content.split('\n').slice(0, 3).join(' ').substring(0, 180) + '...';
-                const readTime = calculateReadingTime(content);
-                const date = formatDate(post.created_at);
-
-                // Güvenli veri aktarımı için encodeURIComponent kullan
-                const postData = encodeURIComponent(JSON.stringify(post));
-
-                return `
-                    <article class="post-card" data-post="${postData}" role="article">
-                        <div class="post-category ${info.color}">
-                            <i class="fas ${info.icon}" aria-hidden="true"></i> ${info.name}
-                        </div>
-                        <h2 class="post-title">${escapeHtml(post.title)}</h2>
-                        <div class="post-meta">
-                            <span><i class="far fa-calendar-alt" aria-hidden="true"></i> ${date}</span>
-                            <span class="reading-time"><i class="far fa-clock" aria-hidden="true"></i> ${readTime} dk okuma</span>
-                        </div>
-                        <p class="post-excerpt">${escapeHtml(excerpt)}</p>
-                        <button class="read-more-btn" onclick="openModalFromElement(this)" aria-label="${escapeHtml(post.title)} yazısını oku">
-                            Devamını Oku <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                        </button>
-                    </article>
-                `;
-            }).join('');
-
-            if (state.currentPage === 1) {
-                container.innerHTML = postsHtml;
-            } else {
-                container.innerHTML += postsHtml;
-            }
-
-            document.getElementById('loader').style.display = state.hasMore ? 'block' : 'none';
-            document.getElementById('totalPosts').textContent = state.allPosts.length;
-
-            if (state.allPosts.length > 0) {
-                const lastPost = state.allPosts.reduce((a, b) =>
-                    new Date(a.updated_at) > new Date(b.updated_at) ? a : b
-                );
-                document.getElementById('lastUpdate').textContent = formatDate(lastPost.updated_at);
-            }
-        }
-
-        function renderRecentPosts() {
-            const recent = [...state.allPosts]
-                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-                .slice(0, 5);
-
-            const container = document.getElementById('recentPosts');
-
-            if (recent.length === 0) {
-                container.innerHTML = '<li><i class="fas fa-info-circle" aria-hidden="true"></i> Henüz yazı yok</li>';
-                return;
-            }
-
-            container.innerHTML = recent.map(post => {
-                const postData = encodeURIComponent(JSON.stringify(post));
-                return `
-                    <li>
-                        <i class="fas fa-angle-right" aria-hidden="true"></i>
-                        <a href="#" onclick="openModalFromPost(decodeURIComponent('${postData}')); return false;" aria-label="${escapeHtml(post.title)} yazısını oku">
-                            ${escapeHtml(post.title)}
-                        </a>
-                    </li>
-                `;
-            }).join('');
-        }
-
-        /**
-         * ============================================================
-         * MODAL İŞLEMLERİ
-         * ============================================================
-         */
-
-        function openModalFromElement(element) {
-            try {
-                const postData = element.closest('.post-card').dataset.post;
-                const post = JSON.parse(decodeURIComponent(postData));
-                openModal(post);
-            } catch (error) {
-                console.error('Modal açılırken hata:', error);
-                showToast('Yazı açılamadı', 'error');
-            }
-        }
-
-        function openModalFromPost(postData) {
-            try {
-                const post = typeof postData === 'string' ? JSON.parse(postData) : postData;
-                openModal(post);
-            } catch (error) {
-                console.error('Modal açılırken hata:', error);
-                showToast('Yazı açılamadı', 'error');
-            }
-        }
-
-        function openModal(post) {
-            const modal = document.getElementById('postModal');
-            const modalBody = document.getElementById('modalBody');
-
-            const category = post.labels[0]?.name || 'edebiyat';
-            const info = getCategoryInfo(category);
-            const content = post.body || '';
-            const readTime = calculateReadingTime(content);
-            const date = formatDate(post.created_at);
-
-            let cleanContent = content.replace(/^## .*\n/, '');
-            cleanContent = markdownToHtml(cleanContent);
-
-            modalBody.innerHTML = `
-                <div class="post-category ${info.color}" style="margin-bottom: 1rem; display: inline-flex;">
-                    <i class="fas ${info.icon}" aria-hidden="true"></i> ${info.name}
-                </div>
-                <h1 id="modalTitle" style="margin-top: 1rem;">${escapeHtml(post.title)}</h1>
-                <div class="post-meta" style="margin-top: 0.5rem;">
-                    <span><i class="far fa-calendar-alt" aria-hidden="true"></i> ${date}</span>
-                    <span><i class="far fa-clock" aria-hidden="true"></i> ${readTime} dk okuma</span>
-                </div>
-                <div class="post-stats">
-                    <span><i class="fas fa-comment" aria-hidden="true"></i> ${post.comments} yorum</span>
-                    <span><i class="fas fa-hashtag" aria-hidden="true"></i> #${category}</span>
-                </div>
-                <hr style="margin: 1.5rem 0;">
-                ${cleanContent}
-                <hr style="margin: 1.5rem 0;">
-                <div style="display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap;">
-                    <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}', '_blank', 'noopener,noreferrer')" 
-                            style="background: #000; color: white; border: none; padding: 0.5rem 1.2rem; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fab fa-twitter" aria-hidden="true"></i> Paylaş
-                    </button>
-                    <button onclick="copyLink()" 
-                            style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1.2rem; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-link" aria-hidden="true"></i> Kopyala
-                    </button>
-                    <button onclick="window.open('${post.html_url}', '_blank', 'noopener,noreferrer')" 
-                            style="background: #6b7280; color: white; border: none; padding: 0.5rem 1.2rem; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fab fa-github" aria-hidden="true"></i> GitHub'da Gör
-                    </button>
-                </div>
-            `;
-
-            // ==========================================
-            // YORUM SİSTEMİ (FIREBASE)
-            // ==========================================
-            const commentContainer = document.createElement('div');
-            commentContainer.id = 'commentContainer';
-            commentContainer.style.marginTop = '2rem';
-
-            commentContainer.innerHTML = `
-                <hr>
-                <h3 style="display:flex; align-items:center; gap:0.5rem; margin:1rem 0;">
-                    <i class="fas fa-comment" aria-hidden="true"></i> Yorum Yap
-                </h3>
-                <form id="commentForm" aria-label="Yorum formu">
-                    <label for="commentName" style="display:block; margin-bottom:0.3rem; font-weight:500;">Adınız</label>
-                    <input type="text" id="commentName" placeholder="Adınız" required 
-                           style="width:100%; padding:0.5rem; margin-bottom:0.5rem; 
-                                  border:1px solid var(--border-color); border-radius:8px; 
-                                  background:var(--container-bg); color:var(--text-main);">
-                    <label for="commentText" style="display:block; margin-bottom:0.3rem; font-weight:500;">Yorumunuz</label>
-                    <textarea id="commentText" placeholder="Yorumunuz..." required 
-                              style="width:100%; padding:0.5rem; margin-bottom:0.5rem; 
-                                     border:1px solid var(--border-color); border-radius:8px; 
-                                     background:var(--container-bg); color:var(--text-main); height:100px;"></textarea>
-                    <div style="display:flex; justify-content:flex-end;">
-                        <button type="submit" 
-                                style="background:var(--accent-color); color:white; 
-                                       border:none; padding:0.5rem 1.5rem; border-radius:50px; 
-                                       cursor:pointer; font-weight:600;">
-                            <i class="fas fa-paper-plane" aria-hidden="true"></i> Gönder
-                        </button>
-                    </div>
-                </form>
-                <div id="commentsList" style="margin-top:1.5rem;">
-                    <p style="color:var(--text-muted);">Yorumlar yükleniyor...</p>
-                </div>
-            `;
-
-            modalBody.appendChild(commentContainer);
-
-            // Firebase yorum formu
-            if (typeof firebase !== 'undefined' && firebase.firestore) {
-                document.getElementById('commentForm').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const name = document.getElementById('commentName').value.trim();
-                    const comment = document.getElementById('commentText').value.trim();
-                    if (name && comment) {
-                        submitComment(post.id, name, comment);
-                        document.getElementById('commentName').value = '';
-                        document.getElementById('commentText').value = '';
-                    } else {
-                        showToast('Lütfen adınızı ve yorumunuzu girin.', 'error');
-                    }
-                });
-
-                getApprovedComments(post.id, (comments) => {
-                    const list = document.getElementById('commentsList');
-                    if (comments.length === 0) {
-                        list.innerHTML = '<p style="color:var(--text-muted);">📭 Henüz onaylanmış yorum yok. İlk yorumu siz yapın!</p>';
-                    } else {
-                        list.innerHTML = comments.map(c => `
-                            <div style="border-bottom:1px solid var(--border-color); padding:0.8rem 0;">
-                                <div style="display:flex; align-items:center; gap:0.5rem;">
-                                    <i class="fas fa-user-circle" style="color:var(--accent-color); font-size:1.2rem;" aria-hidden="true"></i>
-                                    <strong>${escapeHtml(c.name)}</strong>
-                                    <small style="color:var(--text-muted); margin-left:auto;">
-                                        ${c.createdAt ? new Date(c.createdAt.toDate()).toLocaleDateString('tr-TR') : ''}
-                                    </small>
-                                </div>
-                                <p style="margin:0.5rem 0 0 0; word-break:break-word;">${escapeHtml(c.comment)}</p>
-                            </div>
-                        `).join('');
-                    }
-                });
-            } else {
-                document.getElementById('commentForm').style.display = 'none';
-                document.getElementById('commentsList').innerHTML = 
-                    '<p style="color:var(--text-muted);">Yorum sistemi yükleniyor...</p>';
-            }
-
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            document.getElementById('readingProgress').style.width = '0%';
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('postModal');
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        /**
-         * ============================================================
-         * FIREBASE KONFİGÜRASYONU VE FONKSİYONLAR
-         * ============================================================
-         */
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCok6u3AtJFFBhzPen9mq1Vnt2zkGiBbiQ",
-            authDomain: "blog-yorum-85c27.firebaseapp.com",
-            projectId: "blog-yorum-85c27",
-            storageBucket: "blog-yorum-85c27.firebasestorage.app",
-            messagingSenderId: "513829630788",
-            appId: "1:513829630788:web:d32cea4d6cde32ab595d11",
-            measurementId: "G-8MYBYSLCKB"
-        };
-
-        // Firebase'i güvenli bir şekilde başlat
-        let firebaseInitialized = false;
-
-        function initFirebase() {
-            if (firebaseInitialized) return;
-            try {
-                if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length === 0) {
-                    firebase.initializeApp(firebaseConfig);
-                    firebaseInitialized = true;
-                }
-            } catch (error) {
-                console.error('Firebase başlatılamadı:', error);
-            }
-        }
-
-        function getDB() {
-            initFirebase();
-            if (typeof firebase !== 'undefined' && firebase.firestore) {
-                return firebase.firestore();
-            }
-            return null;
-        }
-
-        function submitComment(postId, name, comment) {
-            const db = getDB();
-            if (!db) {
-                showToast('Yorum sistemi şu anda kullanılamıyor.', 'error');
-                return;
-            }
-
-            db.collection("comments").add({
-                postId: postId,
-                name: name,
-                comment: comment,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                approved: false
-            })
-            .then(() => {
-                showToast('✅ Yorumunuz admin onayına gönderildi!', 'success');
-            })
-            .catch(err => {
-                console.error('❌ Yorum gönderilemedi:', err);
-                showToast('❌ Bir hata oluştu, lütfen tekrar deneyin.', 'error');
-            });
-        }
-
-        function getApprovedComments(postId, callback) {
-            const db = getDB();
-            if (!db) {
-                callback([]);
-                return;
-            }
-
-            db.collection("comments")
-                .where("postId", "==", postId)
-                .where("approved", "==", true)
-                .orderBy("createdAt", "asc")
-                .get()
-                .then((snapshot) => {
-                    const comments = [];
-                    snapshot.forEach(doc => {
-                        comments.push({ id: doc.id, ...doc.data() });
-                    });
-                    callback(comments);
-                })
-                .catch(err => {
-                    console.error('❌ Yorumlar alınamadı:', err);
-                    callback([]);
-                });
-        }
-
-        /**
-         * ============================================================
-         * ADMIN PANELİ (GÜVENLİ)
-         * ============================================================
-         */
-        async function adminApprove() {
-            const password = prompt('🔒 Admin şifresini girin:');
+</div>
+
+<script>
+    const REPO_OWNER = 'esakbas';
+    const REPO_NAME = 'esakbas.github.io';
+    
+    let allPosts = [];
+    let currentFilter = 'all';
+    let currentSearch = '';
+    
+    function calculateReadingTime(content) {
+        const wordsPerMinute = 200;
+        const words = content.split(/\s+/).length;
+        const minutes = Math.ceil(words / wordsPerMinute);
+        return minutes < 1 ? 1 : minutes;
+    }
+    
+    async function loadPosts() {
+        const container = document.getElementById('posts');
+        container.innerHTML = `
+            <div class="skeleton-card"><div class="skeleton-title"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton-title"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        `;
+        
+        try {
+            const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues?state=all&per_page=100`);
+            const issues = await response.json();
             
-            if (!password) {
-                showToast('❌ Şifre girmediniz!', 'error');
-                return;
+            allPosts = issues.filter(issue => issue.labels && issue.labels.length > 0);
+            
+            updateCategoryCounts();
+            updateRecentPosts();
+            displayPosts();
+            
+        } catch (err) {
+            container.innerHTML = `<div class="post-card">⚠️ Yazılar yüklenemedi: ${err.message}</div>`;
+        }
+    }
+    
+    function updateCategoryCounts() {
+        const counts = {
+            edebiyat: allPosts.filter(p => p.labels.some(l => l.name === 'edebiyat')).length,
+            siir: allPosts.filter(p => p.labels.some(l => l.name === 'siir')).length,
+            gunluk: allPosts.filter(p => p.labels.some(l => l.name === 'gunluk')).length,
+            'bir-cumle': allPosts.filter(p => p.labels.some(l => l.name === 'bir-cumle')).length
+        };
+        
+        document.getElementById('cat-edebiyat-count').innerHTML = `<i class="fas fa-book"></i> Edebiyat (${counts.edebiyat})`;
+        document.getElementById('cat-siir-count').innerHTML = `<i class="fas fa-feather-alt"></i> Şiir (${counts.siir})`;
+        document.getElementById('cat-gunluk-count').innerHTML = `<i class="fas fa-journal-whills"></i> Günlük (${counts.gunluk})`;
+        document.getElementById('cat-bir-cumle-count').innerHTML = `<i class="fas fa-quote-left"></i> Bir Cümle (${counts['bir-cumle']})`;
+        document.getElementById('totalPosts').innerText = allPosts.length;
+    }
+    
+    function updateRecentPosts() {
+        const recent = [...allPosts].sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0,5);
+        const container = document.getElementById('recentPosts');
+        
+        if (recent.length === 0) {
+            container.innerHTML = '<li><i class="fas fa-info-circle"></i> Henüz yazı yok</li>';
+            return;
+        }
+        
+        container.innerHTML = recent.map(post => `
+            <li>
+                <i class="fas fa-angle-right"></i>
+                <a href="#" onclick="openModal(${JSON.stringify(post).replace(/'/g, "&#39;")}); return false;">${escapeHtml(post.title)}</a>
+            </li>
+        `).join('');
+    }
+    
+    function displayPosts() {
+        const container = document.getElementById('posts');
+        let filtered = allPosts;
+        
+        if (currentFilter !== 'all') {
+            filtered = filtered.filter(post => post.labels.some(l => l.name === currentFilter));
+        }
+        
+        if (currentSearch) {
+            const searchLower = currentSearch.toLowerCase();
+            filtered = filtered.filter(post => 
+                post.title.toLowerCase().includes(searchLower) || 
+                (post.body && post.body.toLowerCase().includes(searchLower))
+            );
+        }
+        
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="post-card">📭 Bu kriterlere uygun yazı bulunamadı.</div>';
+            return;
+        }
+        
+        container.innerHTML = filtered.map(post => {
+            let category = post.labels[0]?.name || 'edebiyat';
+            let categoryName = '';
+            let categoryIcon = '';
+            
+            switch(category) {
+                case 'edebiyat': categoryName = 'Edebiyat'; categoryIcon = '<i class="fas fa-book"></i>'; break;
+                case 'siir': categoryName = 'Şiir'; categoryIcon = '<i class="fas fa-feather-alt"></i>'; break;
+                case 'gunluk': categoryName = 'Günlük'; categoryIcon = '<i class="fas fa-journal-whills"></i>'; break;
+                case 'bir-cumle': categoryName = 'Bir Cümle'; categoryIcon = '<i class="fas fa-quote-left"></i>'; break;
+                default: categoryName = category; categoryIcon = '<i class="fas fa-tag"></i>';
             }
-
-            const isValid = await checkPassword(password);
-            if (!isValid) {
-                showToast('❌ Yanlış şifre!', 'error');
-                return;
-            }
-
-            const db = getDB();
-            if (!db) {
-                showToast('Veritabanı bağlantısı kurulamadı.', 'error');
-                return;
-            }
-
-            try {
-                const snapshot = await db.collection("comments")
-                    .where("approved", "==", false)
-                    .get();
-
-                if (snapshot.empty) {
-                    showToast('📭 Onay bekleyen yorum yok.', 'info');
-                    return;
-                }
-
-                let message = '📋 Onay bekleyen yorumlar:\n\n';
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    message += `📝 ${data.name}: ${data.comment}\n`;
-                });
-
-                if (confirm(message + '\n\nTümünü onaylamak istiyor musunuz?')) {
-                    const batch = db.batch();
-                    snapshot.forEach(doc => {
-                        batch.update(doc.ref, { approved: true });
-                    });
-                    await batch.commit();
-                    showToast('✅ Tüm yorumlar onaylandı!', 'success');
-                }
-            } catch (err) {
-                console.error('Admin onay hatası:', err);
-                showToast('❌ Hata oluştu: ' + err.message, 'error');
-            }
+            
+            const content = post.body || '';
+            const excerpt = content.split('\n').slice(0, 3).join(' ').substring(0, 180) + '...';
+            const date = new Date(post.created_at).toLocaleDateString('tr-TR');
+            const readTime = calculateReadingTime(content);
+            
+            return `
+                <article class="post-card">
+                    <div class="post-category category-${category}">${categoryIcon} ${categoryName}</div>
+                    <h2 class="post-title">${escapeHtml(post.title)}</h2>
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar-alt"></i> ${date}</span>
+                        <span class="reading-time"><i class="far fa-clock"></i> ${readTime} dk okuma</span>
+                    </div>
+                    <p class="post-excerpt">${escapeHtml(excerpt)}</p>
+                    <button class="read-more-btn" onclick='openModal(${JSON.stringify(post).replace(/'/g, "&#39;")})'>
+                        Devamını Oku <i class="fas fa-arrow-right"></i>
+                    </button>
+                </article>
+            `;
+        }).join('');
+    }
+    
+    function openModal(post) {
+        const modal = document.getElementById('postModal');
+        const modalBody = document.getElementById('modalBody');
+        
+        let category = post.labels[0]?.name || 'edebiyat';
+        let categoryName = '';
+        let categoryIcon = '';
+        
+        switch(category) {
+            case 'edebiyat': categoryName = 'Edebiyat'; categoryIcon = '<i class="fas fa-book"></i>'; break;
+            case 'siir': categoryName = 'Şiir'; categoryIcon = '<i class="fas fa-feather-alt"></i>'; break;
+            case 'gunluk': categoryName = 'Günlük'; categoryIcon = '<i class="fas fa-journal-whills"></i>'; break;
+            case 'bir-cumle': categoryName = 'Bir Cümle'; categoryIcon = '<i class="fas fa-quote-left"></i>'; break;
+            default: categoryName = category; categoryIcon = '<i class="fas fa-tag"></i>';
         }
-
-        /**
-         * ============================================================
-         * TEMA YÖNETİMİ
-         * ============================================================
-         */
-
-        function toggleTheme() {
-            state.darkMode = !state.darkMode;
-            localStorage.setItem('darkMode', state.darkMode);
-            updateTheme();
-            showToast(state.darkMode ? '🌙 Koyu tema aktif' : '☀️ Açık tema aktif', 'info');
-        }
-
-        function updateTheme() {
-            const icon = document.getElementById('themeIcon');
-
-            if (state.darkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                icon.className = 'fas fa-sun';
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-                icon.className = 'fas fa-moon';
-            }
-        }
-
-        /**
-         * ============================================================
-         * EVENT KURUCULARI
-         * ============================================================
-         */
-
-        function setupSearch() {
-            const searchInput = document.getElementById('searchInput');
-            let timeout;
-
-            searchInput.addEventListener('input', (e) => {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => {
-                    state.currentSearch = e.target.value.trim();
-                    state.currentPage = 1;
-                    state.hasMore = true;
-                    renderPosts();
-                }, 300);
-            });
-
-            // Klavye kısayolu: Ctrl+K veya Cmd+K
-            document.addEventListener('keydown', (e) => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                    e.preventDefault();
-                    searchInput.focus();
-                }
-            });
-        }
-
-        function setupInfiniteScroll() {
-            const observer = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && state.hasMore && !state.isLoading) {
-                    state.isLoading = true;
-                    state.currentPage++;
-                    renderPosts();
-                    state.isLoading = false;
-                }
-            }, { 
-                threshold: 0.1,
-                rootMargin: '100px'
-            });
-
-            const loader = document.getElementById('loader');
-            if (loader) observer.observe(loader);
-        }
-
-        function setupReadingProgress() {
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.scrollY;
-                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-                const progressBar = document.getElementById('readingProgress');
-                if (progressBar) {
-                    progressBar.style.width = `${Math.min(100, progress)}%`;
-                    progressBar.setAttribute('aria-valuenow', Math.round(progress));
-                }
-
-                const backToTop = document.getElementById('backToTop');
-                if (backToTop) {
-                    if (scrollTop > 300) {
-                        backToTop.classList.add('visible');
-                    } else {
-                        backToTop.classList.remove('visible');
-                    }
-                }
-            });
-        }
-
-        function setupModal() {
-            document.getElementById('closeModal').onclick = closeModal;
-
-            window.onclick = (e) => {
-                if (e.target === document.getElementById('postModal')) {
-                    closeModal();
-                }
-            };
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeModal();
-                }
-            });
-        }
-
-        /**
-         * ============================================================
-         * BAŞLATMA
-         * ============================================================
-         */
-
-        async function init() {
-            updateTheme();
-
-            state.allPosts = await fetchPosts();
-
-            renderCategories();
-            renderPosts();
-            renderRecentPosts();
-
-            setupSearch();
-            setupInfiniteScroll();
-            setupReadingProgress();
-            setupModal();
-
-            // Service Worker
-            if ('serviceWorker' in navigator) {
-                try {
-                    const registration = await navigator.serviceWorker.register('/sw.js');
-                    console.log('✅ Service Worker kaydedildi:', registration);
-                } catch (err) {
-                    console.log('❌ Service Worker kaydedilemedi:', err);
-                }
-            }
-
-            console.log(`🚀 Hindiba yüklendi! ${state.allPosts.length} yazı bulundu.`);
-        }
-
-        // DOM yüklendiğinde başlat
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
-    </script>
+        
+        let content = post.body || '';
+        content = content.replace(/^## .*\n/, '');
+        content = markdownToHtml(content);
+        const readTime = calculateReadingTime(post.body || '');
+        const date = new Date(post.created_at).toLocaleDateString('tr-TR');
+        
+        modalBody.innerHTML = `
+            <div class="post-category category-${category}" style="margin-bottom: 1rem; display: inline-flex;">${categoryIcon} ${categoryName}</div>
+            <h1 style="margin-top: 1rem;">${escapeHtml(post.title)}</h1>
+            <div class="post-meta" style="margin-top: 0.5rem;">
+                <span><i class="far fa-calendar-alt"></i> ${date}</span>
+                <span><i class="far fa-clock"></i> ${readTime} dk okuma</span>
+            </div>
+            <hr style="margin: 1.5rem 0;">
+            ${content}
+            <hr style="margin: 1.5rem 0;">
+            <div style="display: flex; justify-content: center; gap: 0.5rem;">
+                <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}', '_blank')" style="background: #000000; color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fab fa-twitter"></i> Paylaş</button>
+                <button onclick="navigator.clipboard.writeText(window.location.href); alert('Link kopyalandı!')" style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fas fa-link"></i> Kopyala</button>
+            </div>
+        `;
+        
+        modal.style.display = 'block';
+    }
+    
+    function markdownToHtml(md) {
+        let html = md;
+        html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+        html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+        html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+        html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+        html = html.split('\n\n').map(para => {
+            if (para.startsWith('<h') || para.startsWith('<pre') || para.startsWith('<ul')) return para;
+            return `<p>${para.replace(/\n/g, '<br>')}</p>`;
+        }).join('');
+        return html;
+    }
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+        currentSearch = e.target.value;
+        displayPosts();
+    });
+    
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.category;
+            displayPosts();
+        });
+    });
+    
+    const modal = document.getElementById('postModal');
+    document.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+    
+    loadPosts();
+</script>
 
 </body>
 </html>
