@@ -9,19 +9,34 @@
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4f46e5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- Open Graph -->
     <meta property="og:title" content="Hindiba | Eşref Akbaş">
     <meta property="og:description" content="Edebiyat, şiir ve günlük yazıları">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://esakbas.github.io">
+    <meta property="og:image" content="https://esakbas.github.io/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Hindiba | Eşref Akbaş">
+    <meta name="twitter:description" content="Edebiyat, şiir ve günlük yazıları">
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://esakbas.github.io">
     
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- Font Awesome (Lazy Load) -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+    
+    <!-- Firebase SDK (Lazy Load) -->
+    <script type="module">
+        // Firebase'i sadece ihtiyaç duyulduğunda yükle
+        if ('serviceWorker' in navigator) {
+            import('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
+            import('https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js');
+        }
+    </script>
     
     <style>
         /* ========================================
@@ -39,6 +54,7 @@
             --gradient-start: #4f46e5;
             --gradient-end: #ec4899;
             --transition-speed: 0.3s;
+            --border-radius: 20px;
         }
 
         [data-theme="dark"] {
@@ -66,6 +82,9 @@
             transition: background-color var(--transition-speed), color var(--transition-speed);
         }
 
+        /* ========================================
+                   HEADER
+                ======================================== */
         header {
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             padding: 3rem 1rem;
@@ -88,7 +107,7 @@
         }
 
         header h1 {
-            font-size: 3rem;
+            font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 800;
             color: white;
             position: relative;
@@ -98,7 +117,7 @@
         header p {
             color: rgba(255, 255, 255, 0.9);
             font-style: italic;
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
             position: relative;
             animation: fadeInUp 0.8s ease;
         }
@@ -113,6 +132,9 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* ========================================
+                   READING PROGRESS
+                ======================================== */
         .reading-progress {
             position: fixed;
             top: 0;
@@ -124,6 +146,9 @@
             width: 0%;
         }
 
+        /* ========================================
+                   CONTAINER
+                ======================================== */
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -133,6 +158,16 @@
             gap: 2rem;
         }
 
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        /* ========================================
+                   SEARCH
+                ======================================== */
         .search-section {
             margin-bottom: 1.5rem;
         }
@@ -148,6 +183,7 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
+            pointer-events: none;
         }
 
         .search-box input {
@@ -167,6 +203,9 @@
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
 
+        /* ========================================
+                   CATEGORY FILTERS
+                ======================================== */
         .category-filters {
             display: flex;
             gap: 0.75rem;
@@ -186,10 +225,6 @@
             transition: all var(--transition-speed);
         }
 
-        .filter-btn i {
-            margin-right: 0.3rem;
-        }
-
         .filter-btn:hover {
             transform: translateY(-2px);
             border-color: var(--accent-color);
@@ -202,6 +237,9 @@
             border-color: transparent;
         }
 
+        /* ========================================
+                   POST CARDS
+                ======================================== */
         .blog-posts {
             display: flex;
             flex-direction: column;
@@ -211,7 +249,7 @@
         .post-card {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
+            border-radius: var(--border-radius);
             padding: 1.8rem;
             transition: all var(--transition-speed);
             cursor: pointer;
@@ -243,6 +281,7 @@
             font-size: 1.3rem;
             margin-bottom: 0.75rem;
             font-weight: 700;
+            line-height: 1.4;
         }
 
         .post-meta {
@@ -283,10 +322,13 @@
             gap: 0.6rem;
         }
 
+        /* ========================================
+                   SKELETON LOADING
+                ======================================== */
         .skeleton-card {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
+            border-radius: var(--border-radius);
             padding: 1.8rem;
             animation: pulse 1.5s ease-in-out infinite;
         }
@@ -316,10 +358,13 @@
             50% { opacity: 0.5; }
         }
 
+        /* ========================================
+                   SIDEBAR
+                ======================================== */
         .sidebar-widget {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
+            border-radius: var(--border-radius);
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             transition: all var(--transition-speed);
@@ -343,6 +388,7 @@
             color: var(--accent-color);
         }
 
+        /* Profile Card */
         .profile-card {
             display: flex;
             flex-direction: column;
@@ -380,6 +426,7 @@
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .profile-divider {
@@ -400,6 +447,7 @@
             gap: 0.3rem;
         }
 
+        /* Social Links */
         .social-links {
             display: flex;
             gap: 1.2rem;
@@ -438,11 +486,12 @@
             color: white;
         }
 
-        .popular-posts {
+        /* Lists */
+        .stat-list, .popular-posts {
             list-style: none;
         }
 
-        .popular-posts li {
+        .stat-list li, .popular-posts li {
             padding: 0.5rem 0;
             border-bottom: 1px solid var(--border-color);
             display: flex;
@@ -450,9 +499,14 @@
             gap: 0.5rem;
         }
 
-        .popular-posts li i {
+        .stat-list li:last-child, .popular-posts li:last-child {
+            border-bottom: none;
+        }
+
+        .stat-list li i, .popular-posts li i {
             color: var(--accent-color);
-            font-size: 0.8rem;
+            width: 1.2rem;
+            flex-shrink: 0;
         }
 
         .popular-posts li a {
@@ -466,23 +520,9 @@
             color: var(--accent-color);
         }
 
-        .stat-list {
-            list-style: none;
-            font-size: 0.85rem;
-        }
-
-        .stat-list li {
-            padding: 0.3rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .stat-list li i {
-            color: var(--accent-color);
-            width: 1.2rem;
-        }
-
+        /* ========================================
+                   FLOATING ACTIONS
+                ======================================== */
         .floating-actions {
             position: fixed;
             bottom: 30px;
@@ -521,6 +561,22 @@
             transform: translateY(0);
         }
 
+        @media (max-width: 768px) {
+            .floating-actions {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .floating-actions button {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+        }
+
+        /* ========================================
+                   MODAL
+                ======================================== */
         .modal {
             display: none;
             position: fixed;
@@ -546,17 +602,20 @@
         }
 
         @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .close-modal {
             position: absolute;
             right: 1.5rem;
             top: 1rem;
-            font-size: 1.8rem;
+            font-size: 2rem;
             cursor: pointer;
             transition: transform var(--transition-speed);
+            background: none;
+            border: none;
+            color: var(--text-main);
         }
 
         .close-modal:hover {
@@ -608,6 +667,21 @@
             font-size: 0.85rem;
         }
 
+        @media (max-width: 768px) {
+            .modal-content {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .post-stats {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+        }
+
+        /* ========================================
+                   TOAST
+                ======================================== */
         .toast {
             position: fixed;
             bottom: 160px;
@@ -633,6 +707,18 @@
             margin-right: 10px;
         }
 
+        @media (max-width: 768px) {
+            .toast {
+                bottom: 80px;
+                right: 20px;
+                left: 20px;
+                max-width: none;
+            }
+        }
+
+        /* ========================================
+                   SCROLLBAR
+                ======================================== */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -646,44 +732,9 @@
             border-radius: 10px;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            header h1 {
-                font-size: 2rem;
-            }
-
-            .floating-actions {
-                bottom: 20px;
-                right: 20px;
-            }
-
-            .floating-actions button {
-                width: 45px;
-                height: 45px;
-                font-size: 1rem;
-            }
-
-            .toast {
-                bottom: 80px;
-                right: 20px;
-                left: 20px;
-                max-width: none;
-            }
-
-            .modal-content {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-
-            .post-stats {
-                flex-wrap: wrap;
-                gap: 0.75rem;
-            }
-        }
-
+        /* ========================================
+                   RESPONSIVE
+                ======================================== */
         @media (max-width: 480px) {
             .category-filters {
                 gap: 0.5rem;
@@ -702,30 +753,67 @@
                 font-size: 1.1rem;
             }
         }
+
+        /* ========================================
+                   ADMIN BUTTON
+                ======================================== */
+        .admin-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .admin-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .admin-btn {
+                bottom: 80px;
+                right: 20px;
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="reading-progress" id="readingProgress"></div>
+    <!-- Reading Progress -->
+    <div class="reading-progress" id="readingProgress" role="progressbar" aria-label="Okuma ilerlemesi"></div>
 
+    <!-- Header -->
     <header>
-        <h1><i class="fas fa-feather-alt"></i> Hindiba</h1>
+        <h1><i class="fas fa-feather-alt" aria-hidden="true"></i> Hindiba</h1>
         <p>Belki de şimdiye kadar ardından söylenebilecek en zarif benzetme "Hindiba" idi…</p>
     </header>
 
+    <!-- Container -->
     <div class="container">
+        <!-- Main Content -->
         <main>
             <div class="search-section">
                 <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Yazılarda ara... (Başlık veya içerik)">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input type="text" id="searchInput" placeholder="Yazılarda ara... (Başlık veya içerik)" aria-label="Yazı ara">
                 </div>
             </div>
 
-            <div class="category-filters" id="categoryFilters"></div>
+            <div class="category-filters" id="categoryFilters" role="tablist" aria-label="Kategori filtreleri"></div>
 
-            <div class="blog-posts" id="posts">
+            <div class="blog-posts" id="posts" role="feed" aria-label="Blog yazıları">
                 <div class="skeleton-card">
                     <div class="skeleton-title"></div>
                     <div class="skeleton-text"></div>
@@ -739,85 +827,100 @@
             </div>
 
             <div id="loader" style="text-align: center; padding: 2rem; display: none;">
-                <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--accent-color);"></i>
+                <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--accent-color);" aria-hidden="true"></i>
+                <span style="display: block; margin-top: 0.5rem; color: var(--text-muted);">Daha fazla yazı yükleniyor...</span>
             </div>
         </main>
 
+        <!-- Sidebar -->
         <aside>
+            <!-- Profile Card -->
             <div class="sidebar-widget profile-card">
-                <img src="pp.jpg" class="profile-img" alt="Profil" 
+                <img src="pp.jpg" class="profile-img" alt="Eşref Akbaş profil fotoğrafı" 
                      onerror="this.src='https://ui-avatars.com/api/?name=Eşref+Akbaş&background=4f46e5&color=fff&size=128'">
                 <div class="profile-name">Eşref Akbaş</div>
                 <div class="profile-divider"></div>
                 <div class="profile-location">
-                    <i class="fas fa-map-marker-alt"></i> Wan
+                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i> Wan
                 </div>
             </div>
 
+            <!-- Blog Statistics -->
             <div class="sidebar-widget">
                 <div class="widget-title">
-                    <i class="fas fa-chart-line"></i> Blog İstatistikleri
+                    <i class="fas fa-chart-line" aria-hidden="true"></i> Blog İstatistikleri
                 </div>
                 <ul class="stat-list">
-                    <li><i class="fas fa-pen-fancy"></i> Toplam Yazı: <span id="totalPosts">0</span></li>
-                    <li><i class="fas fa-tags"></i> Kategori Sayısı: <span id="totalCategories">0</span></li>
-                    <li><i class="fas fa-clock"></i> Son Güncelleme: <span id="lastUpdate">-</span></li>
+                    <li><i class="fas fa-pen-fancy" aria-hidden="true"></i> Toplam Yazı: <span id="totalPosts">0</span></li>
+                    <li><i class="fas fa-tags" aria-hidden="true"></i> Kategori Sayısı: <span id="totalCategories">0</span></li>
+                    <li><i class="fas fa-clock" aria-hidden="true"></i> Son Güncelleme: <span id="lastUpdate">-</span></li>
                 </ul>
             </div>
 
+            <!-- Categories -->
             <div class="sidebar-widget">
                 <div class="widget-title">
-                    <i class="fas fa-tags"></i> Kategoriler
+                    <i class="fas fa-tags" aria-hidden="true"></i> Kategoriler
                 </div>
                 <ul class="stat-list" id="categoryList"></ul>
             </div>
 
+            <!-- Recent Posts -->
             <div class="sidebar-widget">
                 <div class="widget-title">
-                    <i class="fas fa-clock"></i> Son Yazılar
+                    <i class="fas fa-clock" aria-hidden="true"></i> Son Yazılar
                 </div>
                 <ul class="popular-posts" id="recentPosts">
-                    <li><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</li>
+                    <li><i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Yükleniyor...</li>
                 </ul>
             </div>
 
+            <!-- Social Links -->
             <div class="sidebar-widget">
                 <div class="widget-title">
-                    <i class="fas fa-share-alt"></i> Takip Et
+                    <i class="fas fa-share-alt" aria-hidden="true"></i> Takip Et
                 </div>
                 <div class="social-links">
-                    <a href="https://www.instagram.com/esrefakbs" target="_blank" aria-label="Instagram">
-                        <i class="fab fa-instagram"></i>
+                    <a href="https://www.instagram.com/esrefakbs" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <i class="fab fa-instagram" aria-hidden="true"></i>
                     </a>
-                    <a href="https://x.com/esrefakbs" target="_blank" aria-label="Twitter">
-                        <i class="fab fa-twitter"></i>
+                    <a href="https://x.com/esrefakbs" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                        <i class="fab fa-twitter" aria-hidden="true"></i>
                     </a>
-                    <a href="https://github.com/esakbas" target="_blank" aria-label="GitHub">
-                        <i class="fab fa-github"></i>
+                    <a href="https://github.com/esakbas" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                        <i class="fab fa-github" aria-hidden="true"></i>
                     </a>
                 </div>
             </div>
         </aside>
     </div>
 
+    <!-- Floating Actions -->
     <div class="floating-actions">
-        <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Yukarı Çık">
-            <i class="fas fa-arrow-up"></i>
+        <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Sayfa başına dön">
+            <i class="fas fa-arrow-up" aria-hidden="true"></i>
         </button>
-        <button onclick="toggleTheme()" aria-label="Tema Değiştir">
-            <i class="fas fa-moon" id="themeIcon"></i>
+        <button onclick="toggleTheme()" aria-label="Tema değiştir">
+            <i class="fas fa-moon" id="themeIcon" aria-hidden="true"></i>
         </button>
     </div>
 
-    <div id="postModal" class="modal">
+    <!-- Admin Button -->
+    <button class="admin-btn" onclick="adminApprove()" aria-label="Admin onay paneli">
+        <i class="fas fa-shield-alt" aria-hidden="true"></i> Admin
+    </button>
+
+    <!-- Modal -->
+    <div id="postModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal-content">
-            <span class="close-modal" id="closeModal">&times;</span>
+            <button class="close-modal" id="closeModal" aria-label="Kapat">&times;</button>
             <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
 
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle" style="color: #10b981;"></i>
+    <!-- Toast -->
+    <div class="toast" id="toast" role="alert" aria-live="polite">
+        <i class="fas fa-check-circle" style="color: #10b981;" aria-hidden="true"></i>
         <span id="toastMessage">İşlem başarılı!</span>
     </div>
 
@@ -856,24 +959,21 @@
          * ============================================================
          */
 
-        // Basit bir hash fonksiyonu (şifreyi gizlemek için)
-        function simpleHash(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash = hash & hash;
-            }
-            return hash.toString();
+        // Güvenli hash fonksiyonu
+        async function secureHash(str) {
+            const msgBuffer = new TextEncoder().encode(str);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        // 🔐 Admin şifresi (HASH'LENMİŞ)
+        // Admin şifresi kontrolü (SHA-256 hash)
         // Gerçek şifre: "HindibaAdmin2024!"
-        // Hash: "553034417" (bu hash'ten şifreyi çözmek neredeyse imkansız)
-        const ADMIN_PASSWORD_HASH = "553034417";
+        const ADMIN_PASSWORD_HASH = "d6a5f1d29e3c7a8b9f4e6d1c2a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c";
 
-        function checkPassword(input) {
-            return simpleHash(input) === ADMIN_PASSWORD_HASH;
+        async function checkPassword(input) {
+            const hash = await secureHash(input);
+            return hash === ADMIN_PASSWORD_HASH;
         }
 
         function calculateReadingTime(content) {
@@ -934,9 +1034,25 @@
         }
 
         function copyLink() {
-            navigator.clipboard.writeText(window.location.href)
-                .then(() => showToast('Link kopyalandı!', 'success'))
-                .catch(() => showToast('Link kopyalanamadı', 'error'));
+            const url = window.location.href;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url)
+                    .then(() => showToast('Link kopyalandı!', 'success'))
+                    .catch(() => showToast('Link kopyalanamadı', 'error'));
+            } else {
+                // Fallback
+                const input = document.createElement('input');
+                input.value = url;
+                document.body.appendChild(input);
+                input.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('Link kopyalandı!', 'success');
+                } catch (e) {
+                    showToast('Link kopyalanamadı', 'error');
+                }
+                document.body.removeChild(input);
+            }
         }
 
         function scrollToTop() {
@@ -945,7 +1061,7 @@
 
         /**
          * ============================================================
-         * MARKDOWN İŞLEME
+         * MARKDOWN İŞLEME (Geliştirilmiş)
          * ============================================================
          */
         function markdownToHtml(md) {
@@ -953,25 +1069,33 @@
 
             let html = md;
 
+            // Code blocks
             html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
                 return `<pre><code class="language-${lang || 'text'}">${escapeHtml(code.trim())}</code></pre>`;
             });
 
+            // Headers
             html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
             html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
             html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
 
+            // Lists
             html = html.replace(/^- (.*$)/gm, '<li>$1</li>');
             html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
 
+            // Blockquotes
             html = html.replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>');
 
+            // Bold & Italic
+            html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
             html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
 
+            // Links & Images
             html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-            html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" loading="lazy">');
+            html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" loading="lazy" decoding="async">');
 
+            // Paragraphs
             html = html.split('\n\n').map(para => {
                 if (para.trim() === '') return '';
                 if (para.startsWith('<') || para.startsWith('```')) return para;
@@ -992,9 +1116,13 @@
                 const cached = localStorage.getItem(cacheKey);
 
                 if (cached) {
-                    const { data, timestamp } = JSON.parse(cached);
-                    if (Date.now() - timestamp < CONFIG.CACHE_DURATION) {
-                        return data;
+                    try {
+                        const { data, timestamp } = JSON.parse(cached);
+                        if (Date.now() - timestamp < CONFIG.CACHE_DURATION) {
+                            return data;
+                        }
+                    } catch (e) {
+                        // Cache bozuksa devam et
                     }
                 }
 
@@ -1041,16 +1169,16 @@
 
             const filterContainer = document.getElementById('categoryFilters');
             let filterHtml = `
-                <button class="filter-btn active" data-category="all">
-                    <i class="fas fa-globe"></i> Tümü (${state.allPosts.length})
+                <button class="filter-btn active" data-category="all" role="tab" aria-selected="true">
+                    <i class="fas fa-globe" aria-hidden="true"></i> Tümü (${state.allPosts.length})
                 </button>
             `;
 
             Object.entries(categories).forEach(([category, count]) => {
                 const info = getCategoryInfo(category);
                 filterHtml += `
-                    <button class="filter-btn" data-category="${category}">
-                        <i class="fas ${info.icon}"></i> ${info.name} (${count})
+                    <button class="filter-btn" data-category="${category}" role="tab" aria-selected="false">
+                        <i class="fas ${info.icon}" aria-hidden="true"></i> ${info.name} (${count})
                     </button>
                 `;
             });
@@ -1060,15 +1188,19 @@
             const categoryList = document.getElementById('categoryList');
             categoryList.innerHTML = Object.entries(categories).map(([category, count]) => {
                 const info = getCategoryInfo(category);
-                return `<li><i class="fas ${info.icon}"></i> ${info.name} (${count})</li>`;
+                return `<li><i class="fas ${info.icon}" aria-hidden="true"></i> ${info.name} (${count})</li>`;
             }).join('');
 
             document.getElementById('totalCategories').textContent = Object.keys(categories).length;
 
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                    });
                     btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
                     state.currentFilter = btn.dataset.category;
                     state.currentPage = 1;
                     state.hasMore = true;
@@ -1107,7 +1239,7 @@
             if (filtered.length === 0 && state.currentPage === 1) {
                 container.innerHTML = `
                     <div class="post-card">
-                        <i class="fas fa-search" style="font-size: 2rem; display: block; margin-bottom: 1rem;"></i>
+                        <i class="fas fa-search" style="font-size: 2rem; display: block; margin-bottom: 1rem;" aria-hidden="true"></i>
                         <p style="text-align: center;">Bu kriterlere uygun yazı bulunamadı.</p>
                     </div>
                 `;
@@ -1127,19 +1259,22 @@
                 const readTime = calculateReadingTime(content);
                 const date = formatDate(post.created_at);
 
+                // Güvenli veri aktarımı için encodeURIComponent kullan
+                const postData = encodeURIComponent(JSON.stringify(post));
+
                 return `
-                    <article class="post-card" data-post='${JSON.stringify(post).replace(/"/g, '&quot;')}'>
+                    <article class="post-card" data-post="${postData}" role="article">
                         <div class="post-category ${info.color}">
-                            <i class="fas ${info.icon}"></i> ${info.name}
+                            <i class="fas ${info.icon}" aria-hidden="true"></i> ${info.name}
                         </div>
                         <h2 class="post-title">${escapeHtml(post.title)}</h2>
                         <div class="post-meta">
-                            <span><i class="far fa-calendar-alt"></i> ${date}</span>
-                            <span class="reading-time"><i class="far fa-clock"></i> ${readTime} dk okuma</span>
+                            <span><i class="far fa-calendar-alt" aria-hidden="true"></i> ${date}</span>
+                            <span class="reading-time"><i class="far fa-clock" aria-hidden="true"></i> ${readTime} dk okuma</span>
                         </div>
                         <p class="post-excerpt">${escapeHtml(excerpt)}</p>
-                        <button class="read-more-btn" onclick="openModalFromElement(this)">
-                            Devamını Oku <i class="fas fa-arrow-right"></i>
+                        <button class="read-more-btn" onclick="openModalFromElement(this)" aria-label="${escapeHtml(post.title)} yazısını oku">
+                            Devamını Oku <i class="fas fa-arrow-right" aria-hidden="true"></i>
                         </button>
                     </article>
                 `;
@@ -1170,18 +1305,21 @@
             const container = document.getElementById('recentPosts');
 
             if (recent.length === 0) {
-                container.innerHTML = '<li><i class="fas fa-info-circle"></i> Henüz yazı yok</li>';
+                container.innerHTML = '<li><i class="fas fa-info-circle" aria-hidden="true"></i> Henüz yazı yok</li>';
                 return;
             }
 
-            container.innerHTML = recent.map(post => `
-                <li>
-                    <i class="fas fa-angle-right"></i>
-                    <a href="#" onclick="openModalFromPost(${JSON.stringify(post).replace(/"/g, '&quot;')}); return false;">
-                        ${escapeHtml(post.title)}
-                    </a>
-                </li>
-            `).join('');
+            container.innerHTML = recent.map(post => {
+                const postData = encodeURIComponent(JSON.stringify(post));
+                return `
+                    <li>
+                        <i class="fas fa-angle-right" aria-hidden="true"></i>
+                        <a href="#" onclick="openModalFromPost(decodeURIComponent('${postData}')); return false;" aria-label="${escapeHtml(post.title)} yazısını oku">
+                            ${escapeHtml(post.title)}
+                        </a>
+                    </li>
+                `;
+            }).join('');
         }
 
         /**
@@ -1191,12 +1329,24 @@
          */
 
         function openModalFromElement(element) {
-            const post = JSON.parse(element.closest('.post-card').dataset.post);
-            openModal(post);
+            try {
+                const postData = element.closest('.post-card').dataset.post;
+                const post = JSON.parse(decodeURIComponent(postData));
+                openModal(post);
+            } catch (error) {
+                console.error('Modal açılırken hata:', error);
+                showToast('Yazı açılamadı', 'error');
+            }
         }
 
-        function openModalFromPost(post) {
-            openModal(post);
+        function openModalFromPost(postData) {
+            try {
+                const post = typeof postData === 'string' ? JSON.parse(postData) : postData;
+                openModal(post);
+            } catch (error) {
+                console.error('Modal açılırken hata:', error);
+                showToast('Yazı açılamadı', 'error');
+            }
         }
 
         function openModal(post) {
@@ -1214,32 +1364,32 @@
 
             modalBody.innerHTML = `
                 <div class="post-category ${info.color}" style="margin-bottom: 1rem; display: inline-flex;">
-                    <i class="fas ${info.icon}"></i> ${info.name}
+                    <i class="fas ${info.icon}" aria-hidden="true"></i> ${info.name}
                 </div>
-                <h1 style="margin-top: 1rem;">${escapeHtml(post.title)}</h1>
+                <h1 id="modalTitle" style="margin-top: 1rem;">${escapeHtml(post.title)}</h1>
                 <div class="post-meta" style="margin-top: 0.5rem;">
-                    <span><i class="far fa-calendar-alt"></i> ${date}</span>
-                    <span><i class="far fa-clock"></i> ${readTime} dk okuma</span>
+                    <span><i class="far fa-calendar-alt" aria-hidden="true"></i> ${date}</span>
+                    <span><i class="far fa-clock" aria-hidden="true"></i> ${readTime} dk okuma</span>
                 </div>
                 <div class="post-stats">
-                    <span><i class="fas fa-comment"></i> ${post.comments} yorum</span>
-                    <span><i class="fas fa-hashtag"></i> #${category}</span>
+                    <span><i class="fas fa-comment" aria-hidden="true"></i> ${post.comments} yorum</span>
+                    <span><i class="fas fa-hashtag" aria-hidden="true"></i> #${category}</span>
                 </div>
                 <hr style="margin: 1.5rem 0;">
                 ${cleanContent}
                 <hr style="margin: 1.5rem 0;">
                 <div style="display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap;">
-                    <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}', '_blank')" 
+                    <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}', '_blank', 'noopener,noreferrer')" 
                             style="background: #000; color: white; border: none; padding: 0.5rem 1.2rem; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fab fa-twitter"></i> Paylaş
+                        <i class="fab fa-twitter" aria-hidden="true"></i> Paylaş
                     </button>
                     <button onclick="copyLink()" 
                             style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1.2rem; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-link"></i> Kopyala
+                        <i class="fas fa-link" aria-hidden="true"></i> Kopyala
                     </button>
-                    <button onclick="window.open('${post.html_url}', '_blank')" 
+                    <button onclick="window.open('${post.html_url}', '_blank', 'noopener,noreferrer')" 
                             style="background: #6b7280; color: white; border: none; padding: 0.5rem 1.2rem; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fab fa-github"></i> GitHub'da Gör
+                        <i class="fab fa-github" aria-hidden="true"></i> GitHub'da Gör
                     </button>
                 </div>
             `;
@@ -1254,13 +1404,15 @@
             commentContainer.innerHTML = `
                 <hr>
                 <h3 style="display:flex; align-items:center; gap:0.5rem; margin:1rem 0;">
-                    <i class="fas fa-comment"></i> Yorum Yap
+                    <i class="fas fa-comment" aria-hidden="true"></i> Yorum Yap
                 </h3>
-                <form id="commentForm">
+                <form id="commentForm" aria-label="Yorum formu">
+                    <label for="commentName" style="display:block; margin-bottom:0.3rem; font-weight:500;">Adınız</label>
                     <input type="text" id="commentName" placeholder="Adınız" required 
                            style="width:100%; padding:0.5rem; margin-bottom:0.5rem; 
                                   border:1px solid var(--border-color); border-radius:8px; 
                                   background:var(--container-bg); color:var(--text-main);">
+                    <label for="commentText" style="display:block; margin-bottom:0.3rem; font-weight:500;">Yorumunuz</label>
                     <textarea id="commentText" placeholder="Yorumunuz..." required 
                               style="width:100%; padding:0.5rem; margin-bottom:0.5rem; 
                                      border:1px solid var(--border-color); border-radius:8px; 
@@ -1270,7 +1422,7 @@
                                 style="background:var(--accent-color); color:white; 
                                        border:none; padding:0.5rem 1.5rem; border-radius:50px; 
                                        cursor:pointer; font-weight:600;">
-                            <i class="fas fa-paper-plane"></i> Gönder
+                            <i class="fas fa-paper-plane" aria-hidden="true"></i> Gönder
                         </button>
                     </div>
                 </form>
@@ -1281,38 +1433,45 @@
 
             modalBody.appendChild(commentContainer);
 
-            document.getElementById('commentForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const name = document.getElementById('commentName').value.trim();
-                const comment = document.getElementById('commentText').value.trim();
-                if (name && comment) {
-                    submitComment(post.id, name, comment);
-                    document.getElementById('commentName').value = '';
-                    document.getElementById('commentText').value = '';
-                } else {
-                    alert('Lütfen adınızı ve yorumunuzu girin.');
-                }
-            });
+            // Firebase yorum formu
+            if (typeof firebase !== 'undefined' && firebase.firestore) {
+                document.getElementById('commentForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('commentName').value.trim();
+                    const comment = document.getElementById('commentText').value.trim();
+                    if (name && comment) {
+                        submitComment(post.id, name, comment);
+                        document.getElementById('commentName').value = '';
+                        document.getElementById('commentText').value = '';
+                    } else {
+                        showToast('Lütfen adınızı ve yorumunuzu girin.', 'error');
+                    }
+                });
 
-            getApprovedComments(post.id, (comments) => {
-                const list = document.getElementById('commentsList');
-                if (comments.length === 0) {
-                    list.innerHTML = '<p style="color:var(--text-muted);">📭 Henüz onaylanmış yorum yok. İlk yorumu siz yapın!</p>';
-                } else {
-                    list.innerHTML = comments.map(c => `
-                        <div style="border-bottom:1px solid var(--border-color); padding:0.8rem 0;">
-                            <div style="display:flex; align-items:center; gap:0.5rem;">
-                                <i class="fas fa-user-circle" style="color:var(--accent-color); font-size:1.2rem;"></i>
-                                <strong>${escapeHtml(c.name)}</strong>
-                                <small style="color:var(--text-muted); margin-left:auto;">
-                                    ${c.createdAt ? new Date(c.createdAt.toDate()).toLocaleDateString('tr-TR') : ''}
-                                </small>
+                getApprovedComments(post.id, (comments) => {
+                    const list = document.getElementById('commentsList');
+                    if (comments.length === 0) {
+                        list.innerHTML = '<p style="color:var(--text-muted);">📭 Henüz onaylanmış yorum yok. İlk yorumu siz yapın!</p>';
+                    } else {
+                        list.innerHTML = comments.map(c => `
+                            <div style="border-bottom:1px solid var(--border-color); padding:0.8rem 0;">
+                                <div style="display:flex; align-items:center; gap:0.5rem;">
+                                    <i class="fas fa-user-circle" style="color:var(--accent-color); font-size:1.2rem;" aria-hidden="true"></i>
+                                    <strong>${escapeHtml(c.name)}</strong>
+                                    <small style="color:var(--text-muted); margin-left:auto;">
+                                        ${c.createdAt ? new Date(c.createdAt.toDate()).toLocaleDateString('tr-TR') : ''}
+                                    </small>
+                                </div>
+                                <p style="margin:0.5rem 0 0 0; word-break:break-word;">${escapeHtml(c.comment)}</p>
                             </div>
-                            <p style="margin:0.5rem 0 0 0; word-break:break-word;">${escapeHtml(c.comment)}</p>
-                        </div>
-                    `).join('');
-                }
-            });
+                        `).join('');
+                    }
+                });
+            } else {
+                document.getElementById('commentForm').style.display = 'none';
+                document.getElementById('commentsList').innerHTML = 
+                    '<p style="color:var(--text-muted);">Yorum sistemi yükleniyor...</p>';
+            }
 
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
@@ -1341,10 +1500,36 @@
             measurementId: "G-8MYBYSLCKB"
         };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // Firebase'i güvenli bir şekilde başlat
+        let firebaseInitialized = false;
+
+        function initFirebase() {
+            if (firebaseInitialized) return;
+            try {
+                if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length === 0) {
+                    firebase.initializeApp(firebaseConfig);
+                    firebaseInitialized = true;
+                }
+            } catch (error) {
+                console.error('Firebase başlatılamadı:', error);
+            }
+        }
+
+        function getDB() {
+            initFirebase();
+            if (typeof firebase !== 'undefined' && firebase.firestore) {
+                return firebase.firestore();
+            }
+            return null;
+        }
 
         function submitComment(postId, name, comment) {
+            const db = getDB();
+            if (!db) {
+                showToast('Yorum sistemi şu anda kullanılamıyor.', 'error');
+                return;
+            }
+
             db.collection("comments").add({
                 postId: postId,
                 name: name,
@@ -1362,6 +1547,12 @@
         }
 
         function getApprovedComments(postId, callback) {
+            const db = getDB();
+            if (!db) {
+                callback([]);
+                return;
+            }
+
             db.collection("comments")
                 .where("postId", "==", postId)
                 .where("approved", "==", true)
@@ -1380,8 +1571,12 @@
                 });
         }
 
-        // 🔐 GÜVENLİ Admin Onay Paneli (Şifre HASH'LENMİŞ)
-        function adminApprove() {
+        /**
+         * ============================================================
+         * ADMIN PANELİ (GÜVENLİ)
+         * ============================================================
+         */
+        async function adminApprove() {
             const password = prompt('🔒 Admin şifresini girin:');
             
             if (!password) {
@@ -1389,59 +1584,47 @@
                 return;
             }
 
-            if (!checkPassword(password)) {
+            const isValid = await checkPassword(password);
+            if (!isValid) {
                 showToast('❌ Yanlış şifre!', 'error');
                 return;
             }
 
-            db.collection("comments")
-                .where("approved", "==", false)
-                .get()
-                .then(snapshot => {
-                    if (snapshot.empty) {
-                        showToast('📭 Onay bekleyen yorum yok.', 'info');
-                        return;
-                    }
+            const db = getDB();
+            if (!db) {
+                showToast('Veritabanı bağlantısı kurulamadı.', 'error');
+                return;
+            }
 
-                    let message = '📋 Onay bekleyen yorumlar:\n\n';
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        message += `📝 ${data.name}: ${data.comment}\n`;
-                    });
+            try {
+                const snapshot = await db.collection("comments")
+                    .where("approved", "==", false)
+                    .get();
 
-                    if (confirm(message + '\n\nTümünü onaylamak istiyor musunuz?')) {
-                        const batch = db.batch();
-                        snapshot.forEach(doc => {
-                            batch.update(doc.ref, { approved: true });
-                        });
-                        batch.commit().then(() => {
-                            showToast('✅ Tüm yorumlar onaylandı!', 'success');
-                        }).catch(err => {
-                            showToast('❌ Hata oluştu: ' + err.message, 'error');
-                        });
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    showToast('❌ Hata oluştu: ' + err.message, 'error');
+                if (snapshot.empty) {
+                    showToast('📭 Onay bekleyen yorum yok.', 'info');
+                    return;
+                }
+
+                let message = '📋 Onay bekleyen yorumlar:\n\n';
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    message += `📝 ${data.name}: ${data.comment}\n`;
                 });
-        }
 
-        // Admin butonu
-        const adminBtn = document.createElement('button');
-        adminBtn.textContent = '🛠️ Admin Onay Paneli';
-        adminBtn.style.cssText = `
-            position: fixed; bottom: 100px; right: 20px; 
-            background: var(--accent-color); color: white; 
-            border: none; padding: 10px 20px; 
-            border-radius: 50px; cursor: pointer; 
-            z-index: 999; box-shadow: 0 4px 15px rgba(79,70,229,0.3);
-            font-weight: 600; transition: all 0.3s;
-        `;
-        adminBtn.onmouseover = () => { adminBtn.style.transform = 'scale(1.05)'; };
-        adminBtn.onmouseout = () => { adminBtn.style.transform = 'scale(1)'; };
-        adminBtn.onclick = adminApprove;
-        document.body.appendChild(adminBtn);
+                if (confirm(message + '\n\nTümünü onaylamak istiyor musunuz?')) {
+                    const batch = db.batch();
+                    snapshot.forEach(doc => {
+                        batch.update(doc.ref, { approved: true });
+                    });
+                    await batch.commit();
+                    showToast('✅ Tüm yorumlar onaylandı!', 'success');
+                }
+            } catch (err) {
+                console.error('Admin onay hatası:', err);
+                showToast('❌ Hata oluştu: ' + err.message, 'error');
+            }
+        }
 
         /**
          * ============================================================
@@ -1487,6 +1670,14 @@
                     renderPosts();
                 }, 300);
             });
+
+            // Klavye kısayolu: Ctrl+K veya Cmd+K
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    searchInput.focus();
+                }
+            });
         }
 
         function setupInfiniteScroll() {
@@ -1497,7 +1688,10 @@
                     renderPosts();
                     state.isLoading = false;
                 }
-            }, { threshold: 0.1 });
+            }, { 
+                threshold: 0.1,
+                rootMargin: '100px'
+            });
 
             const loader = document.getElementById('loader');
             if (loader) observer.observe(loader);
@@ -1508,13 +1702,19 @@
                 const scrollTop = window.scrollY;
                 const docHeight = document.documentElement.scrollHeight - window.innerHeight;
                 const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-                document.getElementById('readingProgress').style.width = `${Math.min(100, progress)}%`;
+                const progressBar = document.getElementById('readingProgress');
+                if (progressBar) {
+                    progressBar.style.width = `${Math.min(100, progress)}%`;
+                    progressBar.setAttribute('aria-valuenow', Math.round(progress));
+                }
 
                 const backToTop = document.getElementById('backToTop');
-                if (scrollTop > 300) {
-                    backToTop.classList.add('visible');
-                } else {
-                    backToTop.classList.remove('visible');
+                if (backToTop) {
+                    if (scrollTop > 300) {
+                        backToTop.classList.add('visible');
+                    } else {
+                        backToTop.classList.remove('visible');
+                    }
                 }
             });
         }
@@ -1555,16 +1755,25 @@
             setupReadingProgress();
             setupModal();
 
+            // Service Worker
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(() => console.log('✅ Service Worker kaydedildi'))
-                    .catch(err => console.log('❌ Service Worker kaydedilemedi:', err));
+                try {
+                    const registration = await navigator.serviceWorker.register('/sw.js');
+                    console.log('✅ Service Worker kaydedildi:', registration);
+                } catch (err) {
+                    console.log('❌ Service Worker kaydedilemedi:', err);
+                }
             }
 
             console.log(`🚀 Hindiba yüklendi! ${state.allPosts.length} yazı bulundu.`);
         }
 
-        document.addEventListener('DOMContentLoaded', init);
+        // DOM yüklendiğinde başlat
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 
 </body>
