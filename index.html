@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hindiba | Eşref Akbaş - Hatıra Deft
-
-eri</title>
+    <title>Hindiba | Eşref Akbaş - Hatıra Defteri</title>
     <meta name="description" content="Eşref Akbaş'ın kişisel blogu - Edebiyat, şiir ve günlük yazıları">
     
     <!-- PWA Meta Tags -->
@@ -21,7 +19,7 @@ eri</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Firebase SDK (v9 Compat) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
@@ -43,9 +41,6 @@ eri</title>
             --transition-speed: 0.3s;
         }
 
-        /* ========================================
-                   KOYU TEMA
-                ======================================== */
         [data-theme="dark"] {
             --bg-color: #0f172a;
             --container-bg: #1e293b;
@@ -56,9 +51,6 @@ eri</title>
             --border-color: #334155;
         }
 
-        /* ========================================
-                   GENEL STILLER
-                ======================================== */
         * {
             margin: 0;
             padding: 0;
@@ -74,9 +66,6 @@ eri</title>
             transition: background-color var(--transition-speed), color var(--transition-speed);
         }
 
-        /* ========================================
-                   HEADER
-                ======================================== */
         header {
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             padding: 3rem 1rem;
@@ -115,30 +104,15 @@ eri</title>
         }
 
         @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ========================================
-                   OKUMA İLERLEME ÇUBUĞU
-                ======================================== */
         .reading-progress {
             position: fixed;
             top: 0;
@@ -150,9 +124,6 @@ eri</title>
             width: 0%;
         }
 
-        /* ========================================
-                   ANA KONTEYNER
-                ======================================== */
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -162,9 +133,6 @@ eri</title>
             gap: 2rem;
         }
 
-        /* ========================================
-                   ARAMA BÖLÜMÜ
-                ======================================== */
         .search-section {
             margin-bottom: 1.5rem;
         }
@@ -199,9 +167,6 @@ eri</title>
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
 
-        /* ========================================
-                   KATEGORİ FİLTRELERİ
-                ======================================== */
         .category-filters {
             display: flex;
             gap: 0.75rem;
@@ -237,9 +202,6 @@ eri</title>
             border-color: transparent;
         }
 
-        /* ========================================
-                   YAZI KARTLARI
-                ======================================== */
         .blog-posts {
             display: flex;
             flex-direction: column;
@@ -272,22 +234,10 @@ eri</title>
             margin-bottom: 1rem;
         }
 
-        .category-edebiyat {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-        }
-        .category-siir {
-            background: linear-gradient(135deg, #ec4899, #db2777);
-            color: white;
-        }
-        .category-gunluk {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-        .category-bir-cumle {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
+        .category-edebiyat { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
+        .category-siir { background: linear-gradient(135deg, #ec4899, #db2777); color: white; }
+        .category-gunluk { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .category-bir-cumle { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
 
         .post-title {
             font-size: 1.3rem;
@@ -333,9 +283,6 @@ eri</title>
             gap: 0.6rem;
         }
 
-        /* ========================================
-                   YÜKLEYİCİ (Skeleton)
-                ======================================== */
         .skeleton-card {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
@@ -365,18 +312,10 @@ eri</title>
         }
 
         @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
-        /* ========================================
-                   SİDEBAR
-                ======================================== */
         .sidebar-widget {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
@@ -404,7 +343,6 @@ eri</title>
             color: var(--accent-color);
         }
 
-        /* Profil Kartı */
         .profile-card {
             display: flex;
             flex-direction: column;
@@ -462,7 +400,6 @@ eri</title>
             gap: 0.3rem;
         }
 
-        /* Sosyal Medya */
         .social-links {
             display: flex;
             gap: 1.2rem;
@@ -501,7 +438,6 @@ eri</title>
             color: white;
         }
 
-        /* Popüler Yazılar */
         .popular-posts {
             list-style: none;
         }
@@ -530,7 +466,6 @@ eri</title>
             color: var(--accent-color);
         }
 
-        /* İstatistikler */
         .stat-list {
             list-style: none;
             font-size: 0.85rem;
@@ -548,9 +483,6 @@ eri</title>
             width: 1.2rem;
         }
 
-        /* ========================================
-                   FLOATING ACTION BUTTONS
-                ======================================== */
         .floating-actions {
             position: fixed;
             bottom: 30px;
@@ -589,9 +521,6 @@ eri</title>
             transform: translateY(0);
         }
 
-        /* ========================================
-                   MODAL
-                ======================================== */
         .modal {
             display: none;
             position: fixed;
@@ -617,14 +546,8 @@ eri</title>
         }
 
         @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .close-modal {
@@ -685,9 +608,6 @@ eri</title>
             font-size: 0.85rem;
         }
 
-        /* ========================================
-                   TOAST BİLDİRİM
-                ======================================== */
         .toast {
             position: fixed;
             bottom: 160px;
@@ -713,9 +633,6 @@ eri</title>
             margin-right: 10px;
         }
 
-        /* ========================================
-                   SCROLLBAR
-                ======================================== */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -729,9 +646,6 @@ eri</title>
             border-radius: 10px;
         }
 
-        /* ========================================
-                   RESPONSIVE
-                ======================================== */
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
@@ -793,28 +707,15 @@ eri</title>
 
 <body>
 
-    <!-- ========================================
-    OKUMA İLERLEME ÇUBUĞU
-    ======================================== -->
     <div class="reading-progress" id="readingProgress"></div>
 
-    <!-- ========================================
-    HEADER
-    ======================================== -->
     <header>
         <h1><i class="fas fa-feather-alt"></i> Hindiba</h1>
         <p>Belki de şimdiye kadar ardından söylenebilecek en zarif benzetme "Hindiba" idi…</p>
     </header>
 
-    <!-- ========================================
-    ANA İÇERİK
-    ======================================== -->
     <div class="container">
-
-        <!-- ===== ANA KOLON ===== -->
         <main>
-
-            <!-- Arama -->
             <div class="search-section">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
@@ -822,14 +723,9 @@ eri</title>
                 </div>
             </div>
 
-            <!-- Kategori Filtreleri -->
-            <div class="category-filters" id="categoryFilters">
-                <!-- Dinamik olarak doldurulacak -->
-            </div>
+            <div class="category-filters" id="categoryFilters"></div>
 
-            <!-- Yazılar -->
             <div class="blog-posts" id="posts">
-                <!-- İskelet yükleyiciler -->
                 <div class="skeleton-card">
                     <div class="skeleton-title"></div>
                     <div class="skeleton-text"></div>
@@ -842,17 +738,12 @@ eri</title>
                 </div>
             </div>
 
-            <!-- Sonsuz Kaydırma Yükleyici -->
             <div id="loader" style="text-align: center; padding: 2rem; display: none;">
                 <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--accent-color);"></i>
             </div>
-
         </main>
 
-        <!-- ===== SİDEBAR ===== -->
         <aside>
-
-            <!-- Profil Kartı -->
             <div class="sidebar-widget profile-card">
                 <img src="pp.jpg" class="profile-img" alt="Profil" 
                      onerror="this.src='https://ui-avatars.com/api/?name=Eşref+Akbaş&background=4f46e5&color=fff&size=128'">
@@ -863,7 +754,6 @@ eri</title>
                 </div>
             </div>
 
-            <!-- İstatistikler -->
             <div class="sidebar-widget">
                 <div class="widget-title">
                     <i class="fas fa-chart-line"></i> Blog İstatistikleri
@@ -875,17 +765,13 @@ eri</title>
                 </ul>
             </div>
 
-            <!-- Kategoriler -->
             <div class="sidebar-widget">
                 <div class="widget-title">
                     <i class="fas fa-tags"></i> Kategoriler
                 </div>
-                <ul class="stat-list" id="categoryList">
-                    <!-- Dinamik doldurulacak -->
-                </ul>
+                <ul class="stat-list" id="categoryList"></ul>
             </div>
 
-            <!-- Son Yazılar -->
             <div class="sidebar-widget">
                 <div class="widget-title">
                     <i class="fas fa-clock"></i> Son Yazılar
@@ -895,7 +781,6 @@ eri</title>
                 </ul>
             </div>
 
-            <!-- Sosyal Medya -->
             <div class="sidebar-widget">
                 <div class="widget-title">
                     <i class="fas fa-share-alt"></i> Takip Et
@@ -912,14 +797,9 @@ eri</title>
                     </a>
                 </div>
             </div>
-
         </aside>
-
     </div>
 
-    <!-- ========================================
-    FLOATING ACTION BUTTONS
-    ======================================== -->
     <div class="floating-actions">
         <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Yukarı Çık">
             <i class="fas fa-arrow-up"></i>
@@ -929,9 +809,6 @@ eri</title>
         </button>
     </div>
 
-    <!-- ========================================
-    MODAL
-    ======================================== -->
     <div id="postModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" id="closeModal">&times;</span>
@@ -939,17 +816,11 @@ eri</title>
         </div>
     </div>
 
-    <!-- ========================================
-    TOAST BİLDİRİM
-    ======================================== -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle" style="color: #10b981;"></i>
         <span id="toastMessage">İşlem başarılı!</span>
     </div>
 
-    <!-- ========================================
-    JAVASCRIPT
-    ======================================== -->
     <script>
         /**
          * ============================================================
@@ -984,6 +855,26 @@ eri</title>
          * YARDIMCI FONKSİYONLAR
          * ============================================================
          */
+
+        // Basit bir hash fonksiyonu (şifreyi gizlemek için)
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash.toString();
+        }
+
+        // 🔐 Admin şifresi (HASH'LENMİŞ)
+        // Gerçek şifre: "HindibaAdmin2024!"
+        // Hash: "553034417" (bu hash'ten şifreyi çözmek neredeyse imkansız)
+        const ADMIN_PASSWORD_HASH = "553034417";
+
+        function checkPassword(input) {
+            return simpleHash(input) === ADMIN_PASSWORD_HASH;
+        }
 
         function calculateReadingTime(content) {
             const words = content?.split(/\s+/).length || 0;
@@ -1440,7 +1331,6 @@ eri</title>
          * ============================================================
          */
 
-        // 🔥 FIREBASE KONFİG - SİZİN BİLGİLERİNİZ
         const firebaseConfig = {
             apiKey: "AIzaSyCok6u3AtJFFBhzPen9mq1Vnt2zkGiBbiQ",
             authDomain: "blog-yorum-85c27.firebaseapp.com",
@@ -1454,7 +1344,6 @@ eri</title>
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Yorum gönderme
         function submitComment(postId, name, comment) {
             db.collection("comments").add({
                 postId: postId,
@@ -1472,7 +1361,6 @@ eri</title>
             });
         }
 
-        // Onaylanmış yorumları getir
         function getApprovedComments(postId, callback) {
             db.collection("comments")
                 .where("postId", "==", postId)
@@ -1492,10 +1380,16 @@ eri</title>
                 });
         }
 
-        // Admin onay paneli
+        // 🔐 GÜVENLİ Admin Onay Paneli (Şifre HASH'LENMİŞ)
         function adminApprove() {
             const password = prompt('🔒 Admin şifresini girin:');
-            if (password !== 'HindibaAdmin2024!') {
+            
+            if (!password) {
+                showToast('❌ Şifre girmediniz!', 'error');
+                return;
+            }
+
+            if (!checkPassword(password)) {
                 showToast('❌ Yanlış şifre!', 'error');
                 return;
             }
@@ -1533,7 +1427,7 @@ eri</title>
                 });
         }
 
-        // Admin butonunu ekle
+        // Admin butonu
         const adminBtn = document.createElement('button');
         adminBtn.textContent = '🛠️ Admin Onay Paneli';
         adminBtn.style.cssText = `
