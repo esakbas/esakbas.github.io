@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hindiba | Eşref Akbaş - Hatıra Defteri</title>
+    <title>Hindiba | Eşref Akbaş - Hatıra Deft
+
+eri</title>
     <meta name="description" content="Eşref Akbaş'ın kişisel blogu - Edebiyat, şiir ve günlük yazıları">
     
     <!-- PWA Meta Tags -->
@@ -19,7 +21,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (v9 Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
@@ -958,7 +960,7 @@
             REPO_OWNER: 'esakbas',
             REPO_NAME: 'esakbas.github.io',
             POSTS_PER_PAGE: 10,
-            CACHE_DURATION: 5 * 60 * 1000, // 5 dakika
+            CACHE_DURATION: 5 * 60 * 1000,
         };
 
         /**
@@ -1388,7 +1390,6 @@
 
             modalBody.appendChild(commentContainer);
 
-            // Form submit event
             document.getElementById('commentForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const name = document.getElementById('commentName').value.trim();
@@ -1402,7 +1403,6 @@
                 }
             });
 
-            // Onaylanmış yorumları göster
             getApprovedComments(post.id, (comments) => {
                 const list = document.getElementById('commentsList');
                 if (comments.length === 0) {
@@ -1440,14 +1440,15 @@
          * ============================================================
          */
 
-        // 🔥 FIREBASE KONFİG - KENDİ BİLGİLERİNİZLE DEĞİŞTİRİN
+        // 🔥 FIREBASE KONFİG - SİZİN BİLGİLERİNİZ
         const firebaseConfig = {
-            apiKey: "AIzaSyD...",  // 👈 KENDİ API KEY'İNİZ
-            authDomain: "hindiba-blog.firebaseapp.com",  // 👈 KENDİ DOMAIN'İNİZ
-            projectId: "hindiba-blog",  // 👈 KENDİ PROJE ID'NİZ
-            storageBucket: "hindiba-blog.appspot.com",  // 👈 KENDİ BUCKET
-            messagingSenderId: "123456789",  // 👈 KENDİ SENDER ID
-            appId: "1:123456789:web:abcdef"  // 👈 KENDİ APP ID
+            apiKey: "AIzaSyCok6u3AtJFFBhzPen9mq1Vnt2zkGiBbiQ",
+            authDomain: "blog-yorum-85c27.firebaseapp.com",
+            projectId: "blog-yorum-85c27",
+            storageBucket: "blog-yorum-85c27.firebasestorage.app",
+            messagingSenderId: "513829630788",
+            appId: "1:513829630788:web:d32cea4d6cde32ab595d11",
+            measurementId: "G-8MYBYSLCKB"
         };
 
         firebase.initializeApp(firebaseConfig);
@@ -1494,7 +1495,7 @@
         // Admin onay paneli
         function adminApprove() {
             const password = prompt('🔒 Admin şifresini girin:');
-            if (password !== 'seninşifren') {  // 👈 Şifreyi değiştirin
+            if (password !== 'HindibaAdmin2024!') {
                 showToast('❌ Yanlış şifre!', 'error');
                 return;
             }
@@ -1660,7 +1661,6 @@
             setupReadingProgress();
             setupModal();
 
-            // Service Worker
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/sw.js')
                     .then(() => console.log('✅ Service Worker kaydedildi'))
