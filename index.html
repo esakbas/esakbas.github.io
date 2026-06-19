@@ -213,6 +213,8 @@
             font-size: 0.7rem;
             font-weight: 600;
             margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
         }
 
         .category-edebiyat { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
@@ -794,11 +796,11 @@
         </div>
 
         <div class="category-filters">
-            <button class="filter-btn active" data-category="all"><i class="fas fa-globe"></i> Tümü</button>
-            <button class="filter-btn" data-category="edebiyat"><i class="fas fa-book"></i> Edebiyat</button>
-            <button class="filter-btn" data-category="siir"><i class="fas fa-feather-alt"></i> Şiir</button>
-            <button class="filter-btn" data-category="gunluk"><i class="fas fa-journal-whills"></i> Günlük</button>
-            <button class="filter-btn" data-category="bir-cumle"><i class="fas fa-quote-left"></i> Bir Cümle</button>
+            <button type="button" class="filter-btn active" data-category="all"><i class="fas fa-globe"></i> Tümü</button>
+            <button type="button" class="filter-btn" data-category="edebiyat"><i class="fas fa-book"></i> Edebiyat</button>
+            <button type="button" class="filter-btn" data-category="siir"><i class="fas fa-feather-alt"></i> Şiir</button>
+            <button type="button" class="filter-btn" data-category="gunluk"><i class="fas fa-journal-whills"></i> Günlük</button>
+            <button type="button" class="filter-btn" data-category="bir-cumle"><i class="fas fa-quote-left"></i> Bir Cümle</button>
         </div>
 
         <div class="blog-posts" id="posts">
@@ -817,7 +819,7 @@
 
     <aside>
         <div class="sidebar-widget profile-card">
-            <img src="pp.jpg" class="profile-img" alt="Profil" onerror="this.src='https://via.placeholder.com/100'">
+            <img src="pp.jpg" class="profile-img" alt="Eşref Akbaş profil fotoğrafı" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=EA'">
             <div class="profile-name">Eşref Akbaş</div>
             <div class="profile-divider"></div>
             <div class="profile-location">
@@ -861,8 +863,8 @@
                 <i class="fas fa-share-alt"></i> Takip Et
             </div>
             <div class="social-links">
-                <a href="https://www.instagram.com/esrefakbs" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://x.com/esrefakbs" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/esrefakbs" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://x.com/esrefakbs" target="_blank" rel="noopener noreferrer" aria-label="X"><i class="fab fa-twitter"></i></a>
             </div>
         </div>
     </aside>
@@ -878,7 +880,7 @@
 
 <!-- Floating Buttons - SADECE TEMA BUTONU -->
 <div class="floating-buttons">
-    <button class="floating-btn btn-theme" id="themeToggle">
+    <button class="floating-btn btn-theme" id="themeToggle" type="button" aria-label="Temayı değiştir">
         <i class="fas fa-moon"></i>
     </button>
 </div>
@@ -916,10 +918,19 @@
         const userAgent = navigator.userAgent;
         
         // LocalStorage'dan ID al veya oluştur
-        let visitorId = localStorage.getItem('visitorId');
+        let visitorId = '';
+        try {
+            visitorId = localStorage.getItem('visitorId') || '';
+        } catch (error) {
+            visitorId = '';
+        }
         if (!visitorId) {
             visitorId = 'visitor_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
-            localStorage.setItem('visitorId', visitorId);
+            try {
+                localStorage.setItem('visitorId', visitorId);
+            } catch (error) {
+                console.warn('Ziyaretçi kimliği kaydedilemedi:', error);
+            }
         }
         
         return visitorId;
@@ -1012,7 +1023,7 @@
             }
         },
         
-        getPostStats: async (postId, callback) => {
+        getPostStats: (postId, callback) => {
             const postRef = doc(db, 'posts', postId.toString());
             return onSnapshot(postRef, (doc) => {
                 if (doc.exists()) {
@@ -1020,6 +1031,9 @@
                 } else {
                     callback({ viewCount: 0, commentCount: 0 });
                 }
+            }, error => {
+                console.error('İstatistikler yüklenirken hata:', error);
+                callback({ viewCount: 0, commentCount: 0 });
             });
         },
         
@@ -1042,16 +1056,32 @@
     let unsubscribeStats = null;
     
     // ============ TEMA YÖNETİMİ ============
+    function getStoredValue(key, fallback = '') {
+        try {
+            return localStorage.getItem(key) || fallback;
+        } catch (error) {
+            return fallback;
+        }
+    }
+
+    function setStoredValue(key, value) {
+        try {
+            localStorage.setItem(key, value);
+        } catch (error) {
+            console.warn('Ayar kaydedilemedi:', error);
+        }
+    }
+
     function initTheme() {
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = getStoredValue('theme', 'light');
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateThemeIcon(savedTheme);
         
-        document.getElementById('themeToggle').addEventListener('click', () => {
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
+            setStoredValue('theme', newTheme);
             updateThemeIcon(newTheme);
         });
     }
@@ -1066,34 +1096,75 @@
     // ============ OKUMA İLERLEME ÇUBUĞU ============
     function initProgressBar() {
         window.addEventListener('scroll', () => {
-            const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-            document.getElementById('reading-progress').style.width = Math.min(scrollPercent, 100) + '%';
+            const scrollableHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = scrollableHeight > 0 ? (window.scrollY / scrollableHeight) * 100 : 0;
+            const progressBar = document.getElementById('reading-progress');
+            if (progressBar) progressBar.style.width = Math.min(scrollPercent, 100) + '%';
         });
     }
     
     // ============ YARDIMCI FONKSİYONLAR ============
     function calculateReadingTime(content) {
         const wordsPerMinute = 200;
-        const words = content.split(/\s+/).length;
+        const words = String(content || '').trim().split(/\s+/).filter(Boolean).length;
         const minutes = Math.ceil(words / wordsPerMinute);
         return minutes < 1 ? 1 : minutes;
     }
     
     function escapeHtml(text) {
         const div = document.createElement('div');
-        div.textContent = text;
+        div.textContent = String(text ?? '');
         return div.innerHTML;
+    }
+
+    function sanitizeUrl(url) {
+        try {
+            const parsed = new URL(url, window.location.href);
+            return ['http:', 'https:', 'mailto:'].includes(parsed.protocol) ? parsed.href : '#';
+        } catch (error) {
+            return '#';
+        }
+    }
+
+    function slugifyCategory(category) {
+        return String(category || 'edebiyat').toLowerCase().replace(/[^a-z0-9-]/g, '-');
+    }
+
+    function getCategoryMeta(post) {
+        const category = post.labels?.[0]?.name || 'edebiyat';
+        const meta = {
+            edebiyat: { name: 'Edebiyat', icon: '<i class="fas fa-book"></i>' },
+            siir: { name: 'Şiir', icon: '<i class="fas fa-feather-alt"></i>' },
+            gunluk: { name: 'Günlük', icon: '<i class="fas fa-journal-whills"></i>' },
+            'bir-cumle': { name: 'Bir Cümle', icon: '<i class="fas fa-quote-left"></i>' }
+        };
+
+        return {
+            id: category,
+            className: `category-${slugifyCategory(category)}`,
+            name: meta[category]?.name || escapeHtml(category),
+            icon: meta[category]?.icon || '<i class="fas fa-tag"></i>'
+        };
+    }
+
+    function formatDate(value, includeTime = false) {
+        if (!value) return 'Tarih yok';
+        const date = value?.toDate ? value.toDate() : new Date(value);
+        if (Number.isNaN(date.getTime())) return 'Tarih yok';
+        return includeTime ? date.toLocaleString('tr-TR') : date.toLocaleDateString('tr-TR');
     }
     
     function markdownToHtml(md) {
-        let html = md;
+        let html = escapeHtml(md);
         html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
         html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
         html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
         html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
         html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-        html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+        html = html.replace(/\[(.*?)\]\((.*?)\)/g, (match, label, url) => {
+            return `<a href="${sanitizeUrl(url)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+        });
         html = html.split('\n\n').map(para => {
             if (para.startsWith('<h') || para.startsWith('<pre') || para.startsWith('<ul')) return para;
             return `<p>${para.replace(/\n/g, '<br>')}</p>`;
@@ -1122,7 +1193,10 @@
                 throw new Error('Beklenmeyen veri formatı');
             }
             
-            allPosts = issues.filter(issue => issue.labels && issue.labels.length > 0);
+            allPosts = issues
+                .filter(issue => !issue.pull_request)
+                .filter(issue => Array.isArray(issue.labels) && issue.labels.length > 0)
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             
             updateCategoryCounts();
             updateRecentPosts();
@@ -1135,7 +1209,7 @@
                     <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #f59e0b;"></i>
                     <h3 style="margin-top: 1rem;">Yazılar Yüklenemedi</h3>
                     <p style="color: var(--text-muted); margin: 1rem 0;">${err.message}</p>
-                    <button onclick="loadPosts()" class="read-more-btn">
+                    <button type="button" onclick="loadPosts()" class="read-more-btn">
                         <i class="fas fa-redo"></i> Tekrar Dene
                     </button>
                 </div>
@@ -1159,7 +1233,7 @@
     }
     
     function updateRecentPosts() {
-        const recent = [...allPosts].sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0,5);
+        const recent = [...allPosts].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 5);
         const container = document.getElementById('recentPosts');
         
         if (recent.length === 0) {
@@ -1212,33 +1286,23 @@
         }
         
         container.innerHTML = filtered.map(post => {
-            let category = post.labels[0]?.name || 'edebiyat';
-            let categoryName = '';
-            let categoryIcon = '';
-            
-            switch(category) {
-                case 'edebiyat': categoryName = 'Edebiyat'; categoryIcon = '<i class="fas fa-book"></i>'; break;
-                case 'siir': categoryName = 'Şiir'; categoryIcon = '<i class="fas fa-feather-alt"></i>'; break;
-                case 'gunluk': categoryName = 'Günlük'; categoryIcon = '<i class="fas fa-journal-whills"></i>'; break;
-                case 'bir-cumle': categoryName = 'Bir Cümle'; categoryIcon = '<i class="fas fa-quote-left"></i>'; break;
-                default: categoryName = category; categoryIcon = '<i class="fas fa-tag"></i>';
-            }
-            
+            const category = getCategoryMeta(post);
             const content = post.body || '';
-            const excerpt = content.split('\n').slice(0, 3).join(' ').substring(0, 180) + '...';
-            const date = new Date(post.created_at).toLocaleDateString('tr-TR');
+            const plainExcerpt = content.replace(/[#*_>`\[\]()]/g, '').split('\n').slice(0, 3).join(' ').trim();
+            const excerpt = plainExcerpt.length > 180 ? plainExcerpt.substring(0, 180) + '...' : plainExcerpt || 'Özet bulunmuyor.';
+            const date = formatDate(post.created_at);
             const readTime = calculateReadingTime(content);
             
             return `
                 <article class="post-card">
-                    <div class="post-category category-${category}">${categoryIcon} ${categoryName}</div>
+                    <div class="post-category ${category.className}">${category.icon} ${category.name}</div>
                     <h2 class="post-title">${escapeHtml(post.title)}</h2>
                     <div class="post-meta">
                         <span><i class="far fa-calendar-alt"></i> ${date}</span>
                         <span class="reading-time"><i class="far fa-clock"></i> ${readTime} dk okuma</span>
                     </div>
                     <p class="post-excerpt">${escapeHtml(excerpt)}</p>
-                    <button class="read-more-btn" data-post-id="${post.id}">
+                    <button type="button" class="read-more-btn" data-post-id="${post.id}">
                         Devamını Oku <i class="fas fa-arrow-right"></i>
                     </button>
                 </article>
@@ -1287,26 +1351,15 @@
         
         currentPostId = post.id;
         
-        let category = post.labels[0]?.name || 'edebiyat';
-        let categoryName = '';
-        let categoryIcon = '';
-        
-        switch(category) {
-            case 'edebiyat': categoryName = 'Edebiyat'; categoryIcon = '<i class="fas fa-book"></i>'; break;
-            case 'siir': categoryName = 'Şiir'; categoryIcon = '<i class="fas fa-feather-alt"></i>'; break;
-            case 'gunluk': categoryName = 'Günlük'; categoryIcon = '<i class="fas fa-journal-whills"></i>'; break;
-            case 'bir-cumle': categoryName = 'Bir Cümle'; categoryIcon = '<i class="fas fa-quote-left"></i>'; break;
-            default: categoryName = category; categoryIcon = '<i class="fas fa-tag"></i>';
-        }
-        
+        const category = getCategoryMeta(post);
         let content = post.body || '';
         content = content.replace(/^## .*\n/, '');
         content = markdownToHtml(content);
         const readTime = calculateReadingTime(post.body || '');
-        const date = new Date(post.created_at).toLocaleDateString('tr-TR');
+        const date = formatDate(post.created_at);
         
         modalBody.innerHTML = `
-            <div class="post-category category-${category}" style="margin-bottom: 1rem; display: inline-flex;">${categoryIcon} ${categoryName}</div>
+            <div class="post-category ${category.className}" style="margin-bottom: 1rem; display: inline-flex;">${category.icon} ${category.name}</div>
             <h1 style="margin-top: 1rem;">${escapeHtml(post.title)}</h1>
             <div class="post-meta" style="margin-top: 0.5rem;">
                 <span><i class="far fa-calendar-alt"></i> ${date}</span>
@@ -1318,11 +1371,11 @@
             </div>
             <hr style="margin: 1.5rem 0;">
             <div style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
-                <button onclick="shareOnTwitter('${escapeHtml(post.title).replace(/'/g, "\\'")}')" 
+                <button type="button" onclick="shareOnTwitter(this.dataset.title)" data-title="${escapeHtml(post.title)}"
                         style="background: #000; color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer; font-size: 0.85rem;">
                     <i class="fab fa-twitter"></i> Twitter'da Paylaş
                 </button>
-                <button onclick="copyToClipboard()" 
+                <button type="button" onclick="copyToClipboard()" 
                         style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer; font-size: 0.85rem;">
                     <i class="fas fa-link"></i> Link Kopyala
                 </button>
@@ -1369,7 +1422,7 @@
                         <h4>${escapeHtml(post.title)}</h4>
                         <small>
                             <i class="far fa-calendar-alt"></i> 
-                            ${new Date(post.created_at).toLocaleDateString('tr-TR')}
+                            ${formatDate(post.created_at)}
                         </small>
                     </div>
                 `).join('')}
@@ -1382,7 +1435,7 @@
         const post = allPosts.find(p => p.id === postId);
         if (post) {
             openModal(post);
-            modal.scrollTop = 0;
+            if (modal) modal.scrollTop = 0;
         }
     }
     
@@ -1403,7 +1456,7 @@
                            maxlength="50">
                     <textarea id="commentText" class="comment-input" 
                               placeholder="Yorumunuzu yazın..." required></textarea>
-                    <button class="comment-submit" onclick="submitComment(${postId})">
+                    <button type="button" class="comment-submit" onclick="submitComment(${postId})">
                         <i class="fas fa-paper-plane"></i> Gönder
                     </button>
                 </div>
@@ -1439,6 +1492,8 @@
                     <i class="fas fa-eye"></i> ${views} Okunma
                 `;
             });
+        } else {
+            commentCountSpan.innerHTML = '<i class="fas fa-comment"></i> Yorum sistemi hazırlanıyor';
         }
         
         // Yorumları dinle
@@ -1452,7 +1507,7 @@
                     `;
                 } else {
                     commentsContainer.innerHTML = comments.map(comment => {
-                        const date = comment.createdAt ? new Date(comment.createdAt.toDate()).toLocaleString('tr-TR') : 'Az önce';
+                        const date = formatDate(comment.createdAt, true);
                         const likedBy = comment.likedBy || [];
                         const isLiked = likedBy.includes(visitorId);
                         
@@ -1467,7 +1522,8 @@
                                 <div class="comment-text">${escapeHtml(comment.text)}</div>
                                 <div class="comment-actions">
                                     <button class="comment-like-btn ${isLiked ? 'liked' : ''}" 
-                                            onclick="likeComment(${postId}, '${comment.id}')"
+                                            type="button"
+                                            onclick="likeComment(${postId}, '${comment.id}', this)"
                                             title="${isLiked ? 'Beğeniyi geri al' : 'Beğen'}">
                                         <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> 
                                         <span class="like-count">${comment.likes || 0}</span>
@@ -1478,6 +1534,12 @@
                     }).join('');
                 }
             });
+        } else {
+            commentsContainer.innerHTML = `
+                <p style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                    Yorum sistemi şu anda kullanılamıyor.
+                </p>
+            `;
         }
         
         // Görüntülenme sayısını artır
@@ -1521,20 +1583,25 @@
         }
     };
     
-    window.likeComment = async function(postId, commentId) {
+    window.likeComment = async function(postId, commentId, buttonEl) {
         if (!window.FirebaseFunctions || !window.FirebaseFunctions.likeComment) return;
         
-        const btn = event.target.closest('.comment-like-btn');
+        const btn = buttonEl?.closest ? buttonEl.closest('.comment-like-btn') : buttonEl;
         if (btn) {
             btn.disabled = true;
             btn.style.opacity = '0.5';
         }
         
         try {
-            const result = await window.FirebaseFunctions.likeComment(postId, commentId);
+            await window.FirebaseFunctions.likeComment(postId, commentId);
             // Sayfa yeniden yüklenecek - Firebase gerçek zamanlı olduğu için otomatik güncellenir
         } catch (error) {
             console.error('Beğeni hatası:', error);
+            if (btn) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            }
+        } finally {
             if (btn) {
                 btn.disabled = false;
                 btn.style.opacity = '1';
@@ -1549,16 +1616,40 @@
     }
     
     function copyToClipboard() {
-        navigator.clipboard.writeText(window.location.href).then(() => {
-            alert('🔗 Link kopyalandı!');
-        }).catch(() => {
-            alert('❌ Link kopyalanamadı! Lütfen manuel olarak kopyalayın.');
-        });
+        const url = window.location.href;
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link kopyalandı!');
+            }).catch(() => fallbackCopyToClipboard(url));
+            return;
+        }
+
+        fallbackCopyToClipboard(url);
+    }
+
+    function fallbackCopyToClipboard(text) {
+        const input = document.createElement('textarea');
+        input.value = text;
+        input.setAttribute('readonly', '');
+        input.style.position = 'fixed';
+        input.style.opacity = '0';
+        document.body.appendChild(input);
+        input.select();
+
+        try {
+            document.execCommand('copy');
+            alert('Link kopyalandı!');
+        } catch (error) {
+            alert('Link kopyalanamadı. Lütfen adres çubuğundan manuel olarak kopyalayın.');
+        } finally {
+            input.remove();
+        }
     }
     
     // ============ MODAL KAPATMA ============
     function closeModal() {
         const modal = document.getElementById('postModal');
+        if (!modal) return;
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
         
@@ -1575,7 +1666,7 @@
     
     // ============ EVENT LISTENERS ============
     // Arama
-    document.getElementById('searchInput').addEventListener('input', (e) => {
+    document.getElementById('searchInput')?.addEventListener('input', (e) => {
         currentSearch = e.target.value;
         displayPosts();
     });
@@ -1591,7 +1682,7 @@
     });
     
     // Modal kapatma
-    document.querySelector('.close-modal').addEventListener('click', closeModal);
+    document.querySelector('.close-modal')?.addEventListener('click', closeModal);
     
     window.addEventListener('click', (e) => {
         const modal = document.getElementById('postModal');
