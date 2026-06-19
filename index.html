@@ -642,14 +642,8 @@
         
         try {
             const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues?state=all&per_page=100`);
-            
-            if (!response.ok) {
-                throw new Error(`GitHub API hatası: ${response.status}`);
-            }
-            
             const issues = await response.json();
             
-            // Sadece etiketi olan issue'ları al
             allPosts = issues.filter(issue => issue.labels && issue.labels.length > 0);
             
             updateCategoryCounts();
@@ -657,8 +651,7 @@
             displayPosts();
             
         } catch (err) {
-            console.error('Yazılar yüklenirken hata:', err);
-            container.innerHTML = `<div class="post-card">⚠️ Yazılar yüklenemedi: ${err.message}. Lütfen daha sonra tekrar deneyin.</div>`;
+            container.innerHTML = `<div class="post-card">⚠️ Yazılar yüklenemedi: ${err.message}</div>`;
         }
     }
     
@@ -678,9 +671,7 @@
     }
     
     function updateRecentPosts() {
-        const recent = [...allPosts]
-            .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
-            .slice(0,5);
+        const recent = [...allPosts].sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0,5);
         const container = document.getElementById('recentPosts');
         
         if (recent.length === 0) {
@@ -688,16 +679,12 @@
             return;
         }
         
-        container.innerHTML = recent.map(post => {
-            // Güvenli bir şekilde post objesini stringe çevir
-            const postJson = JSON.stringify(post).replace(/'/g, "&#39;").replace(/"/g, '&quot;');
-            return `
-                <li>
-                    <i class="fas fa-angle-right"></i>
-                    <a href="#" onclick="openModalFromJson('${postJson}'); return false;">${escapeHtml(post.title)}</a>
-                </li>
-            `;
-        }).join('');
+        container.innerHTML = recent.map(post => `
+            <li>
+                <i class="fas fa-angle-right"></i>
+                <a href="#" onclick="openModal(${JSON.stringify(post).replace(/'/g, "&#39;")}); return false;">${escapeHtml(post.title)}</a>
+            </li>
+        `).join('');
     }
     
     function displayPosts() {
@@ -739,9 +726,6 @@
             const date = new Date(post.created_at).toLocaleDateString('tr-TR');
             const readTime = calculateReadingTime(content);
             
-            // Güvenli JSON string oluştur
-            const postJson = JSON.stringify(post).replace(/'/g, "&#39;").replace(/"/g, '&quot;');
-            
             return `
                 <article class="post-card">
                     <div class="post-category category-${category}">${categoryIcon} ${categoryName}</div>
@@ -751,22 +735,12 @@
                         <span class="reading-time"><i class="far fa-clock"></i> ${readTime} dk okuma</span>
                     </div>
                     <p class="post-excerpt">${escapeHtml(excerpt)}</p>
-                    <button class="read-more-btn" onclick='openModalFromJson("${postJson}")'>
+                    <button class="read-more-btn" onclick='openModal(${JSON.stringify(post).replace(/'/g, "&#39;")})'>
                         Devamını Oku <i class="fas fa-arrow-right"></i>
                     </button>
                 </article>
             `;
         }).join('');
-    }
-    
-    // JSON string'den post objesine çevirip modal'ı açan yardımcı fonksiyon
-    function openModalFromJson(postJson) {
-        try {
-            const post = JSON.parse(postJson.replace(/&quot;/g, '"').replace(/&#39;/g, "'"));
-            openModal(post);
-        } catch (e) {
-            console.error('Post parse hatası:', e);
-        }
     }
     
     function openModal(post) {
@@ -786,7 +760,6 @@
         }
         
         let content = post.body || '';
-        // İlk satır başlık olabilir, onu kaldır
         content = content.replace(/^## .*\n/, '');
         content = markdownToHtml(content);
         const readTime = calculateReadingTime(post.body || '');
@@ -799,14 +772,12 @@
                 <span><i class="far fa-calendar-alt"></i> ${date}</span>
                 <span><i class="far fa-clock"></i> ${readTime} dk okuma</span>
             </div>
-            <hr style="margin: 1.5rem 0; border-color: var(--border-color);">
-            <div class="post-content">
-                ${content}
-            </div>
-            <hr style="margin: 1.5rem 0; border-color: var(--border-color);">
+            <hr style="margin: 1.5rem 0;">
+            ${content}
+            <hr style="margin: 1.5rem 0;">
             <div style="display: flex; justify-content: center; gap: 0.5rem;">
                 <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}', '_blank')" style="background: #000000; color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fab fa-twitter"></i> Paylaş</button>
-                <button onclick="navigator.clipboard.writeText(window.location.href).then(() => alert('Link kopyalandı!')).catch(() => alert('Kopyalama başarısız'))" style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fas fa-link"></i> Kopyala</button>
+                <button onclick="navigator.clipboard.writeText(window.location.href); alert('Link kopyalandı!')" style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fas fa-link"></i> Kopyala</button>
             </div>
         `;
         
@@ -815,18 +786,13 @@
     
     function markdownToHtml(md) {
         let html = md;
-        // Kod blokları
         html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-        // Başlıklar
         html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
         html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
         html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
-        // Bold ve italic
         html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-        // Linkler
         html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
-        // Paragraflar
         html = html.split('\n\n').map(para => {
             if (para.startsWith('<h') || para.startsWith('<pre') || para.startsWith('<ul')) return para;
             return `<p>${para.replace(/\n/g, '<br>')}</p>`;
@@ -840,7 +806,6 @@
         return div.innerHTML;
     }
     
-    // Event listeners
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
         currentSearch = e.target.value;
@@ -859,13 +824,6 @@
     const modal = document.getElementById('postModal');
     document.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
     window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-    
-    // ESC tuşu ile modal kapatma
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.style.display === 'block') {
-            modal.style.display = 'none';
-        }
-    });
     
     loadPosts();
 </script>
