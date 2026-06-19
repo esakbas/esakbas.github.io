@@ -682,9 +682,19 @@
         container.innerHTML = recent.map(post => `
             <li>
                 <i class="fas fa-angle-right"></i>
-                <a href="#" onclick="openModal(${JSON.stringify(post).replace(/'/g, "&#39;")}); return false;">${escapeHtml(post.title)}</a>
+                <a href="#" data-post-id="${post.id}">${escapeHtml(post.title)}</a>
             </li>
         `).join('');
+        
+        // Son yazılar için event listener ekle
+        container.querySelectorAll('a[data-post-id]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const postId = parseInt(e.target.getAttribute('data-post-id'));
+                const post = allPosts.find(p => p.id === postId);
+                if (post) openModal(post);
+            });
+        });
     }
     
     function displayPosts() {
@@ -735,17 +745,53 @@
                         <span class="reading-time"><i class="far fa-clock"></i> ${readTime} dk okuma</span>
                     </div>
                     <p class="post-excerpt">${escapeHtml(excerpt)}</p>
-                    <button class="read-more-btn" onclick='openModal(${JSON.stringify(post).replace(/'/g, "&#39;")})'>
+                    <button class="read-more-btn" data-post-id="${post.id}">
                         Devamını Oku <i class="fas fa-arrow-right"></i>
                     </button>
                 </article>
             `;
         }).join('');
+        
+        // Tüm "Devamını Oku" butonlarına event listener ekle
+        container.querySelectorAll('.read-more-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Kart tıklamasını engelle
+                const postId = parseInt(btn.getAttribute('data-post-id'));
+                const post = allPosts.find(p => p.id === postId);
+                if (post) {
+                    openModal(post);
+                } else {
+                    alert('Yazı bulunamadı!');
+                }
+            });
+        });
+        
+        // Kart tıklaması için event listener ekle (opsiyonel)
+        container.querySelectorAll('.post-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                // Eğer butona tıklanmadıysa kart tıklamasını işle
+                if (!e.target.closest('.read-more-btn')) {
+                    const btn = card.querySelector('.read-more-btn');
+                    if (btn) {
+                        const postId = parseInt(btn.getAttribute('data-post-id'));
+                        const post = allPosts.find(p => p.id === postId);
+                        if (post) openModal(post);
+                    }
+                }
+            });
+        });
     }
     
     function openModal(post) {
+        console.log('Opening modal for post:', post.title); // Debug için
+        
         const modal = document.getElementById('postModal');
         const modalBody = document.getElementById('modalBody');
+        
+        if (!modal || !modalBody) {
+            console.error('Modal elements not found!');
+            return;
+        }
         
         let category = post.labels[0]?.name || 'edebiyat';
         let categoryName = '';
@@ -776,12 +822,26 @@
             ${content}
             <hr style="margin: 1.5rem 0;">
             <div style="display: flex; justify-content: center; gap: 0.5rem;">
-                <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}', '_blank')" style="background: #000000; color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fab fa-twitter"></i> Paylaş</button>
-                <button onclick="navigator.clipboard.writeText(window.location.href); alert('Link kopyalandı!')" style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fas fa-link"></i> Kopyala</button>
+                <button onclick="shareOnTwitter('${escapeHtml(post.title).replace(/'/g, "\\'")}')" style="background: #000000; color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fab fa-twitter"></i> Paylaş</button>
+                <button onclick="copyToClipboard()" style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fas fa-link"></i> Kopyala</button>
             </div>
         `;
         
         modal.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Arka planı kaydırmayı engelle
+    }
+    
+    function shareOnTwitter(title) {
+        const url = window.location.href;
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`, '_blank');
+    }
+    
+    function copyToClipboard() {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            alert('Link kopyalandı!');
+        }).catch(() => {
+            alert('Link kopyalanamadı!');
+        });
     }
     
     function markdownToHtml(md) {
@@ -806,6 +866,7 @@
         return div.innerHTML;
     }
     
+    // Event Listeners
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
         currentSearch = e.target.value;
@@ -821,10 +882,33 @@
         });
     });
     
+    // Modal kapatma işlemleri
     const modal = document.getElementById('postModal');
-    document.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
-    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+    const closeModalBtn = document.querySelector('.close-modal');
     
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Arka plan kaydırmayı geri aç
+        });
+    }
+    
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Arka plan kaydırmayı geri aç
+        }
+    });
+    
+    // ESC tuşu ile modal kapatma
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+    
+    // Sayfa yüklendiğinde
     loadPosts();
 </script>
 
