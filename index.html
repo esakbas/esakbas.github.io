@@ -534,8 +534,6 @@
         }
 
         .btn-theme { background: linear-gradient(135deg, #667eea, #764ba2); }
-        .btn-audio { background: linear-gradient(135deg, #10b981, #059669); }
-        .btn-audio.playing { background: linear-gradient(135deg, #ef4444, #dc2626); }
 
         /* Yorum Sistemi Stilleri */
         .comments-section {
@@ -648,6 +646,14 @@
         .comment-like-btn:hover {
             color: #ef4444;
             background: rgba(239, 68, 68, 0.1);
+        }
+
+        .comment-like-btn.liked {
+            color: #ef4444;
+        }
+
+        .comment-like-btn.liked i {
+            font-weight: 900;
         }
 
         .comment-count {
@@ -870,33 +876,29 @@
     </div>
 </div>
 
-<!-- Floating Buttons -->
+<!-- Floating Buttons - SADECE TEMA BUTONU -->
 <div class="floating-buttons">
     <button class="floating-btn btn-theme" id="themeToggle">
         <i class="fas fa-moon"></i>
-    </button>
-    <button class="floating-btn btn-audio" id="audioToggle">
-        <i class="fas fa-headphones"></i>
     </button>
 </div>
 
 <!-- Firebase SDK -->
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment, setDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment, setDoc, getDoc, arrayUnion } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
     import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
     
-    // Firebase yapılandırması - BURAYI KENDİ BİLGİLERİNLE GÜNCELLE
     // Firebase yapılandırması
-const firebaseConfig = {
-    apiKey: "AIzaSyCok6u3AtJFFBhzPen9mq1Vnt2zkGiBbiQ",
-    authDomain: "blog-yorum-85c27.firebaseapp.com",
-    projectId: "blog-yorum-85c27",
-    storageBucket: "blog-yorum-85c27.firebasestorage.app",
-    messagingSenderId: "513829630788",
-    appId: "1:513829630788:web:d32cea4d6cde32ab595d11",
-    measurementId: "G-8MYBYSLCKB"
-};
+    const firebaseConfig = {
+        apiKey: "AIzaSyCok6u3AtJFFBhzPen9mq1Vnt2zkGiBbiQ",
+        authDomain: "blog-yorum-85c27.firebaseapp.com",
+        projectId: "blog-yorum-85c27",
+        storageBucket: "blog-yorum-85c27.firebasestorage.app",
+        messagingSenderId: "513829630788",
+        appId: "1:513829630788:web:d32cea4d6cde32ab595d11",
+        measurementId: "G-8MYBYSLCKB"
+    };
     
     // Firebase'i başlat
     const app = initializeApp(firebaseConfig);
@@ -905,6 +907,23 @@ const firebaseConfig = {
     
     // Anonim giriş yap
     signInAnonymously(auth).catch(error => console.error('Auth error:', error));
+    
+    // Kullanıcı IP'sini al (beğeni limiti için)
+    async function getUserFingerprint() {
+        // Basit bir parmak izi: IP + user agent + ekran boyutu
+        const screenInfo = `${window.screen.width}x${window.screen.height}`;
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const userAgent = navigator.userAgent;
+        
+        // LocalStorage'dan ID al veya oluştur
+        let visitorId = localStorage.getItem('visitorId');
+        if (!visitorId) {
+            visitorId = 'visitor_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+            localStorage.setItem('visitorId', visitorId);
+        }
+        
+        return visitorId;
+    }
     
     // Global fonksiyonları tanımla
     window.FirebaseFunctions = {
@@ -915,7 +934,8 @@ const firebaseConfig = {
                     text: commentText,
                     userName: userName || 'Anonim',
                     createdAt: serverTimestamp(),
-                    likes: 0
+                    likes: 0,
+                    likedBy: [] // Beğenenlerin listesi
                 });
                 
                 // Post sayacını güncelle
@@ -950,12 +970,34 @@ const firebaseConfig = {
         
         likeComment: async (postId, commentId) => {
             try {
+                const visitorId = await getUserFingerprint();
                 const commentRef = doc(db, 'posts', postId.toString(), 'comments', commentId);
-                await updateDoc(commentRef, {
-                    likes: increment(1)
-                });
+                const commentSnap = await getDoc(commentRef);
+                
+                if (commentSnap.exists()) {
+                    const commentData = commentSnap.data();
+                    const likedBy = commentData.likedBy || [];
+                    
+                    // Eğer bu kullanıcı daha önce beğendiyse, beğeniyi geri al
+                    if (likedBy.includes(visitorId)) {
+                        await updateDoc(commentRef, {
+                            likes: increment(-1),
+                            likedBy: likedBy.filter(id => id !== visitorId)
+                        });
+                        return { action: 'unliked', visitorId };
+                    } 
+                    // Yeni beğeni
+                    else {
+                        await updateDoc(commentRef, {
+                            likes: increment(1),
+                            likedBy: arrayUnion(visitorId)
+                        });
+                        return { action: 'liked', visitorId };
+                    }
+                }
             } catch (error) {
                 console.error('Beğeni eklenirken hata:', error);
+                throw error;
             }
         },
         
@@ -979,7 +1021,9 @@ const firebaseConfig = {
                     callback({ viewCount: 0, commentCount: 0 });
                 }
             });
-        }
+        },
+        
+        getUserFingerprint: getUserFingerprint
     };
     
     console.log('✅ Firebase yüklendi ve hazır');
@@ -996,8 +1040,6 @@ const firebaseConfig = {
     let currentPostId = null;
     let unsubscribeComments = null;
     let unsubscribeStats = null;
-    let speechUtterance = null;
-    let isReading = false;
     
     // ============ TEMA YÖNETİMİ ============
     function initTheme() {
@@ -1026,52 +1068,6 @@ const firebaseConfig = {
         window.addEventListener('scroll', () => {
             const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
             document.getElementById('reading-progress').style.width = Math.min(scrollPercent, 100) + '%';
-        });
-    }
-    
-    // ============ SESLİ OKUMA ============
-    function initAudioReader() {
-        document.getElementById('audioToggle').addEventListener('click', function() {
-            const icon = this.querySelector('i');
-            
-            if (isReading) {
-                window.speechSynthesis.cancel();
-                isReading = false;
-                icon.className = 'fas fa-headphones';
-                this.classList.remove('playing');
-                return;
-            }
-            
-            const modalContent = document.querySelector('.modal-body');
-            const text = modalContent ? modalContent.textContent : document.querySelector('.blog-posts')?.textContent || '';
-            
-            if (!text.trim()) {
-                alert('Okunacak içerik bulunamadı!');
-                return;
-            }
-            
-            speechUtterance = new SpeechSynthesisUtterance(text.substring(0, 2000));
-            speechUtterance.lang = 'tr-TR';
-            speechUtterance.rate = 0.9;
-            speechUtterance.pitch = 1;
-            
-            speechUtterance.onend = () => {
-                isReading = false;
-                icon.className = 'fas fa-headphones';
-                document.getElementById('audioToggle').classList.remove('playing');
-            };
-            
-            speechUtterance.onerror = (e) => {
-                console.error('Sesli okuma hatası:', e);
-                isReading = false;
-                icon.className = 'fas fa-headphones';
-                document.getElementById('audioToggle').classList.remove('playing');
-            };
-            
-            window.speechSynthesis.speak(speechUtterance);
-            isReading = true;
-            icon.className = 'fas fa-stop';
-            this.classList.add('playing');
         });
     }
     
@@ -1390,7 +1386,7 @@ const firebaseConfig = {
         }
     }
     
-    // ============ YORUM SİSTEMİ ============
+    // ============ YORUM SİSTEMİ (BEĞENİ LİMİTLİ) ============
     function createCommentSection(postId) {
         return `
             <div class="comments-section">
@@ -1421,11 +1417,17 @@ const firebaseConfig = {
         `;
     }
     
-    function displayComments(postId) {
+    async function displayComments(postId) {
         const commentsContainer = document.getElementById('commentsList');
         const commentCountSpan = document.getElementById('commentCount');
         
         if (!commentsContainer || !commentCountSpan) return;
+        
+        // Kullanıcı fingerprint'ini al
+        let visitorId = '';
+        if (window.FirebaseFunctions && window.FirebaseFunctions.getUserFingerprint) {
+            visitorId = await window.FirebaseFunctions.getUserFingerprint();
+        }
         
         // İstatistikleri dinle
         if (window.FirebaseFunctions && window.FirebaseFunctions.getPostStats) {
@@ -1451,6 +1453,9 @@ const firebaseConfig = {
                 } else {
                     commentsContainer.innerHTML = comments.map(comment => {
                         const date = comment.createdAt ? new Date(comment.createdAt.toDate()).toLocaleString('tr-TR') : 'Az önce';
+                        const likedBy = comment.likedBy || [];
+                        const isLiked = likedBy.includes(visitorId);
+                        
                         return `
                             <div class="comment-card">
                                 <div class="comment-header">
@@ -1461,8 +1466,11 @@ const firebaseConfig = {
                                 </div>
                                 <div class="comment-text">${escapeHtml(comment.text)}</div>
                                 <div class="comment-actions">
-                                    <button class="comment-like-btn" onclick="likeComment(${postId}, '${comment.id}')">
-                                        <i class="far fa-heart"></i> ${comment.likes || 0}
+                                    <button class="comment-like-btn ${isLiked ? 'liked' : ''}" 
+                                            onclick="likeComment(${postId}, '${comment.id}')"
+                                            title="${isLiked ? 'Beğeniyi geri al' : 'Beğen'}">
+                                        <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> 
+                                        <span class="like-count">${comment.likes || 0}</span>
                                     </button>
                                 </div>
                             </div>
@@ -1513,9 +1521,24 @@ const firebaseConfig = {
         }
     };
     
-    window.likeComment = function(postId, commentId) {
-        if (window.FirebaseFunctions && window.FirebaseFunctions.likeComment) {
-            window.FirebaseFunctions.likeComment(postId, commentId);
+    window.likeComment = async function(postId, commentId) {
+        if (!window.FirebaseFunctions || !window.FirebaseFunctions.likeComment) return;
+        
+        const btn = event.target.closest('.comment-like-btn');
+        if (btn) {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+        }
+        
+        try {
+            const result = await window.FirebaseFunctions.likeComment(postId, commentId);
+            // Sayfa yeniden yüklenecek - Firebase gerçek zamanlı olduğu için otomatik güncellenir
+        } catch (error) {
+            console.error('Beğeni hatası:', error);
+            if (btn) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            }
         }
     };
     
@@ -1538,15 +1561,6 @@ const firebaseConfig = {
         const modal = document.getElementById('postModal');
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
-        
-        // Sesli okumayı durdur
-        if (isReading) {
-            window.speechSynthesis.cancel();
-            isReading = false;
-            const audioIcon = document.querySelector('#audioToggle i');
-            if (audioIcon) audioIcon.className = 'fas fa-headphones';
-            document.getElementById('audioToggle')?.classList.remove('playing');
-        }
         
         // Yorum dinleyicilerini temizle
         if (unsubscribeComments) {
@@ -1600,11 +1614,10 @@ const firebaseConfig = {
     function init() {
         initTheme();
         initProgressBar();
-        initAudioReader();
         loadPosts();
         
         console.log('🚀 Hindiba Blog hazır!');
-        console.log('📝 Özellikler: Karanlık Mod, İlerleme Çubuğu, Sesli Okuma, Yorum Sistemi, İlgili Yazılar');
+        console.log('📝 Özellikler: Karanlık Mod, İlerleme Çubuğu, Yorum Sistemi (limitli beğeni), İlgili Yazılar');
     }
     
     // Sayfa yüklendiğinde başlat
