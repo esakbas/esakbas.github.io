@@ -23,18 +23,12 @@
             --gradient-end: #ec4899;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #0f172a;
-                --container-bg: #1e293b;
-                --text-main: #f8fafc;
-                --text-muted: #94a3b8;
-                --accent-color: #6366f1;
-                --accent-hover: #818cf8;
-                --border-color: #334155;
-                --gradient-start: #6366f1;
-                --gradient-end: #f43f5e;
-            }
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --container-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
         }
 
         * {
@@ -49,6 +43,20 @@
             color: var(--text-main);
             line-height: 1.7;
             padding-bottom: 3rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Okuma İlerleme Çubuğu */
+        #reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            z-index: 10000;
+            transition: width 0.2s ease;
+            box-shadow: 0 0 10px rgba(79, 70, 229, 0.5);
+            width: 0%;
         }
 
         header {
@@ -283,7 +291,6 @@
             color: var(--accent-color);
         }
 
-        /* PROFİL KARTI - FLEXBOX İLE GARANTİLİ ORTALAMA */
         .profile-card {
             display: flex;
             flex-direction: column;
@@ -413,6 +420,7 @@
             text-decoration: none;
             font-size: 0.85rem;
             transition: color 0.3s;
+            cursor: pointer;
         }
 
         .popular-posts li a:hover {
@@ -488,10 +496,234 @@
             font-size: 1.8rem;
             cursor: pointer;
             transition: transform 0.3s;
+            color: var(--text-main);
         }
 
         .close-modal:hover {
             transform: rotate(90deg);
+        }
+
+        /* Floating Buttons */
+        .floating-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 999;
+        }
+
+        .floating-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-theme { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .btn-audio { background: linear-gradient(135deg, #10b981, #059669); }
+        .btn-audio.playing { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+        /* Yorum Sistemi Stilleri */
+        .comments-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .comment-form {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-direction: column;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--container-bg);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .comment-submit {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            align-self: flex-end;
+        }
+
+        .comment-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .comment-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .comment-card {
+            background: var(--bg-color);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent-color);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .comment-user {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .comment-text {
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .comment-actions {
+            margin-top: 0.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .comment-like-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: color 0.3s;
+            padding: 0.3rem 0.5rem;
+            border-radius: 8px;
+        }
+
+        .comment-like-btn:hover {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .comment-count {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* İlgili Yazılar Stilleri */
+        .related-posts-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .related-post-item {
+            background: var(--bg-color);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--border-color);
+        }
+
+        .related-post-item:hover {
+            transform: translateX(5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .related-post-item h4 {
+            margin: 0 0 0.3rem 0;
+            color: var(--text-main);
+        }
+
+        .related-post-item small {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Post Content Styles */
+        .post-content {
+            line-height: 1.8;
+        }
+
+        .post-content h1, .post-content h2, .post-content h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1rem;
+        }
+
+        .post-content pre {
+            background: var(--bg-color);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .post-content code {
+            background: var(--bg-color);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .post-content pre code {
+            padding: 0;
+            background: none;
         }
 
         ::-webkit-scrollbar {
@@ -515,15 +747,35 @@
             header h1 {
                 font-size: 2rem;
             }
+
+            .floating-buttons {
+                bottom: 10px;
+                right: 10px;
+                gap: 8px;
+            }
+
+            .floating-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+
+            .modal-content {
+                margin: 1rem auto;
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 
 <body>
 
+<!-- Okuma İlerleme Çubuğu -->
+<div id="reading-progress"></div>
+
 <header>
     <h1><i class="fas fa-feather-alt"></i> Hindiba</h1>
-    <p>Belki de şimdiye kadar ardından söylenebilecek en zarif benzetme “Hindiba” idi…</p>
+    <p>Belki de şimdiye kadar ardından söylenebilecek en zarif benzetme "Hindiba" idi…</p>
 </header>
 
 <div class="container">
@@ -558,7 +810,6 @@
     </main>
 
     <aside>
-        <!-- PROFİL KARTI - FLEXBOX İLE ORTALANMIŞ -->
         <div class="sidebar-widget profile-card">
             <img src="pp.jpg" class="profile-img" alt="Profil" onerror="this.src='https://via.placeholder.com/100'">
             <div class="profile-name">Eşref Akbaş</div>
@@ -611,6 +862,7 @@
     </aside>
 </div>
 
+<!-- Modal -->
 <div id="postModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
@@ -618,14 +870,210 @@
     </div>
 </div>
 
+<!-- Floating Buttons -->
+<div class="floating-buttons">
+    <button class="floating-btn btn-theme" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    <button class="floating-btn btn-audio" id="audioToggle">
+        <i class="fas fa-headphones"></i>
+    </button>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, updateDoc, increment, setDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+    import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+    
+    // Firebase yapılandırması - BURAYI KENDİ BİLGİLERİNLE GÜNCELLE
+    const firebaseConfig = {
+        apiKey: "AIzaSy YOUR_API_KEY",
+        authDomain: "hindiba-blog.firebaseapp.com",
+        projectId: "hindiba-blog",
+        storageBucket: "hindiba-blog.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+    
+    // Firebase'i başlat
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    
+    // Anonim giriş yap
+    signInAnonymously(auth).catch(error => console.error('Auth error:', error));
+    
+    // Global fonksiyonları tanımla
+    window.FirebaseFunctions = {
+        addComment: async (postId, commentText, userName) => {
+            try {
+                const commentsRef = collection(db, 'posts', postId.toString(), 'comments');
+                const docRef = await addDoc(commentsRef, {
+                    text: commentText,
+                    userName: userName || 'Anonim',
+                    createdAt: serverTimestamp(),
+                    likes: 0
+                });
+                
+                // Post sayacını güncelle
+                const postRef = doc(db, 'posts', postId.toString());
+                await setDoc(postRef, { 
+                    commentCount: increment(1),
+                    title: postId.toString()
+                }, { merge: true });
+                
+                return docRef.id;
+            } catch (error) {
+                console.error('Yorum eklenirken hata:', error);
+                throw error;
+            }
+        },
+        
+        loadComments: (postId, callback) => {
+            const commentsRef = collection(db, 'posts', postId.toString(), 'comments');
+            const q = query(commentsRef, orderBy('createdAt', 'desc'));
+            
+            return onSnapshot(q, (snapshot) => {
+                const comments = [];
+                snapshot.forEach(doc => {
+                    comments.push({ id: doc.id, ...doc.data() });
+                });
+                callback(comments);
+            }, error => {
+                console.error('Yorumlar yüklenirken hata:', error);
+                callback([]);
+            });
+        },
+        
+        likeComment: async (postId, commentId) => {
+            try {
+                const commentRef = doc(db, 'posts', postId.toString(), 'comments', commentId);
+                await updateDoc(commentRef, {
+                    likes: increment(1)
+                });
+            } catch (error) {
+                console.error('Beğeni eklenirken hata:', error);
+            }
+        },
+        
+        incrementView: async (postId) => {
+            try {
+                const postRef = doc(db, 'posts', postId.toString());
+                await setDoc(postRef, { 
+                    viewCount: increment(1) 
+                }, { merge: true });
+            } catch (error) {
+                console.error('Görüntülenme sayacı hatası:', error);
+            }
+        },
+        
+        getPostStats: async (postId, callback) => {
+            const postRef = doc(db, 'posts', postId.toString());
+            return onSnapshot(postRef, (doc) => {
+                if (doc.exists()) {
+                    callback(doc.data());
+                } else {
+                    callback({ viewCount: 0, commentCount: 0 });
+                }
+            });
+        }
+    };
+    
+    console.log('✅ Firebase yüklendi ve hazır');
+</script>
+
 <script>
+    // ============ ANA BLOG SCRIPTS ============
     const REPO_OWNER = 'esakbas';
     const REPO_NAME = 'esakbas.github.io';
     
     let allPosts = [];
     let currentFilter = 'all';
     let currentSearch = '';
+    let currentPostId = null;
+    let unsubscribeComments = null;
+    let unsubscribeStats = null;
+    let speechUtterance = null;
+    let isReading = false;
     
+    // ============ TEMA YÖNETİMİ ============
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+        
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+    }
+    
+    function updateThemeIcon(theme) {
+        const icon = document.querySelector('#themeToggle i');
+        if (icon) {
+            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+    }
+    
+    // ============ OKUMA İLERLEME ÇUBUĞU ============
+    function initProgressBar() {
+        window.addEventListener('scroll', () => {
+            const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('reading-progress').style.width = Math.min(scrollPercent, 100) + '%';
+        });
+    }
+    
+    // ============ SESLİ OKUMA ============
+    function initAudioReader() {
+        document.getElementById('audioToggle').addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            
+            if (isReading) {
+                window.speechSynthesis.cancel();
+                isReading = false;
+                icon.className = 'fas fa-headphones';
+                this.classList.remove('playing');
+                return;
+            }
+            
+            const modalContent = document.querySelector('.modal-body');
+            const text = modalContent ? modalContent.textContent : document.querySelector('.blog-posts')?.textContent || '';
+            
+            if (!text.trim()) {
+                alert('Okunacak içerik bulunamadı!');
+                return;
+            }
+            
+            speechUtterance = new SpeechSynthesisUtterance(text.substring(0, 2000));
+            speechUtterance.lang = 'tr-TR';
+            speechUtterance.rate = 0.9;
+            speechUtterance.pitch = 1;
+            
+            speechUtterance.onend = () => {
+                isReading = false;
+                icon.className = 'fas fa-headphones';
+                document.getElementById('audioToggle').classList.remove('playing');
+            };
+            
+            speechUtterance.onerror = (e) => {
+                console.error('Sesli okuma hatası:', e);
+                isReading = false;
+                icon.className = 'fas fa-headphones';
+                document.getElementById('audioToggle').classList.remove('playing');
+            };
+            
+            window.speechSynthesis.speak(speechUtterance);
+            isReading = true;
+            icon.className = 'fas fa-stop';
+            this.classList.add('playing');
+        });
+    }
+    
+    // ============ YARDIMCI FONKSİYONLAR ============
     function calculateReadingTime(content) {
         const wordsPerMinute = 200;
         const words = content.split(/\s+/).length;
@@ -633,6 +1081,29 @@
         return minutes < 1 ? 1 : minutes;
     }
     
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    function markdownToHtml(md) {
+        let html = md;
+        html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+        html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+        html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+        html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+        html = html.split('\n\n').map(para => {
+            if (para.startsWith('<h') || para.startsWith('<pre') || para.startsWith('<ul')) return para;
+            return `<p>${para.replace(/\n/g, '<br>')}</p>`;
+        }).join('');
+        return html;
+    }
+    
+    // ============ VERİ YÜKLEME ============
     async function loadPosts() {
         const container = document.getElementById('posts');
         container.innerHTML = `
@@ -642,7 +1113,16 @@
         
         try {
             const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues?state=all&per_page=100`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const issues = await response.json();
+            
+            if (!Array.isArray(issues)) {
+                throw new Error('Beklenmeyen veri formatı');
+            }
             
             allPosts = issues.filter(issue => issue.labels && issue.labels.length > 0);
             
@@ -651,7 +1131,17 @@
             displayPosts();
             
         } catch (err) {
-            container.innerHTML = `<div class="post-card">⚠️ Yazılar yüklenemedi: ${err.message}</div>`;
+            console.error('Yazılar yüklenirken hata:', err);
+            container.innerHTML = `
+                <div class="post-card" style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #f59e0b;"></i>
+                    <h3 style="margin-top: 1rem;">Yazılar Yüklenemedi</h3>
+                    <p style="color: var(--text-muted); margin: 1rem 0;">${err.message}</p>
+                    <button onclick="loadPosts()" class="read-more-btn">
+                        <i class="fas fa-redo"></i> Tekrar Dene
+                    </button>
+                </div>
+            `;
         }
     }
     
@@ -686,7 +1176,6 @@
             </li>
         `).join('');
         
-        // Son yazılar için event listener ekle
         container.querySelectorAll('a[data-post-id]').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -714,7 +1203,13 @@
         }
         
         if (filtered.length === 0) {
-            container.innerHTML = '<div class="post-card">📭 Bu kriterlere uygun yazı bulunamadı.</div>';
+            container.innerHTML = `
+                <div class="post-card" style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-search" style="font-size: 3rem; color: var(--text-muted);"></i>
+                    <h3 style="margin-top: 1rem;">Sonuç Bulunamadı</h3>
+                    <p style="color: var(--text-muted);">Bu kriterlere uygun yazı bulunamadı.</p>
+                </div>
+            `;
             return;
         }
         
@@ -752,24 +1247,17 @@
             `;
         }).join('');
         
-        // Tüm "Devamını Oku" butonlarına event listener ekle
         container.querySelectorAll('.read-more-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Kart tıklamasını engelle
+                e.stopPropagation();
                 const postId = parseInt(btn.getAttribute('data-post-id'));
                 const post = allPosts.find(p => p.id === postId);
-                if (post) {
-                    openModal(post);
-                } else {
-                    alert('Yazı bulunamadı!');
-                }
+                if (post) openModal(post);
             });
         });
         
-        // Kart tıklaması için event listener ekle (opsiyonel)
         container.querySelectorAll('.post-card').forEach(card => {
             card.addEventListener('click', (e) => {
-                // Eğer butona tıklanmadıysa kart tıklamasını işle
                 if (!e.target.closest('.read-more-btn')) {
                     const btn = card.querySelector('.read-more-btn');
                     if (btn) {
@@ -782,16 +1270,24 @@
         });
     }
     
+    // ============ MODAL YÖNETİMİ ============
     function openModal(post) {
-        console.log('Opening modal for post:', post.title); // Debug için
-        
         const modal = document.getElementById('postModal');
         const modalBody = document.getElementById('modalBody');
         
-        if (!modal || !modalBody) {
-            console.error('Modal elements not found!');
-            return;
+        if (!modal || !modalBody) return;
+        
+        // Eski yorum dinleyicilerini temizle
+        if (unsubscribeComments) {
+            unsubscribeComments();
+            unsubscribeComments = null;
         }
+        if (unsubscribeStats) {
+            unsubscribeStats();
+            unsubscribeStats = null;
+        }
+        
+        currentPostId = post.id;
         
         let category = post.labels[0]?.name || 'edebiyat';
         let categoryName = '';
@@ -819,60 +1315,256 @@
                 <span><i class="far fa-clock"></i> ${readTime} dk okuma</span>
             </div>
             <hr style="margin: 1.5rem 0;">
-            ${content}
-            <hr style="margin: 1.5rem 0;">
-            <div style="display: flex; justify-content: center; gap: 0.5rem;">
-                <button onclick="shareOnTwitter('${escapeHtml(post.title).replace(/'/g, "\\'")}')" style="background: #000000; color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fab fa-twitter"></i> Paylaş</button>
-                <button onclick="copyToClipboard()" style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer;"><i class="fas fa-link"></i> Kopyala</button>
+            <div class="post-content">
+                ${content}
             </div>
+            <hr style="margin: 1.5rem 0;">
+            <div style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                <button onclick="shareOnTwitter('${escapeHtml(post.title).replace(/'/g, "\\'")}')" 
+                        style="background: #000; color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer; font-size: 0.85rem;">
+                    <i class="fab fa-twitter"></i> Twitter'da Paylaş
+                </button>
+                <button onclick="copyToClipboard()" 
+                        style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer; font-size: 0.85rem;">
+                    <i class="fas fa-link"></i> Link Kopyala
+                </button>
+            </div>
+            ${showRelatedPosts(post)}
+            ${createCommentSection(post.id)}
         `;
         
         modal.style.display = 'block';
-        document.body.style.overflow = 'hidden'; // Arka planı kaydırmayı engelle
+        document.body.style.overflow = 'hidden';
+        
+        // Yorumları yükle
+        setTimeout(() => displayComments(post.id), 100);
+        
+        // Sayfayı yukarı kaydır
+        modal.scrollTop = 0;
     }
     
+    // ============ İLGİLİ YAZILAR ============
+    function showRelatedPosts(currentPost) {
+        if (!allPosts || allPosts.length === 0) return '';
+        
+        const currentTags = currentPost.labels ? currentPost.labels.map(l => l.name) : [];
+        
+        const relatedPosts = allPosts
+            .filter(post => post.id !== currentPost.id)
+            .map(post => ({
+                ...post,
+                score: post.labels ? post.labels.filter(l => currentTags.includes(l.name)).length : 0
+            }))
+            .filter(post => post.score > 0)
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 3);
+        
+        if (relatedPosts.length === 0) return '';
+        
+        return `
+            <div class="related-posts-section">
+                <h3 style="margin-bottom: 1rem;">
+                    <i class="fas fa-link"></i> İlgili Yazılar
+                </h3>
+                ${relatedPosts.map(post => `
+                    <div class="related-post-item" onclick="openModalById(${post.id})">
+                        <h4>${escapeHtml(post.title)}</h4>
+                        <small>
+                            <i class="far fa-calendar-alt"></i> 
+                            ${new Date(post.created_at).toLocaleDateString('tr-TR')}
+                        </small>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    function openModalById(postId) {
+        const modal = document.getElementById('postModal');
+        const post = allPosts.find(p => p.id === postId);
+        if (post) {
+            openModal(post);
+            modal.scrollTop = 0;
+        }
+    }
+    
+    // ============ YORUM SİSTEMİ ============
+    function createCommentSection(postId) {
+        return `
+            <div class="comments-section">
+                <h3 style="margin-bottom: 0.5rem;">
+                    <i class="fas fa-comments"></i> Yorumlar
+                </h3>
+                <div class="comment-count" id="commentCount">
+                    <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                </div>
+                
+                <div class="comment-form">
+                    <input type="text" id="commentName" placeholder="Adınız (opsiyonel)" 
+                           class="comment-input" style="min-height: auto; padding: 0.8rem;"
+                           maxlength="50">
+                    <textarea id="commentText" class="comment-input" 
+                              placeholder="Yorumunuzu yazın..." required></textarea>
+                    <button class="comment-submit" onclick="submitComment(${postId})">
+                        <i class="fas fa-paper-plane"></i> Gönder
+                    </button>
+                </div>
+                
+                <div id="commentsList">
+                    <p style="text-align: center; color: var(--text-muted);">
+                        <i class="fas fa-spinner fa-spin"></i> Yorumlar yükleniyor...
+                    </p>
+                </div>
+            </div>
+        `;
+    }
+    
+    function displayComments(postId) {
+        const commentsContainer = document.getElementById('commentsList');
+        const commentCountSpan = document.getElementById('commentCount');
+        
+        if (!commentsContainer || !commentCountSpan) return;
+        
+        // İstatistikleri dinle
+        if (window.FirebaseFunctions && window.FirebaseFunctions.getPostStats) {
+            unsubscribeStats = window.FirebaseFunctions.getPostStats(postId, (stats) => {
+                const count = stats.commentCount || 0;
+                const views = stats.viewCount || 0;
+                commentCountSpan.innerHTML = `
+                    <i class="fas fa-comment"></i> ${count} Yorum • 
+                    <i class="fas fa-eye"></i> ${views} Okunma
+                `;
+            });
+        }
+        
+        // Yorumları dinle
+        if (window.FirebaseFunctions && window.FirebaseFunctions.loadComments) {
+            unsubscribeComments = window.FirebaseFunctions.loadComments(postId, (comments) => {
+                if (comments.length === 0) {
+                    commentsContainer.innerHTML = `
+                        <p style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                            <i class="fas fa-comment-slash"></i> Henüz yorum yapılmamış. İlk yorumu sen yap!
+                        </p>
+                    `;
+                } else {
+                    commentsContainer.innerHTML = comments.map(comment => {
+                        const date = comment.createdAt ? new Date(comment.createdAt.toDate()).toLocaleString('tr-TR') : 'Az önce';
+                        return `
+                            <div class="comment-card">
+                                <div class="comment-header">
+                                    <span class="comment-user">
+                                        <i class="fas fa-user-circle"></i> ${escapeHtml(comment.userName || 'Anonim')}
+                                    </span>
+                                    <span><i class="far fa-clock"></i> ${date}</span>
+                                </div>
+                                <div class="comment-text">${escapeHtml(comment.text)}</div>
+                                <div class="comment-actions">
+                                    <button class="comment-like-btn" onclick="likeComment(${postId}, '${comment.id}')">
+                                        <i class="far fa-heart"></i> ${comment.likes || 0}
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            });
+        }
+        
+        // Görüntülenme sayısını artır
+        if (window.FirebaseFunctions && window.FirebaseFunctions.incrementView) {
+            window.FirebaseFunctions.incrementView(postId);
+        }
+    }
+    
+    window.submitComment = async function(postId) {
+        const commentText = document.getElementById('commentText')?.value.trim();
+        const userName = document.getElementById('commentName')?.value.trim() || 'Anonim';
+        
+        if (!commentText) {
+            alert('Lütfen yorumunuzu yazın!');
+            return;
+        }
+        
+        if (!window.FirebaseFunctions || !window.FirebaseFunctions.addComment) {
+            alert('Yorum sistemi henüz hazır değil. Lütfen sayfayı yenileyip tekrar deneyin.');
+            return;
+        }
+        
+        const submitBtn = document.querySelector('.comment-submit');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gönderiliyor...';
+        }
+        
+        try {
+            await window.FirebaseFunctions.addComment(postId, commentText, userName);
+            const commentTextField = document.getElementById('commentText');
+            if (commentTextField) commentTextField.value = '';
+        } catch (error) {
+            console.error('Yorum gönderme hatası:', error);
+            alert('Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Gönder';
+            }
+        }
+    };
+    
+    window.likeComment = function(postId, commentId) {
+        if (window.FirebaseFunctions && window.FirebaseFunctions.likeComment) {
+            window.FirebaseFunctions.likeComment(postId, commentId);
+        }
+    };
+    
+    // ============ PAYLAŞIM FONKSİYONLARI ============
     function shareOnTwitter(title) {
         const url = window.location.href;
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`, '_blank');
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
     }
     
     function copyToClipboard() {
         navigator.clipboard.writeText(window.location.href).then(() => {
-            alert('Link kopyalandı!');
+            alert('🔗 Link kopyalandı!');
         }).catch(() => {
-            alert('Link kopyalanamadı!');
+            alert('❌ Link kopyalanamadı! Lütfen manuel olarak kopyalayın.');
         });
     }
     
-    function markdownToHtml(md) {
-        let html = md;
-        html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-        html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
-        html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
-        html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
-        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-        html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
-        html = html.split('\n\n').map(para => {
-            if (para.startsWith('<h') || para.startsWith('<pre') || para.startsWith('<ul')) return para;
-            return `<p>${para.replace(/\n/g, '<br>')}</p>`;
-        }).join('');
-        return html;
+    // ============ MODAL KAPATMA ============
+    function closeModal() {
+        const modal = document.getElementById('postModal');
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        
+        // Sesli okumayı durdur
+        if (isReading) {
+            window.speechSynthesis.cancel();
+            isReading = false;
+            const audioIcon = document.querySelector('#audioToggle i');
+            if (audioIcon) audioIcon.className = 'fas fa-headphones';
+            document.getElementById('audioToggle')?.classList.remove('playing');
+        }
+        
+        // Yorum dinleyicilerini temizle
+        if (unsubscribeComments) {
+            unsubscribeComments();
+            unsubscribeComments = null;
+        }
+        if (unsubscribeStats) {
+            unsubscribeStats();
+            unsubscribeStats = null;
+        }
     }
     
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-    
-    // Event Listeners
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', (e) => {
+    // ============ EVENT LISTENERS ============
+    // Arama
+    document.getElementById('searchInput').addEventListener('input', (e) => {
         currentSearch = e.target.value;
         displayPosts();
     });
     
+    // Kategori filtreleri
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -882,34 +1574,39 @@
         });
     });
     
-    // Modal kapatma işlemleri
-    const modal = document.getElementById('postModal');
-    const closeModalBtn = document.querySelector('.close-modal');
-    
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Arka plan kaydırmayı geri aç
-        });
-    }
+    // Modal kapatma
+    document.querySelector('.close-modal').addEventListener('click', closeModal);
     
     window.addEventListener('click', (e) => {
+        const modal = document.getElementById('postModal');
         if (e.target === modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Arka plan kaydırmayı geri aç
+            closeModal();
         }
     });
     
-    // ESC tuşu ile modal kapatma
+    // ESC tuşu
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.style.display === 'block') {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('postModal');
+            if (modal && modal.style.display === 'block') {
+                closeModal();
+            }
         }
     });
     
-    // Sayfa yüklendiğinde
-    loadPosts();
+    // ============ BAŞLANGIÇ ============
+    function init() {
+        initTheme();
+        initProgressBar();
+        initAudioReader();
+        loadPosts();
+        
+        console.log('🚀 Hindiba Blog hazır!');
+        console.log('📝 Özellikler: Karanlık Mod, İlerleme Çubuğu, Sesli Okuma, Yorum Sistemi, İlgili Yazılar');
+    }
+    
+    // Sayfa yüklendiğinde başlat
+    window.addEventListener('DOMContentLoaded', init);
 </script>
 
 </body>
