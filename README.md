@@ -64,3 +64,8 @@ Kişisel edebiyat, şiir ve günlük yazıları blogu. GitHub Issues üzerinden 
 | **LocalStorage API** | Kullanıcı tercihlerini saklama |
 
 ## 📂 Dosya Yapısı
+hindiba-blog/
+├── index.html # Ana blog sayfası (HTML + CSS + JS)
+├── pp.jpg # Profil fotoğrafı
+├── README.md # Proje dokümantasyonu
+└── (GitHub Issues) # Blog içerikleri
