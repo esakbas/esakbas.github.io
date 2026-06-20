@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hindiba | Eşref Akbaş - Hatıra Defteri</title>
     <meta name="description" content="Eşref Akbaş'ın kişisel blogu - Edebiyat, şiir ve günlük yazıları">
+    <meta name="theme-color" content="#4f46e5">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Hindiba | Eşref Akbaş">
+    <meta property="og:description" content="Edebiyat, şiir ve günlük yazıları">
+    <meta property="og:locale" content="tr_TR">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Hindiba | Eşref Akbaş">
+    <meta name="twitter:description" content="Edebiyat, şiir ve günlük yazıları">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -21,6 +29,10 @@
             --card-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.05);
             --gradient-start: #4f46e5;
             --gradient-end: #ec4899;
+            --surface-soft: #f1f5f9;
+            --ring-color: rgba(79, 70, 229, 0.14);
+            --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+            --reading-font-size: 1rem;
         }
 
         [data-theme="dark"] {
@@ -29,6 +41,8 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: #334155;
+            --surface-soft: #111827;
+            --ring-color: rgba(236, 72, 153, 0.16);
         }
 
         * {
@@ -43,7 +57,23 @@
             color: var(--text-main);
             line-height: 1.7;
             padding-bottom: 3rem;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.45s ease, color 0.45s ease;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        button, input, textarea, a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible,
+        a:focus-visible {
+            outline: 3px solid var(--ring-color);
+            outline-offset: 3px;
         }
 
         /* Okuma İlerleme Çubuğu */
@@ -105,6 +135,52 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .results-status {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .reader-controls {
+            display: inline-flex;
+            gap: 0.45rem;
+            align-items: center;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            padding: 0.25rem;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
+        }
+
+        .reader-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s var(--ease-out), background-color 0.25s, color 0.25s;
+        }
+
+        .reader-btn:hover,
+        .reader-btn.active {
+            color: white;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            transform: translateY(-1px);
+        }
+
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -139,7 +215,7 @@
             background-color: var(--container-bg);
             color: var(--text-main);
             font-size: 0.9rem;
-            transition: all 0.3s;
+            transition: transform 0.3s var(--ease-out), color 0.3s, border-color 0.3s, background 0.3s, box-shadow 0.3s;
         }
 
         .search-box input:focus {
@@ -181,6 +257,7 @@
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             color: white;
             border-color: transparent;
+            box-shadow: 0 12px 28px var(--ring-color);
         }
 
         .blog-posts {
@@ -192,16 +269,38 @@
         .post-card {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
+            border-radius: 14px;
             padding: 1.8rem;
-            transition: all 0.3s;
+            transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out), border-color 0.35s, opacity 0.35s;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: cardIn 0.55s var(--ease-out) both;
+        }
+
+        .post-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(236, 72, 153, 0.06));
+            opacity: 0;
+            transition: opacity 0.35s;
+            pointer-events: none;
         }
 
         .post-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px) scale(1.005);
             box-shadow: var(--card-shadow);
-            border-color: transparent;
+            border-color: rgba(79, 70, 229, 0.22);
+        }
+
+        .post-card:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(18px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .post-category {
@@ -266,13 +365,45 @@
             gap: 0.6rem;
         }
 
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .save-post-btn {
+            border: 1px solid var(--border-color);
+            background: var(--surface-soft);
+            color: var(--text-muted);
+            border-radius: 999px;
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s var(--ease-out);
+        }
+
+        .save-post-btn:hover,
+        .save-post-btn.saved {
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.24);
+            transform: translateY(-2px);
+        }
+
         .sidebar-widget {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
+            border-radius: 14px;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
-            transition: all 0.3s;
+            transition: transform 0.35s var(--ease-out), box-shadow 0.35s, border-color 0.35s;
+            animation: cardIn 0.55s var(--ease-out) both;
         }
 
         .sidebar-widget:hover {
@@ -429,6 +560,20 @@
             color: var(--accent-color);
         }
 
+        .category-count {
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 0.35rem 0.45rem;
+            margin-left: -0.45rem;
+            transition: background-color 0.25s, color 0.25s, transform 0.25s var(--ease-out);
+        }
+
+        .category-count:hover {
+            background: var(--surface-soft);
+            color: var(--accent-color);
+            transform: translateX(3px);
+        }
+
         .skeleton-card {
             background-color: var(--container-bg);
             border: 1px solid var(--border-color);
@@ -473,6 +618,13 @@
             background-color: rgba(0,0,0,0.8);
             backdrop-filter: blur(5px);
             overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.28s ease;
+        }
+
+        .modal.is-open {
+            display: block;
+            opacity: 1;
         }
 
         .modal-content {
@@ -481,9 +633,14 @@
             padding: 2rem;
             width: 90%;
             max-width: 800px;
-            border-radius: 24px;
+            border-radius: 18px;
             position: relative;
-            animation: modalFadeIn 0.3s ease;
+            transform: translateY(20px) scale(0.98);
+            transition: transform 0.32s var(--ease-out);
+        }
+
+        .modal.is-open .modal-content {
+            transform: translateY(0) scale(1);
         }
 
         @keyframes modalFadeIn {
@@ -536,6 +693,7 @@
         }
 
         .btn-theme { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .btn-top { background: linear-gradient(135deg, #10b981, #0f766e); }
 
         /* Yorum Sistemi Stilleri */
         .comments-section {
@@ -590,6 +748,12 @@
         .comment-submit:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+        }
+
+        .comment-helper {
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            margin-top: -0.65rem;
         }
 
         .comment-card {
@@ -703,6 +867,7 @@
         /* Post Content Styles */
         .post-content {
             line-height: 1.8;
+            font-size: var(--reading-font-size);
         }
 
         .post-content h1, .post-content h2, .post-content h3 {
@@ -732,6 +897,54 @@
         .post-content pre code {
             padding: 0;
             background: none;
+        }
+
+        .toc-box {
+            background: var(--surface-soft);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1.25rem 0;
+        }
+
+        .toc-box h3 {
+            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .toc-box a {
+            color: var(--text-muted);
+            display: block;
+            text-decoration: none;
+            padding: 0.25rem 0;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .toc-box a:hover {
+            color: var(--accent-color);
+            transform: translateX(3px);
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 24px;
+            transform: translate(-50%, 14px);
+            background: var(--text-main);
+            color: var(--container-bg);
+            border-radius: 999px;
+            padding: 0.7rem 1rem;
+            z-index: 10001;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s, transform 0.25s var(--ease-out);
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.22);
+            font-size: 0.9rem;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
         }
 
         ::-webkit-scrollbar {
@@ -772,6 +985,21 @@
                 margin: 1rem auto;
                 padding: 1.5rem;
             }
+
+            .toolbar {
+                align-items: stretch;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.001ms !important;
+            }
         }
     </style>
 </head>
@@ -792,6 +1020,16 @@
             <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="text" id="searchInput" placeholder="Yazılarda ara... (Başlık veya içerik)">
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <div class="results-status" id="resultsStatus">Yazılar hazırlanıyor...</div>
+            <div class="reader-controls" aria-label="Okuma ayarları">
+                <button type="button" class="reader-btn" id="fontDecrease" aria-label="Yazı boyutunu küçült"><i class="fas fa-minus"></i></button>
+                <button type="button" class="reader-btn" id="fontReset" aria-label="Yazı boyutunu sıfırla"><i class="fas fa-font"></i></button>
+                <button type="button" class="reader-btn" id="fontIncrease" aria-label="Yazı boyutunu büyüt"><i class="fas fa-plus"></i></button>
+                <button type="button" class="reader-btn" id="savedFilter" aria-label="Kaydedilen yazıları göster"><i class="fas fa-heart"></i></button>
             </div>
         </div>
 
@@ -834,6 +1072,7 @@
             <ul style="list-style:none; font-size:0.85rem;">
                 <li><i class="fas fa-pen-fancy"></i> Toplam Yazı: <span id="totalPosts">0</span></li>
                 <li><i class="fas fa-tags"></i> Kategori Sayısı: 4</li>
+                <li><i class="fas fa-bookmark"></i> Son Okunan: <span id="lastReadTitle">Yok</span></li>
             </ul>
         </div>
 
@@ -842,10 +1081,10 @@
                 <i class="fas fa-tags"></i> Kategoriler
             </div>
             <ul style="list-style:none; font-size:0.85rem;">
-                <li id="cat-edebiyat-count"><i class="fas fa-book"></i> Edebiyat (0)</li>
-                <li id="cat-siir-count"><i class="fas fa-feather-alt"></i> Şiir (0)</li>
-                <li id="cat-gunluk-count"><i class="fas fa-journal-whills"></i> Günlük (0)</li>
-                <li id="cat-bir-cumle-count"><i class="fas fa-quote-left"></i> Bir Cümle (0)</li>
+                <li id="cat-edebiyat-count" class="category-count" data-category="edebiyat"><i class="fas fa-book"></i> Edebiyat (0)</li>
+                <li id="cat-siir-count" class="category-count" data-category="siir"><i class="fas fa-feather-alt"></i> Şiir (0)</li>
+                <li id="cat-gunluk-count" class="category-count" data-category="gunluk"><i class="fas fa-journal-whills"></i> Günlük (0)</li>
+                <li id="cat-bir-cumle-count" class="category-count" data-category="bir-cumle"><i class="fas fa-quote-left"></i> Bir Cümle (0)</li>
             </ul>
         </div>
 
@@ -880,10 +1119,15 @@
 
 <!-- Floating Buttons - SADECE TEMA BUTONU -->
 <div class="floating-buttons">
+    <button class="floating-btn btn-top" id="scrollTopBtn" type="button" aria-label="Yukarı çık">
+        <i class="fas fa-arrow-up"></i>
+    </button>
     <button class="floating-btn btn-theme" id="themeToggle" type="button" aria-label="Temayı değiştir">
         <i class="fas fa-moon"></i>
     </button>
 </div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- Firebase SDK -->
 <script type="module">
@@ -1054,6 +1298,28 @@
     let currentPostId = null;
     let unsubscribeComments = null;
     let unsubscribeStats = null;
+    let showSavedOnly = false;
+    let readingFontSize = Number(getStoredValue('readingFontSize', '1')) || 1;
+    let toastTimer = null;
+
+    const FALLBACK_POSTS = [
+        {
+            id: 900001,
+            title: 'Hindiba Notu',
+            body: '## Hindiba Notu\n\nYazılar geçici olarak yüklenemediğinde bu örnek kayıt görünür. Bağlantı yeniden kurulduğunda GitHub Issues içeriği otomatik olarak bunun yerini alır.\n\n### Kısa Bir Cümle\n\nBazen bir blogun ilk işi sessizce açık kalmaktır.',
+            created_at: new Date().toISOString(),
+            labels: [{ name: 'gunluk' }],
+            fallback: true
+        },
+        {
+            id: 900002,
+            title: 'Bir Cümle',
+            body: 'Bir cümle bazen uzun bir günün kapısını kapatmaya yeter.',
+            created_at: new Date(Date.now() - 86400000).toISOString(),
+            labels: [{ name: 'bir-cumle' }],
+            fallback: true
+        }
+    ];
     
     // ============ TEMA YÖNETİMİ ============
     function getStoredValue(key, fallback = '') {
@@ -1153,6 +1419,86 @@
         if (Number.isNaN(date.getTime())) return 'Tarih yok';
         return includeTime ? date.toLocaleString('tr-TR') : date.toLocaleDateString('tr-TR');
     }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function getSavedPosts() {
+        try {
+            return JSON.parse(getStoredValue('savedPosts', '[]'));
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function setSavedPosts(ids) {
+        setStoredValue('savedPosts', JSON.stringify(ids));
+    }
+
+    function isPostSaved(postId) {
+        return getSavedPosts().includes(String(postId));
+    }
+
+    function toggleSavedPost(postId) {
+        const id = String(postId);
+        const saved = getSavedPosts();
+        const next = saved.includes(id) ? saved.filter(item => item !== id) : [...saved, id];
+        setSavedPosts(next);
+        displayPosts();
+        showToast(next.includes(id) ? 'Yazı kaydedildi' : 'Kayıt kaldırıldı');
+    }
+
+    function updateResultsStatus(count, total) {
+        const status = document.getElementById('resultsStatus');
+        if (!status) return;
+        const parts = [`${count} yazı gösteriliyor`];
+        if (total !== count) parts.push(`${total} toplam`);
+        if (showSavedOnly) parts.push('kaydedilenler');
+        if (currentSearch) parts.push(`arama: "${currentSearch}"`);
+        status.textContent = parts.join(' • ');
+    }
+
+    function applyReadingFontSize() {
+        readingFontSize = Math.min(1.25, Math.max(0.9, readingFontSize));
+        document.documentElement.style.setProperty('--reading-font-size', `${readingFontSize}rem`);
+        setStoredValue('readingFontSize', String(readingFontSize));
+    }
+
+    function setActiveCategory(category) {
+        currentFilter = category;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.category === category);
+        });
+        displayPosts();
+    }
+
+    function updateHashForPost(postId) {
+        const nextHash = `post-${postId}`;
+        if (window.location.hash.slice(1) !== nextHash) {
+            history.replaceState(null, '', `#${nextHash}`);
+        }
+    }
+
+    function openPostFromHash() {
+        const match = window.location.hash.match(/^#post-(\d+)/);
+        if (!match || allPosts.length === 0) return;
+        const post = allPosts.find(p => String(p.id) === match[1]);
+        if (post) openModal(post, { updateHash: false });
+    }
+
+    function updateLastReadDisplay() {
+        const target = document.getElementById('lastReadTitle');
+        if (!target) return;
+        const lastRead = getStoredValue('lastReadPostTitle', '');
+        target.textContent = lastRead ? lastRead.slice(0, 34) : 'Yok';
+        target.title = lastRead;
+    }
     
     function markdownToHtml(md) {
         let html = escapeHtml(md);
@@ -1170,6 +1516,25 @@
             return `<p>${para.replace(/\n/g, '<br>')}</p>`;
         }).join('');
         return html;
+    }
+
+    function addTableOfContents(html) {
+        const template = document.createElement('template');
+        template.innerHTML = html;
+        const headings = [...template.content.querySelectorAll('h2, h3')];
+        if (headings.length < 2) return html;
+
+        const links = headings.map((heading, index) => {
+            const id = `section-${index + 1}`;
+            heading.id = id;
+            return `<a href="#${id}">${escapeHtml(heading.textContent)}</a>`;
+        }).join('');
+
+        const toc = document.createElement('div');
+        toc.className = 'toc-box';
+        toc.innerHTML = `<h3><i class="fas fa-list"></i> İçindekiler</h3>${links}`;
+        template.content.prepend(toc);
+        return template.innerHTML;
     }
     
     // ============ VERİ YÜKLEME ============
@@ -1201,19 +1566,15 @@
             updateCategoryCounts();
             updateRecentPosts();
             displayPosts();
+            openPostFromHash();
             
         } catch (err) {
             console.error('Yazılar yüklenirken hata:', err);
-            container.innerHTML = `
-                <div class="post-card" style="text-align: center; padding: 3rem;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #f59e0b;"></i>
-                    <h3 style="margin-top: 1rem;">Yazılar Yüklenemedi</h3>
-                    <p style="color: var(--text-muted); margin: 1rem 0;">${err.message}</p>
-                    <button type="button" onclick="loadPosts()" class="read-more-btn">
-                        <i class="fas fa-redo"></i> Tekrar Dene
-                    </button>
-                </div>
-            `;
+            allPosts = [...FALLBACK_POSTS];
+            updateCategoryCounts();
+            updateRecentPosts();
+            displayPosts();
+            showToast('Yazılar yüklenemedi, örnek içerik gösteriliyor');
         }
     }
     
@@ -1265,6 +1626,11 @@
         if (currentFilter !== 'all') {
             filtered = filtered.filter(post => post.labels.some(l => l.name === currentFilter));
         }
+
+        if (showSavedOnly) {
+            const savedIds = getSavedPosts();
+            filtered = filtered.filter(post => savedIds.includes(String(post.id)));
+        }
         
         if (currentSearch) {
             const searchLower = currentSearch.toLowerCase();
@@ -1273,6 +1639,8 @@
                 (post.body && post.body.toLowerCase().includes(searchLower))
             );
         }
+
+        updateResultsStatus(filtered.length, allPosts.length);
         
         if (filtered.length === 0) {
             container.innerHTML = `
@@ -1285,16 +1653,17 @@
             return;
         }
         
-        container.innerHTML = filtered.map(post => {
+        container.innerHTML = filtered.map((post, index) => {
             const category = getCategoryMeta(post);
             const content = post.body || '';
             const plainExcerpt = content.replace(/[#*_>`\[\]()]/g, '').split('\n').slice(0, 3).join(' ').trim();
             const excerpt = plainExcerpt.length > 180 ? plainExcerpt.substring(0, 180) + '...' : plainExcerpt || 'Özet bulunmuyor.';
             const date = formatDate(post.created_at);
             const readTime = calculateReadingTime(content);
+            const saved = isPostSaved(post.id);
             
             return `
-                <article class="post-card">
+                <article class="post-card" style="animation-delay: ${Math.min(index * 45, 360)}ms">
                     <div class="post-category ${category.className}">${category.icon} ${category.name}</div>
                     <h2 class="post-title">${escapeHtml(post.title)}</h2>
                     <div class="post-meta">
@@ -1302,9 +1671,14 @@
                         <span class="reading-time"><i class="far fa-clock"></i> ${readTime} dk okuma</span>
                     </div>
                     <p class="post-excerpt">${escapeHtml(excerpt)}</p>
-                    <button type="button" class="read-more-btn" data-post-id="${post.id}">
-                        Devamını Oku <i class="fas fa-arrow-right"></i>
-                    </button>
+                    <div class="post-actions">
+                        <button type="button" class="read-more-btn" data-post-id="${post.id}">
+                            Devamını Oku <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="button" class="save-post-btn ${saved ? 'saved' : ''}" data-save-post-id="${post.id}" aria-label="${saved ? 'Kaydı kaldır' : 'Yazıyı kaydet'}">
+                            <i class="${saved ? 'fas' : 'far'} fa-heart"></i>
+                        </button>
+                    </div>
                 </article>
             `;
         }).join('');
@@ -1315,6 +1689,13 @@
                 const postId = parseInt(btn.getAttribute('data-post-id'));
                 const post = allPosts.find(p => p.id === postId);
                 if (post) openModal(post);
+            });
+        });
+
+        container.querySelectorAll('.save-post-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleSavedPost(btn.getAttribute('data-save-post-id'));
             });
         });
         
@@ -1333,7 +1714,7 @@
     }
     
     // ============ MODAL YÖNETİMİ ============
-    function openModal(post) {
+    function openModal(post, options = {}) {
         const modal = document.getElementById('postModal');
         const modalBody = document.getElementById('modalBody');
         
@@ -1350,13 +1731,18 @@
         }
         
         currentPostId = post.id;
+        if (options.updateHash !== false) updateHashForPost(post.id);
+        setStoredValue('lastReadPostId', String(post.id));
+        setStoredValue('lastReadPostTitle', post.title || '');
+        updateLastReadDisplay();
         
         const category = getCategoryMeta(post);
         let content = post.body || '';
         content = content.replace(/^## .*\n/, '');
-        content = markdownToHtml(content);
+        content = addTableOfContents(markdownToHtml(content));
         const readTime = calculateReadingTime(post.body || '');
         const date = formatDate(post.created_at);
+        const saved = isPostSaved(post.id);
         
         modalBody.innerHTML = `
             <div class="post-category ${category.className}" style="margin-bottom: 1rem; display: inline-flex;">${category.icon} ${category.name}</div>
@@ -1379,13 +1765,17 @@
                         style="background: var(--accent-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer; font-size: 0.85rem;">
                     <i class="fas fa-link"></i> Link Kopyala
                 </button>
+                <button type="button" onclick="toggleSavedPost(${post.id})" 
+                        style="background: var(--surface-soft); color: var(--text-main); border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer; font-size: 0.85rem;">
+                    <i class="${saved ? 'fas' : 'far'} fa-heart"></i> ${saved ? 'Kaydedildi' : 'Kaydet'}
+                </button>
             </div>
             ${showRelatedPosts(post)}
             ${createCommentSection(post.id)}
         `;
         
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
+        modal.classList.add('is-open');
+        document.body.classList.add('modal-open');
         
         // Yorumları yükle
         setTimeout(() => displayComments(post.id), 100);
@@ -1455,7 +1845,8 @@
                            class="comment-input" style="min-height: auto; padding: 0.8rem;"
                            maxlength="50">
                     <textarea id="commentText" class="comment-input" 
-                              placeholder="Yorumunuzu yazın..." required></textarea>
+                              placeholder="Yorumunuzu yazın..." required minlength="3" maxlength="1000"></textarea>
+                    <div class="comment-helper" id="commentHelper">En az 3 karakter. Gönderimler arasında kısa bir bekleme uygulanır.</div>
                     <button type="button" class="comment-submit" onclick="submitComment(${postId})">
                         <i class="fas fa-paper-plane"></i> Gönder
                     </button>
@@ -1556,6 +1947,19 @@
             alert('Lütfen yorumunuzu yazın!');
             return;
         }
+
+        if (commentText.length < 3) {
+            alert('Yorum en az 3 karakter olmalı.');
+            return;
+        }
+
+        const cooldownKey = `commentCooldown:${postId}`;
+        const lastSubmitAt = Number(getStoredValue(cooldownKey, '0'));
+        const remainingSeconds = Math.ceil((15000 - (Date.now() - lastSubmitAt)) / 1000);
+        if (remainingSeconds > 0) {
+            alert(`Yeni yorum göndermek için ${remainingSeconds} saniye bekleyin.`);
+            return;
+        }
         
         if (!window.FirebaseFunctions || !window.FirebaseFunctions.addComment) {
             alert('Yorum sistemi henüz hazır değil. Lütfen sayfayı yenileyip tekrar deneyin.');
@@ -1570,8 +1974,10 @@
         
         try {
             await window.FirebaseFunctions.addComment(postId, commentText, userName);
+            setStoredValue(cooldownKey, String(Date.now()));
             const commentTextField = document.getElementById('commentText');
             if (commentTextField) commentTextField.value = '';
+            showToast('Yorum gönderildi');
         } catch (error) {
             console.error('Yorum gönderme hatası:', error);
             alert('Yorum gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
@@ -1650,8 +2056,11 @@
     function closeModal() {
         const modal = document.getElementById('postModal');
         if (!modal) return;
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+        modal.classList.remove('is-open');
+        document.body.classList.remove('modal-open');
+        if (window.location.hash.startsWith('#post-')) {
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
         
         // Yorum dinleyicilerini temizle
         if (unsubscribeComments) {
@@ -1674,11 +2083,40 @@
     // Kategori filtreleri
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentFilter = btn.dataset.category;
-            displayPosts();
+            setActiveCategory(btn.dataset.category);
         });
+    });
+
+    document.querySelectorAll('.category-count').forEach(item => {
+        item.addEventListener('click', () => setActiveCategory(item.dataset.category));
+    });
+
+    document.getElementById('fontDecrease')?.addEventListener('click', () => {
+        readingFontSize -= 0.05;
+        applyReadingFontSize();
+        showToast('Yazı boyutu küçültüldü');
+    });
+
+    document.getElementById('fontReset')?.addEventListener('click', () => {
+        readingFontSize = 1;
+        applyReadingFontSize();
+        showToast('Yazı boyutu sıfırlandı');
+    });
+
+    document.getElementById('fontIncrease')?.addEventListener('click', () => {
+        readingFontSize += 0.05;
+        applyReadingFontSize();
+        showToast('Yazı boyutu büyütüldü');
+    });
+
+    document.getElementById('savedFilter')?.addEventListener('click', (e) => {
+        showSavedOnly = !showSavedOnly;
+        e.currentTarget.classList.toggle('active', showSavedOnly);
+        displayPosts();
+    });
+
+    document.getElementById('scrollTopBtn')?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
     
     // Modal kapatma
@@ -1690,12 +2128,22 @@
             closeModal();
         }
     });
+
+    document.addEventListener('click', (e) => {
+        const tocLink = e.target.closest('.toc-box a');
+        if (!tocLink) return;
+        e.preventDefault();
+        const target = document.querySelector(tocLink.getAttribute('href'));
+        target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    window.addEventListener('hashchange', openPostFromHash);
     
     // ESC tuşu
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             const modal = document.getElementById('postModal');
-            if (modal && modal.style.display === 'block') {
+            if (modal && modal.classList.contains('is-open')) {
                 closeModal();
             }
         }
@@ -1705,6 +2153,8 @@
     function init() {
         initTheme();
         initProgressBar();
+        applyReadingFontSize();
+        updateLastReadDisplay();
         loadPosts();
         
         console.log('🚀 Hindiba Blog hazır!');
