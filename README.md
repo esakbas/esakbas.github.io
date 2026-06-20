@@ -4,8 +4,6 @@
 
 Kişisel edebiyat, şiir ve günlük yazıları blogu. GitHub Issues üzerinden içerik yönetimi ve Firebase entegrasyonlu yorum sistemi ile modern bir blog deneyimi sunar.
 
-![Hindiba Blog](pp.jpg)
-
 ## ✨ Özellikler
 
 ### 📝 İçerik Yönetimi
