@@ -1011,7 +1011,15 @@
     <link rel="stylesheet" href="hindiba-liquid-glass.css">
 </head>
 
-<body>
+<script>
+document.addEventListener('pointermove', e => {
+  const g = e.target.closest('.post-card, .sidebar-widget'); if (!g) return;
+  const r = g.getBoundingClientRect();
+  g.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+  g.style.setProperty('--my', (e.clientY - r.top) + 'px');
+}, { passive: true });
+</script>
+    <body>
 
 <!-- Okuma İlerleme Çubuğu -->
 <div id="reading-progress"></div>
