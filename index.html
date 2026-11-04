@@ -16,7 +16,7 @@
 
     <!-- Kayıtlı temayı sayfa çizilmeden uygula (açılışta açık/koyu yanıp sönmesini önler) -->
     <script>
-        try { document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light'); } catch (e) {}
+        try { document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark'); } catch (e) {}
     </script>
 
     <!-- Font Awesome Icons -->
@@ -873,7 +873,7 @@ header h1 i { display: none; }
     }
 
     function initTheme() {
-        const savedTheme = getStoredValue('theme', 'light');
+        const savedTheme = getStoredValue('theme', 'dark');
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateThemeIcon(savedTheme);
         
