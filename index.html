@@ -4,15 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hindiba | Eşref Akbaş - Hatıra Defteri</title>
-    <meta name="description" content="Eşref Akbaş'ın kişisel blogu - Edebiyat, şiir ve günlük yazıları">
-    <meta name="theme-color" content="#4338ca">
+    <meta name="description" content="Eşref Akbaş'ın hatıra defteri: edebiyat, şiir ve gündelik hayattan küçük notlar.">
+    <meta name="author" content="Eşref Akbaş">
+    <meta name="theme-color" content="#121821">
+    <meta name="color-scheme" content="light dark">
+    <link rel="canonical" href="https://esakbas.github.io/">
+    <link rel="icon" href="pp.jpg" type="image/jpeg">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Hindiba | Eşref Akbaş">
-    <meta property="og:description" content="Edebiyat, şiir ve günlük yazıları">
+    <meta property="og:url" content="https://esakbas.github.io/">
+    <meta property="og:title" content="Hindiba — Eşref Akbaş'ın hatıra defteri">
+    <meta property="og:description" content="Edebiyat, şiir ve gündelik hayattan küçük notlar.">
+    <meta property="og:image" content="https://esakbas.github.io/pp.jpg">
     <meta property="og:locale" content="tr_TR">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Hindiba | Eşref Akbaş">
-    <meta name="twitter:description" content="Edebiyat, şiir ve günlük yazıları">
+    <meta name="twitter:title" content="Hindiba — Eşref Akbaş'ın hatıra defteri">
+    <meta name="twitter:description" content="Edebiyat, şiir ve gündelik hayattan küçük notlar.">
+    <meta name="twitter:image" content="https://esakbas.github.io/pp.jpg">
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Blog",
+            "name": "Hindiba",
+            "url": "https://esakbas.github.io/",
+            "description": "Eşref Akbaş'ın hatıra defteri: edebiyat, şiir ve gündelik hayattan küçük notlar.",
+            "inLanguage": "tr",
+            "author": {
+                "@type": "Person",
+                "name": "Eşref Akbaş",
+                "url": "https://esakbas.github.io/#about"
+            },
+            "image": "https://esakbas.github.io/pp.jpg"
+        }
+    </script>
 
     <!-- Kayıtlı temayı sayfa çizilmeden uygula (açılışta açık/koyu yanıp sönmesini önler) -->
     <script>
@@ -535,46 +559,90 @@ header h1 i { display: none; }
     .post-card:hover::after, .sidebar-widget:hover::after { animation: none !important; }
 }
     </style>
+    <link rel="stylesheet" href="professional.css">
 </head>
 
 <body>
 
+<a class="skip-link" href="#writing">İçeriğe geç</a>
 <!-- Okuma İlerleme Çubuğu -->
-<div id="reading-progress"></div>
+<div id="reading-progress" aria-hidden="true"></div>
 
-<header>
-    <h1>Hindiba</h1>
-    <p>Belki de şimdiye kadar ardından söylenebilecek en zarif benzetme "Hindiba" idi…</p>
+<header class="site-header" id="top">
+    <div class="masthead">
+        <a class="brand" href="#top" aria-label="Hindiba ana sayfa">
+            <span class="brand-mark" aria-hidden="true">h.</span>
+            <span class="brand-copy">
+                <h1>Hindiba</h1>
+                <span>Eşref Akbaş'ın hatıra defteri</span>
+            </span>
+        </a>
+        <nav class="site-nav" aria-label="Ana gezinme">
+            <a href="#writing">Yazılar</a>
+            <a href="#categories">Kategoriler</a>
+            <a href="#about">Hakkımda</a>
+        </nav>
+        <a class="header-cta" href="#writing">Okumaya başla <span aria-hidden="true">↗</span></a>
+    </div>
+
+    <div class="hero">
+        <div class="hero-copy">
+            <p class="eyebrow"><span aria-hidden="true"></span> Edebiyat · Şiir · Günlük</p>
+            <h2>Biraz yavaşla.<br><em>Kelimeler</em> burada.</h2>
+            <p class="hero-description">Gündelik hayatın içinden kalanları; bazen bir şiir, bazen tek bir cümle olarak biriktiriyorum.</p>
+            <a class="hero-link" href="#writing">Defteri karıştır <span aria-hidden="true">↓</span></a>
+        </div>
+        <blockquote class="hero-note">
+            <span class="note-label">HATIRA DEFTERİNDEN</span>
+            <p>“Belki de şimdiye kadar ardından söylenebilecek en zarif benzetme ‘Hindiba’ idi…”</p>
+            <cite>Bir başlangıç notu</cite>
+        </blockquote>
+    </div>
 </header>
 
 <div class="container">
-    <main>
-        <div class="search-section">
+    <main id="writing">
+        <section class="search-section" aria-label="Yazılarda ara">
             <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Yazılarda ara... (Başlık veya içerik)">
+                <label class="visually-hidden" for="searchInput">Yazılarda ara</label>
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input type="search" id="searchInput" placeholder="Bir başlık ya da kelime ara…" autocomplete="off">
             </div>
-        </div>
+        </section>
 
         <div class="toolbar">
-            <div class="results-status" id="resultsStatus">Yazılar hazırlanıyor...</div>
-            <div class="reader-controls" aria-label="Okuma ayarları">
+            <p class="results-status" id="resultsStatus" role="status" aria-live="polite">Yazılar hazırlanıyor...</p>
+            <div class="reader-controls" role="group" aria-label="Okuma ayarları">
                 <button type="button" class="reader-btn" id="fontDecrease" aria-label="Yazı boyutunu küçült"><i class="fas fa-minus"></i></button>
                 <button type="button" class="reader-btn" id="fontReset" aria-label="Yazı boyutunu sıfırla"><i class="fas fa-font"></i></button>
                 <button type="button" class="reader-btn" id="fontIncrease" aria-label="Yazı boyutunu büyüt"><i class="fas fa-plus"></i></button>
-                <button type="button" class="reader-btn" id="savedFilter" aria-label="Kaydedilen yazıları göster"><i class="fas fa-heart"></i></button>
+                <button type="button" class="reader-btn" id="savedFilter" aria-label="Kaydedilen yazıları göster" aria-pressed="false"><i class="fas fa-heart" aria-hidden="true"></i></button>
             </div>
         </div>
 
-        <div class="category-filters">
-            <button type="button" class="filter-btn active" data-category="all"><i class="fas fa-globe"></i> Tümü</button>
-            <button type="button" class="filter-btn" data-category="edebiyat"><i class="fas fa-book"></i> Edebiyat</button>
-            <button type="button" class="filter-btn" data-category="siir"><i class="fas fa-feather-alt"></i> Şiir</button>
-            <button type="button" class="filter-btn" data-category="gunluk"><i class="fas fa-journal-whills"></i> Günlük</button>
-            <button type="button" class="filter-btn" data-category="bir-cumle"><i class="fas fa-quote-left"></i> Bir Cümle</button>
+        <div class="discovery-controls" role="group" aria-label="Yazı listesini düzenle">
+            <label class="visually-hidden" for="sortPosts">Yazıları sıralama</label>
+            <select class="discovery-select" id="sortPosts">
+                <option value="newest">Önce en yeni</option>
+                <option value="oldest">Önce en eski</option>
+            </select>
+            <label class="visually-hidden" for="archiveYear">Yıla göre filtrele</label>
+            <select class="discovery-select" id="archiveYear">
+                <option value="all">Tüm yıllar</option>
+            </select>
+            <button type="button" class="clear-filters" id="clearFilters" hidden>Filtreleri temizle</button>
+            <span class="search-hint"><kbd>/</kbd> Ara</span>
         </div>
 
-        <div class="blog-posts" id="posts">
+        <section class="category-filters" id="categories" aria-label="Yazıları kategoriye göre filtrele">
+            <button type="button" class="filter-btn active" data-category="all" aria-pressed="true"><i class="fas fa-globe" aria-hidden="true"></i> Tümü</button>
+            <button type="button" class="filter-btn" data-category="edebiyat" aria-pressed="false"><i class="fas fa-book" aria-hidden="true"></i> Edebiyat</button>
+            <button type="button" class="filter-btn" data-category="siir" aria-pressed="false"><i class="fas fa-feather-alt" aria-hidden="true"></i> Şiir</button>
+            <button type="button" class="filter-btn" data-category="gunluk" aria-pressed="false"><i class="fas fa-journal-whills" aria-hidden="true"></i> Günlük</button>
+            <button type="button" class="filter-btn" data-category="bir-cumle" aria-pressed="false"><i class="fas fa-quote-left" aria-hidden="true"></i> Bir Cümle</button>
+        </section>
+
+        <section class="blog-posts" id="posts" aria-label="Blog yazıları" aria-busy="true">
             <div class="skeleton-card">
                 <div class="skeleton-title"></div>
                 <div class="skeleton-text"></div>
@@ -585,52 +653,53 @@ header h1 i { display: none; }
                 <div class="skeleton-text"></div>
                 <div class="skeleton-text short"></div>
             </div>
-        </div>
+        </section>
     </main>
 
-    <aside>
-        <div class="sidebar-widget profile-card">
-            <img src="pp.jpg" class="profile-img" alt="Eşref Akbaş profil fotoğrafı" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=EA'">
+    <aside aria-label="Blog bilgileri">
+        <section class="sidebar-widget profile-card" id="about">
+            <img src="pp.jpg" class="profile-img" alt="Eşref Akbaş" width="108" height="108" loading="lazy">
             <div class="profile-name">Eşref Akbaş</div>
             <div class="profile-divider"></div>
             <div class="profile-location">
-                <i class="fas fa-map-marker-alt"></i> Wan
+                <i class="fas fa-map-marker-alt" aria-hidden="true"></i> Wan
             </div>
-        </div>
+            <p class="profile-bio">Kelimelere, hatırlamaya ve küçük şeylerin izine düşen kişisel bir defter.</p>
+        </section>
 
-        <div class="sidebar-widget">
+        <section class="sidebar-widget">
             <div class="widget-title">
-                <i class="fas fa-chart-line"></i> Blog İstatistikleri
+                <i class="fas fa-chart-line"></i> Defterden
             </div>
             <ul style="list-style:none; font-size:0.85rem;">
                 <li><i class="fas fa-pen-fancy"></i> Toplam Yazı: <span id="totalPosts">0</span></li>
                 <li><i class="fas fa-tags"></i> Kategori Sayısı: 4</li>
-                <li><i class="fas fa-bookmark"></i> Son Okunan: <span id="lastReadTitle">Yok</span></li>
+                <li><i class="fas fa-bookmark"></i> Son Okunan: <button type="button" class="last-read-button" id="lastReadTitle" disabled>Yok</button></li>
             </ul>
-        </div>
+        </section>
 
-        <div class="sidebar-widget">
+        <section class="sidebar-widget">
             <div class="widget-title">
                 <i class="fas fa-tags"></i> Kategoriler
             </div>
             <ul style="list-style:none; font-size:0.85rem;">
-                <li id="cat-edebiyat-count" class="category-count" data-category="edebiyat"><i class="fas fa-book"></i> Edebiyat (0)</li>
-                <li id="cat-siir-count" class="category-count" data-category="siir"><i class="fas fa-feather-alt"></i> Şiir (0)</li>
-                <li id="cat-gunluk-count" class="category-count" data-category="gunluk"><i class="fas fa-journal-whills"></i> Günlük (0)</li>
-                <li id="cat-bir-cumle-count" class="category-count" data-category="bir-cumle"><i class="fas fa-quote-left"></i> Bir Cümle (0)</li>
+                <li><button type="button" id="cat-edebiyat-count" class="category-count" data-category="edebiyat" aria-pressed="false"><i class="fas fa-book" aria-hidden="true"></i> Edebiyat (0)</button></li>
+                <li><button type="button" id="cat-siir-count" class="category-count" data-category="siir" aria-pressed="false"><i class="fas fa-feather-alt" aria-hidden="true"></i> Şiir (0)</button></li>
+                <li><button type="button" id="cat-gunluk-count" class="category-count" data-category="gunluk" aria-pressed="false"><i class="fas fa-journal-whills" aria-hidden="true"></i> Günlük (0)</button></li>
+                <li><button type="button" id="cat-bir-cumle-count" class="category-count" data-category="bir-cumle" aria-pressed="false"><i class="fas fa-quote-left" aria-hidden="true"></i> Bir Cümle (0)</button></li>
             </ul>
-        </div>
+        </section>
 
-        <div class="sidebar-widget">
+        <section class="sidebar-widget">
             <div class="widget-title">
                 <i class="fas fa-clock"></i> Son Yazılar
             </div>
             <ul class="popular-posts" id="recentPosts">
                 <li><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</li>
             </ul>
-        </div>
+        </section>
 
-        <div class="sidebar-widget">
+        <section class="sidebar-widget">
             <div class="widget-title">
                 <i class="fas fa-share-alt"></i> Takip Et
             </div>
@@ -639,14 +708,22 @@ header h1 i { display: none; }
                 <a href="https://x.com/esrefakbs" target="_blank" rel="noopener noreferrer" aria-label="X"><i class="fab fa-twitter"></i></a>
                 <a href="https://open.spotify.com/playlist/5mZ5BOFB8HkMSzEBPiX3gi?si=3421b56087c04a81" target="_blank" rel="noopener noreferrer" aria-label="Spotify"><i class="fab fa-spotify"></i></a>
             </div>
-        </div>
+        </section>
     </aside>
 </div>
 
+<footer class="site-footer">
+    <div class="footer-inner">
+        <a class="footer-brand" href="#top">Hindiba<span aria-hidden="true">.</span></a>
+        <p>Yavaşça oku, kendinden bir şey bul.</p>
+        <small>&copy; 2026 Eşref Akbaş · Bu defter GitHub Pages üzerinde yayımlanır.</small>
+    </div>
+</footer>
+
 <!-- Modal -->
-<div id="postModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal">&times;</span>
+<div id="postModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-content" tabindex="-1">
+        <button class="close-modal" id="closeModal" type="button" aria-label="Yazıyı kapat">&times;</button>
         <div class="modal-body" id="modalBody"></div>
     </div>
 </div>
@@ -656,7 +733,7 @@ header h1 i { display: none; }
     <button class="floating-btn btn-top" id="scrollTopBtn" type="button" aria-label="Yukarı çık">
         <i class="fas fa-arrow-up"></i>
     </button>
-    <button class="floating-btn btn-theme" id="themeToggle" type="button" aria-label="Temayı değiştir">
+    <button class="floating-btn btn-theme" id="themeToggle" type="button" aria-label="Açık temaya geç">
         <i class="fas fa-moon"></i>
     </button>
 </div>
@@ -829,10 +906,13 @@ header h1 i { display: none; }
     let allPosts = [];
     let currentFilter = 'all';
     let currentSearch = '';
+    let currentYear = 'all';
+    let sortOrder = 'newest';
     let currentPostId = null;
     let unsubscribeComments = null;
     let unsubscribeStats = null;
     let showSavedOnly = false;
+    let modalOpener = null;
     let readingFontSize = Number(getStoredValue('readingFontSize', '1')) || 1;
     let toastTimer = null;
 
@@ -891,6 +971,7 @@ header h1 i { display: none; }
         if (icon) {
             icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
+        document.getElementById('themeToggle')?.setAttribute('aria-label', theme === 'dark' ? 'Açık temaya geç' : 'Koyu temaya geç');
     }
     
     // ============ OKUMA İLERLEME ÇUBUĞU ============
@@ -995,7 +1076,13 @@ header h1 i { display: none; }
         if (total !== count) parts.push(`${total} toplam`);
         if (showSavedOnly) parts.push('kaydedilenler');
         if (currentSearch) parts.push(`arama: "${currentSearch}"`);
+        if (currentYear !== 'all') parts.push(currentYear);
+        if (sortOrder === 'oldest') parts.push('önce en eski');
         status.textContent = parts.join(' • ');
+        const clearButton = document.getElementById('clearFilters');
+        if (clearButton) {
+            clearButton.hidden = currentFilter === 'all' && !showSavedOnly && !currentSearch && currentYear === 'all' && sortOrder === 'newest';
+        }
     }
 
     function applyReadingFontSize() {
@@ -1008,8 +1095,42 @@ header h1 i { display: none; }
         currentFilter = category;
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.category === category);
+            btn.setAttribute('aria-pressed', String(btn.dataset.category === category));
+        });
+        document.querySelectorAll('.category-count').forEach(btn => {
+            btn.setAttribute('aria-pressed', String(btn.dataset.category === category));
         });
         displayPosts();
+    }
+
+    function updateArchiveYears() {
+        const select = document.getElementById('archiveYear');
+        if (!select) return;
+        const years = [...new Set(allPosts
+            .map(post => new Date(post.created_at).getFullYear())
+            .filter(year => Number.isFinite(year)))]
+            .sort((a, b) => b - a);
+        select.innerHTML = '<option value="all">Tüm yıllar</option>' +
+            years.map(year => `<option value="${year}">${year}</option>`).join('');
+        if (years.includes(Number(currentYear))) select.value = currentYear;
+        else currentYear = 'all';
+    }
+
+    function clearDiscoveryFilters() {
+        currentSearch = '';
+        currentYear = 'all';
+        sortOrder = 'newest';
+        showSavedOnly = false;
+        const search = document.getElementById('searchInput');
+        if (search) search.value = '';
+        const year = document.getElementById('archiveYear');
+        if (year) year.value = 'all';
+        const sort = document.getElementById('sortPosts');
+        if (sort) sort.value = 'newest';
+        const savedButton = document.getElementById('savedFilter');
+        savedButton?.classList.remove('active');
+        savedButton?.setAttribute('aria-pressed', 'false');
+        setActiveCategory('all');
     }
 
     function updateHashForPost(postId) {
@@ -1029,9 +1150,11 @@ header h1 i { display: none; }
     function updateLastReadDisplay() {
         const target = document.getElementById('lastReadTitle');
         if (!target) return;
+        const lastReadId = getStoredValue('lastReadPostId', '');
         const lastRead = getStoredValue('lastReadPostTitle', '');
         target.textContent = lastRead ? lastRead.slice(0, 34) : 'Yok';
         target.title = lastRead;
+        target.disabled = !lastReadId || !allPosts.some(post => String(post.id) === lastReadId);
     }
     
     function markdownToHtml(md) {
@@ -1074,6 +1197,7 @@ header h1 i { display: none; }
     // ============ VERİ YÜKLEME ============
     async function loadPosts() {
         const container = document.getElementById('posts');
+        container.setAttribute('aria-busy', 'true');
         container.innerHTML = `
             <div class="skeleton-card"><div class="skeleton-title"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
             <div class="skeleton-card"><div class="skeleton-title"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
@@ -1098,16 +1222,22 @@ header h1 i { display: none; }
                 .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             
             updateCategoryCounts();
+            updateArchiveYears();
             updateRecentPosts();
             displayPosts();
+            updateLastReadDisplay();
             openPostFromHash();
+            container.setAttribute('aria-busy', 'false');
             
         } catch (err) {
             console.error('Yazılar yüklenirken hata:', err);
             allPosts = [...FALLBACK_POSTS];
             updateCategoryCounts();
+            updateArchiveYears();
             updateRecentPosts();
             displayPosts();
+            updateLastReadDisplay();
+            container.setAttribute('aria-busy', 'false');
             showToast('Yazılar yüklenemedi, örnek içerik gösteriliyor');
         }
     }
@@ -1165,6 +1295,10 @@ header h1 i { display: none; }
             const savedIds = getSavedPosts();
             filtered = filtered.filter(post => savedIds.includes(String(post.id)));
         }
+
+        if (currentYear !== 'all') {
+            filtered = filtered.filter(post => String(new Date(post.created_at).getFullYear()) === currentYear);
+        }
         
         if (currentSearch) {
             const searchLower = currentSearch.toLowerCase();
@@ -1173,6 +1307,11 @@ header h1 i { display: none; }
                 (post.body && post.body.toLowerCase().includes(searchLower))
             );
         }
+
+        filtered = [...filtered].sort((a, b) => {
+            const difference = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+            return sortOrder === 'oldest' ? difference : -difference;
+        });
 
         updateResultsStatus(filtered.length, allPosts.length);
         
@@ -1209,7 +1348,7 @@ header h1 i { display: none; }
                         <button type="button" class="read-more-btn" data-post-id="${post.id}">
                             Devamını Oku <i class="fas fa-arrow-right"></i>
                         </button>
-                        <button type="button" class="save-post-btn ${saved ? 'saved' : ''}" data-save-post-id="${post.id}" aria-label="${saved ? 'Kaydı kaldır' : 'Yazıyı kaydet'}">
+                        <button type="button" class="save-post-btn ${saved ? 'saved' : ''}" data-save-post-id="${post.id}" aria-label="${saved ? 'Kaydı kaldır' : 'Yazıyı kaydet'}" aria-pressed="${saved}">
                             <i class="${saved ? 'fas' : 'far'} fa-heart"></i>
                         </button>
                     </div>
@@ -1265,6 +1404,7 @@ header h1 i { display: none; }
         }
         
         currentPostId = post.id;
+        modalOpener = document.activeElement;
         if (options.updateHash !== false) updateHashForPost(post.id);
         setStoredValue('lastReadPostId', String(post.id));
         setStoredValue('lastReadPostTitle', post.title || '');
@@ -1280,7 +1420,7 @@ header h1 i { display: none; }
         
         modalBody.innerHTML = `
             <div class="post-category ${category.className}" style="margin-bottom: 1rem; display: inline-flex;">${category.icon} ${category.name}</div>
-            <h1 style="margin-top: 1rem;">${escapeHtml(post.title)}</h1>
+            <h1 id="modalTitle" style="margin-top: 1rem;">${escapeHtml(post.title)}</h1>
             <div class="post-meta" style="margin-top: 0.5rem;">
                 <span><i class="far fa-calendar-alt"></i> ${date}</span>
                 <span><i class="far fa-clock"></i> ${readTime} dk okuma</span>
@@ -1309,7 +1449,9 @@ header h1 i { display: none; }
         `;
         
         modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
+        document.querySelector('.modal-content')?.focus();
         
         // Yorumları yükle
         setTimeout(() => displayComments(post.id), 100);
@@ -1342,13 +1484,13 @@ header h1 i { display: none; }
                     <i class="fas fa-link"></i> İlgili Yazılar
                 </h3>
                 ${relatedPosts.map(post => `
-                    <div class="related-post-item" onclick="openModalById(${post.id})">
+                    <button type="button" class="related-post-item" onclick="openModalById(${post.id})">
                         <h4>${escapeHtml(post.title)}</h4>
                         <small>
                             <i class="far fa-calendar-alt"></i> 
                             ${formatDate(post.created_at)}
                         </small>
-                    </div>
+                    </button>
                 `).join('')}
             </div>
         `;
@@ -1375,10 +1517,10 @@ header h1 i { display: none; }
                 </div>
                 
                 <div class="comment-form">
-                    <input type="text" id="commentName" placeholder="Adınız (opsiyonel)" 
+                    <input type="text" id="commentName" aria-label="Adınız (opsiyonel)" placeholder="Adınız (opsiyonel)"
                            class="comment-input" style="min-height: auto; padding: 0.8rem;"
                            maxlength="50">
-                    <textarea id="commentText" class="comment-input" 
+                    <textarea id="commentText" class="comment-input" aria-label="Yorumunuz"
                               placeholder="Yorumunuzu yazın..." required minlength="3" maxlength="1000"></textarea>
                     <div class="comment-helper" id="commentHelper">En az 3 karakter. Gönderimler arasında kısa bir bekleme uygulanır.</div>
                     <button type="button" class="comment-submit" onclick="submitComment(${postId})">
@@ -1591,6 +1733,7 @@ header h1 i { display: none; }
         const modal = document.getElementById('postModal');
         if (!modal) return;
         modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('modal-open');
         if (window.location.hash.startsWith('#post-')) {
             history.replaceState(null, '', window.location.pathname + window.location.search);
@@ -1605,6 +1748,8 @@ header h1 i { display: none; }
             unsubscribeStats();
             unsubscribeStats = null;
         }
+        if (modalOpener instanceof HTMLElement && modalOpener.isConnected) modalOpener.focus();
+        modalOpener = null;
     }
     
     // ============ EVENT LISTENERS ============
@@ -1613,7 +1758,24 @@ header h1 i { display: none; }
         currentSearch = e.target.value;
         displayPosts();
     });
-    
+
+    document.getElementById('sortPosts')?.addEventListener('change', (e) => {
+        sortOrder = e.target.value === 'oldest' ? 'oldest' : 'newest';
+        displayPosts();
+    });
+
+    document.getElementById('archiveYear')?.addEventListener('change', (e) => {
+        currentYear = e.target.value;
+        displayPosts();
+    });
+
+    document.getElementById('clearFilters')?.addEventListener('click', clearDiscoveryFilters);
+    document.getElementById('lastReadTitle')?.addEventListener('click', () => {
+        const postId = getStoredValue('lastReadPostId', '');
+        const post = allPosts.find(item => String(item.id) === postId);
+        if (post) openModal(post);
+    });
+
     // Kategori filtreleri
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1646,6 +1808,7 @@ header h1 i { display: none; }
     document.getElementById('savedFilter')?.addEventListener('click', (e) => {
         showSavedOnly = !showSavedOnly;
         e.currentTarget.classList.toggle('active', showSavedOnly);
+        e.currentTarget.setAttribute('aria-pressed', String(showSavedOnly));
         displayPosts();
     });
 
@@ -1675,8 +1838,31 @@ header h1 i { display: none; }
     
     // ESC tuşu
     document.addEventListener('keydown', (e) => {
+        const modal = document.getElementById('postModal');
+        const target = e.target;
+        const isEditingText = target instanceof HTMLElement &&
+            (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName));
+        const searchShortcut = (e.key === '/' && !e.altKey && !e.ctrlKey && !e.metaKey) ||
+            (e.key.toLowerCase() === 'k' && (e.ctrlKey || e.metaKey) && !e.altKey);
+        if (!modal?.classList.contains('is-open') && !isEditingText && searchShortcut) {
+            e.preventDefault();
+            document.getElementById('searchInput')?.focus();
+            return;
+        }
+        if (modal?.classList.contains('is-open') && e.key === 'Tab') {
+            const focusable = [...modal.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+                .filter(element => element instanceof HTMLElement && element.getClientRects().length > 0);
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.shiftKey && (document.activeElement === first || document.activeElement === modal.querySelector('.modal-content'))) {
+                e.preventDefault();
+                last?.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first?.focus();
+            }
+        }
         if (e.key === 'Escape') {
-            const modal = document.getElementById('postModal');
             if (modal && modal.classList.contains('is-open')) {
                 closeModal();
             }
