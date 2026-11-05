@@ -20,6 +20,9 @@ Kişisel edebiyat, şiir ve günlük yazıları blogu. GitHub Issues üzerinden 
 - **✨ Modern Animasyonlar:** CSS geçişleri ve animasyonlarla akıcı kullanıcı deneyimi
 - **📊 Okuma İlerleme Çubuğu:** Sayfa başında okuma ilerlemesini gösteren çubuk
 - **🔍 Gerçek Zamanlı Arama:** Başlık ve içerik üzerinde anlık arama
+- **🗂️ Arşiv ve Sıralama:** Yazıları yıla göre filtreleme ve eskiden yeniye / yeniden eskiye sıralama
+- **⌨️ Klavye Kısayolu:** `/` tuşuyla aramaya odaklanma ve filtreleri tek dokunuşla sıfırlama
+- **📖 Okumaya Devam Et:** Son açılan yazıya profil panelinden geri dönme
 - **📖 Okuma Süresi Hesaplama:** Her yazı için tahmini okuma süresi
 - **🔤 Yazı Boyutu Ayarı:** Kullanıcı tercihine göre yazı boyutunu değiştirme (+, -, reset)
 - **❤️ Yazı Kaydetme:** Beğenilen yazıları localStorage'da saklama
@@ -60,6 +63,19 @@ Kişisel edebiyat, şiir ve günlük yazıları blogu. GitHub Issues üzerinden 
 | **Firebase Auth** | Anonim kullanıcı girişi |
 | **Font Awesome 6** | İkonlar |
 | **LocalStorage API** | Kullanıcı tercihlerini saklama |
+
+## GitHub Pages'te yayımlama
+
+Site, derleme adımı gerektirmeyen statik bir GitHub Pages sitesidir. `index.html`, `professional.css` ve `pp.jpg` depo kökünde bulunmalıdır.
+
+1. Depoyu GitHub'da açın ve **Settings → Pages** bölümüne gidin.
+2. **Build and deployment → Deploy from a branch** seçeneğini belirleyin.
+3. Kaynak olarak `main` dalını ve `/(root)` klasörünü seçip **Save** düğmesine basın.
+4. Depodaki değişiklikleri `main` dalına gönderdiğinizde GitHub Pages siteyi yayımlar. Site URL'si `https://esakbas.github.io/` olur.
+
+Yazı listesi herkese açık depodaki etiketli GitHub Issues kayıtlarından okunur. Yeni yazı yayımlamak için bir issue açıp `edebiyat`, `siir`, `gunluk` veya `bir-cumle` etiketlerinden birini ekleyin. Yorumlar Firebase yapılandırmasına bağlıdır; Firebase Authentication'da anonim oturum açma etkin ve Firestore güvenlik kuralları yayına uygun olmalıdır.
+
+Ana sayfa stilleri `professional.css` dosyasında tutulur; mevcut içerik kaynağını ve yorum altyapısını koruyarak sayfanın görsel sunumunu özelleştirebilirsiniz.
 
 ## 📂 Dosya Yapısı
 hindiba-blog/
