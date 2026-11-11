@@ -47,7 +47,9 @@ Uygulama/güvenlik testleri giriş/çıkış, yetkisiz işlemler, yabancı Origi
 
 ## Çalıştırılamayan kontroller
 
-Bu oturumun araçlarında `cua_repl.js` / masaüstü JavaScript kontrolü bulunmadı. Ortam hazır olduktan sonra araçlar yeniden arandı; `remote_desktop` enabled:true/state:unknown raporladı. Ortam kimliği: `ccarenv_b64_Y2NhcmVudl80NGJlM2NhNTVkYzA4MTkxOTIyNDQyOWFmZGExM2QwMA`. Bu nedenle **gerçek Chrome'da tıklama, Quill araç çubuğu etkileşimi, klavye/ekran okuyucu ve fiziksel mobil cihaz görünümü test edilmedi**. Başarılı HTTP/sunucu testleri bu kontrollerin yerine geçmiş sayılmaz. Duyarlı CSS, semantik HTML, focus işaretleri ve dialog davranışları kodda uygulanmıştır; canlıya geçmeden önce tarayıcıda son kontrol gerekir.
+Yerel çalışma ortamında tarayıcı kontrol aracı sunulmadığı için ilk yerel kontrolde Chrome etkileşimi doğrulanamamıştı. GitHub erişimi sonrasında bu sınır, ayrı bir GitHub Actions test ortamında Chromium çalıştırılarak giderildi. **Masaüstü 1280 px ve mobil 390 px görünümde toplam 6 tarayıcı testi başarılı.** Testler gerçek 9 yazıyı kullanan geçici veritabanında giriş → taslak → önizleme → çoklu fotoğraf/kapak/alt metin/açıklama → yayımlama → okuyucu → yayından kaldırma; Quill/Markdown dönüşümü; Türkçe arama, tema, arşiv ve yatay taşma kontrollerini içerir. Yeni test yazıları gerçek veritabanına veya GitHub Issues'a yazılmaz.
+
+Doğrulama: [GitHub Actions çalışması](https://github.com/esakbas/esakbas.github.io/actions/runs/42968442697), uygulama commit'i `c3b81ed64e69d99ded5604329b3f5beb01e9524a`. Aynı çalışmada 19 uygulama/aktarım/okuyucu testi, derleme, içerik hash doğrulaması ve bağımlılık taraması da başarılı. Ekran görüntüleri `docs/onizleme/` altında ve Actions çıktısında bulunur. Bu mobil kontrol Chromium cihaz emülasyonudur; fiziksel telefon, Safari ve ekran okuyucu testi yapıldığı iddia edilmez.
 
 Docker image/container derlemesi, gerçek üretim sunucusu/HTTPS, sağlayıcının disk kalıcılığı ve eski alan adındaki canlı köprü henüz çalıştırılmadı. Bunlar barındırma seçimi ve canlı geçiş onayından sonra denetlenmelidir.
 
