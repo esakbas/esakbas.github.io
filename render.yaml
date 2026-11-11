@@ -1,0 +1,25 @@
+# Proposed deployment only. Creating this file does not provision a service.
+# Apply only after the owner approves Render charges and the live deployment.
+services:
+  - type: web
+    name: hindiba-blog
+    runtime: node
+    repo: https://github.com/esakbas/esakbas.github.io
+    branch: codex/hindiba-cms-20261111
+    region: frankfurt
+    plan: 0.5c-512mb
+    autoDeployTrigger: 'off'
+    buildCommand: npm ci --omit=dev && npm run build
+    startCommand: npm run import && SITE_URL="${SITE_URL:-$RENDER_EXTERNAL_URL}" npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data/hindiba
+      - key: TRUST_PROXY
+        value: 'true'
+    disk:
+      name: hindiba-data
+      mountPath: /var/data
+      sizeGB: 1

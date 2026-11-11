@@ -52,3 +52,7 @@ GitHub Pages bu sunucu uygulamasını çalıştıramaz. Canlı yayın için HTTP
 Bu iş akışı siteyi yayımlamaz. `main` dalı ve eski kök `index.html`, CSS ve `pp.jpg` dosyaları korunur; Node.js uygulaması `src/` ve `public/` üzerinden çalışır. GitHub Pages mevcut statik siteyi sunmaya devam eder. Canlı yönetim paneli için ayrıca kalıcı diskli barındırma ve onaylı geçiş gerekir.
 
 Tarayıcı testlerini kendi makinenizde çalıştırmak isterseniz `npm ci`, `npm run build`, `npx playwright install chromium` ve `npm run test:e2e` kullanın. Test kullanıcısı ve yazıları yalnızca geçici test veritabanında oluşturulur; gerçek `DATA_DIR` değiştirilmez.
+
+## Onay bekleyen Render kurulum dosyası
+
+`render.yaml`, kalıcı diskli bir Render hizmeti için hazır bir dağıtım tanımıdır. Dosyanın depoda bulunması hizmet oluşturmaz veya ücret başlatmaz. Güncel taban maliyet, ilk yönetici hesabı, yedek ve geri dönüş adımları [Render kurulum önerisi](docs/RENDER-KURULUM.md) içinde açıklanır. Bu seçenek yalnızca maliyet ve canlı geçiş onayından sonra uygulanmalıdır. Otomatik kaynak kodu dağıtımı kapalıdır; günlük yazı/fotoğraf yayını doğrudan panelden yapılır.

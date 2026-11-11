@@ -4,7 +4,7 @@
 
 ## Nereden başladık?
 
-Yüklenen arşivde beş dosya vardı: `index.html`, iki CSS dosyası, `pp.jpg` ve `README.md`. Uygulama derleme gerektirmeyen HTML, CSS ve JavaScript ile çalışıyordu. README, `main` dalının kökünden GitHub Pages yayını tarif ediyordu. Gerçek hesap ayarları ve ödeme bilgilerine erişim yoktur; bu barındırma bilgisi depo belgelerinden ve koddan saptanmıştır.
+Yüklenen arşivde beş dosya vardı: `index.html`, iki CSS dosyası, `pp.jpg` ve `README.md`. Uygulama derleme gerektirmeyen HTML, CSS ve JavaScript ile çalışıyordu. README, `main` dalının kökünden GitHub Pages yayını tarif ediyordu. GitHub bağlantısı sonrasında Pages API ile kaynak `main` dalı ve `/` dizini, `legacy` yayın türü, `built` durumu ve zorunlu HTTPS salt okunur olarak doğrulandı. Ödeme bilgileri incelenmedi; Pages ayarları değiştirilmedi.
 
 | Veri / özellik | Önceki kaynak |
 | --- | --- |

@@ -51,7 +51,7 @@ Yerel çalışma ortamında tarayıcı kontrol aracı sunulmadığı için ilk y
 
 Doğrulama: [GitHub Actions çalışması](https://github.com/esakbas/esakbas.github.io/actions/runs/42968442697), uygulama commit'i `c3b81ed64e69d99ded5604329b3f5beb01e9524a`. Aynı çalışmada 19 uygulama/aktarım/okuyucu testi, derleme, içerik hash doğrulaması ve bağımlılık taraması da başarılı. Ekran görüntüleri `docs/onizleme/` altında ve Actions çıktısında bulunur. Bu mobil kontrol Chromium cihaz emülasyonudur; fiziksel telefon, Safari ve ekran okuyucu testi yapıldığı iddia edilmez.
 
-Docker image/container derlemesi, gerçek üretim sunucusu/HTTPS, sağlayıcının disk kalıcılığı ve eski alan adındaki canlı köprü henüz çalıştırılmadı. Bunlar barındırma seçimi ve canlı geçiş onayından sonra denetlenmelidir.
+Render dağıtım tanımı resmî JSON şemasıyla doğrulandı; ücretli hizmet oluşturulmadı. Docker image/container derlemesi, gerçek üretim sunucusu/HTTPS, sağlayıcının disk kalıcılığı ve eski alan adındaki canlı köprü henüz çalıştırılmadı. Bunlar barındırma seçimi ve canlı geçiş onayından sonra denetlenmelidir.
 
 ## Size kalan kurulum
 
