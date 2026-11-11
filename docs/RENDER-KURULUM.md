@@ -19,7 +19,7 @@ Güncel görünür plan kimliği `0.5c-512mb` kullanılmıştır. Eski `starter`
 
 ## Hazırlanan yapılandırma
 
-Depo: `esakbas/esakbas.github.io`; geliştirme dalı: `codex/hindiba-cms-20261111`. Kurulum öncesinde dalın son kontrollerinin başarılı olduğu doğrulanmalıdır. Bu öneri ana dalı birleştirmez veya mevcut Pages yayın kaynağını değiştirmez.
+Depo: `esakbas/esakbas.github.io`; Render yayın dalı: `main`. Önce [PR #21](https://github.com/esakbas/esakbas.github.io/pull/21) ana dala birleştirilmelidir. Ardından Render Blueprint ekranında `main` seçilir. Bu dosyanın depoda bulunması kendiliğinden birleştirme veya ücretli hizmet oluşturma yapmaz.
 
 `render.yaml` aşağıdaki davranışı tanımlar:
 
@@ -45,7 +45,7 @@ Hazırlanan gerçek `render.yaml`, Render'ın resmî JSON şemasına karşı yer
 ## Onaydan sonra uygulanacak adımlar
 
 1. Sağlayıcı, aylık 7,25 ABD doları taban maliyet, olası ek ücretler ve aşağıdaki geri dönüş yolu kullanıcı tarafından onaylanır. Ardından kullanıcının Render hesabı ve ilgili GitHub deposuna erişimi gerekir. Hesap ve ödeme bilgileri sohbette paylaşılmaz.
-2. Render'da bu depo ve belirtilen geliştirme dalından Blueprint kurulum ekranı açılır. Hizmetin ücretli planı, Frankfurt bölgesi ve 1 GB kalıcı diski kontrol edilir. Son maliyet kontrolünden sonra oluşturma işlemi tamamlanır.
+2. Render'da **New → Blueprint** ile bu depo seçilir. PR birleştirildikten sonra dal olarak **main**, Blueprint Path olarak **render.yaml** seçilir. Hizmetin ücretli planı, Frankfurt bölgesi ve 1 GB kalıcı diski kontrol edilir. Son maliyet kontrolünden sonra oluşturma işlemi tamamlanır.
 3. Build ve ilk başlatma günlüklerinde başarılı aktarım görülür. Render'ın verdiği HTTPS kök adresinde dokuz yazı ve birkaç eski yazı bağlantısı kontrol edilir.
 4. Render Dashboard'da çalışan hizmetin **Shell** ekranında `npm run verify` çalıştırılır. İlk yönetici için `npm run admin:create` çalıştırılıp kullanıcı adı ve en az 12 karakterli parola etkileşimli girilir. Parola sohbete, Git'e veya komut argümanına yazılmaz; varsayılan parola yoktur.
 5. Yeni sitenin `/admin` adresinden giriş yapılır. Taslak oluşturma, fotoğraf yükleme, önizleme, yayımlama ve yayından kaldırma denenir. Hizmet yeniden başlatılarak yazı ve fotoğrafın kalıcı diskte kaldığı doğrulanır.

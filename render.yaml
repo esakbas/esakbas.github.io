@@ -5,7 +5,7 @@ services:
     name: hindiba-blog
     runtime: node
     repo: https://github.com/esakbas/esakbas.github.io
-    branch: codex/hindiba-cms-20261111
+    branch: main
     region: frankfurt
     plan: 0.5c-512mb
     autoDeployTrigger: 'off'
