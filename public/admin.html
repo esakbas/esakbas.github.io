@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#183c36">
+  <title>Hindiba · Yazı masası</title>
+  <link rel="icon" href="/pp.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/vendor/quill.css">
+  <link rel="stylesheet" href="/admin.css">
+  <script src="/vendor/quill.js" defer></script>
+  <script src="/vendor/turndown.js" defer></script>
+  <script src="/admin.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">İçeriğe geç</a>
+  <div id="loading" class="initial-state" role="status">Yazı masası hazırlanıyor…</div>
+  <section id="login-view" class="login-view" hidden aria-labelledby="login-title">
+    <div class="login-brand"><span class="brand-icon" aria-hidden="true">h.</span><a href="/">Hindiba</a><p>Eşref Akbaş’ın hatıra defteri</p></div>
+    <form id="login-form" class="login-card">
+      <p class="eyebrow">YAZI MASASI</p>
+      <h1 id="login-title">Yeniden hoş geldiniz.</h1>
+      <p class="muted">Defterinize yeni bir sayfa ekleyin.</p>
+      <label for="username">Kullanıcı adı</label>
+      <input id="username" name="username" autocomplete="username" required maxlength="100">
+      <label for="password">Parola</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+      <p id="login-error" class="error" role="alert" hidden></p>
+      <button class="button primary full" type="submit">Güvenli giriş <span aria-hidden="true">↗</span></button>
+      <p class="login-note">İlk kurulumda yönetici hesabını sunucuda oluşturun. Bu panelde hazır bir parola bulunmaz.</p>
+    </form>
+    <a class="quiet-link" href="/">← Bloga dön</a>
+  </section>
+
+  <div id="app" class="app-shell" hidden>
+    <aside class="sidebar" aria-label="Yönetim menüsü">
+      <a class="brand" href="/"><span class="brand-icon" aria-hidden="true">h.</span><span>Hindiba<small>YAZI MASASI</small></span></a>
+      <button id="nav-posts" class="nav-item active" type="button"><span aria-hidden="true">▤</span> Yazılarım</button>
+      <button id="nav-media" class="nav-item" type="button"><span aria-hidden="true">▧</span> Fotoğraf arşivi</button>
+      <a class="nav-item" href="/" target="_blank" rel="noopener"><span aria-hidden="true">↗</span> Blogu görüntüle</a>
+      <div class="sidebar-bottom"><p>Biraz yavaşla.<br><em>Kelimeler burada.</em></p><div class="account"><span class="avatar" aria-hidden="true">EA</span><span id="account-name">Yönetici</span><button id="logout" class="icon-button" type="button" title="Çıkış yap" aria-label="Çıkış yap">↪</button></div></div>
+    </aside>
+    <main id="main" class="workspace" tabindex="-1">
+      <header class="workspace-header"><span id="breadcrumb">Hindiba <span aria-hidden="true">/</span> Yazılarım</span><span class="private-label"><span aria-hidden="true">●</span> Özel çalışma alanı</span></header>
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+      <section id="posts-view" aria-labelledby="posts-title">
+        <div class="page-heading"><div><p class="eyebrow">HATIRA DEFTERİNİZ</p><h1 id="posts-title">Kelimelerinize yer açın.</h1><p class="muted">Yazılarınızı hazırlayın, düzenleyin ve dünyayla paylaşın.</p></div><button id="new-post" class="button primary" type="button"><span aria-hidden="true">＋</span> Yeni yazı</button></div>
+        <div class="stats" aria-label="Yazı istatistikleri"><div><span>Toplam yazı</span><strong id="count-all">0</strong></div><div><span>Yayında</span><strong id="count-published">0</strong></div><div><span>Taslak</span><strong id="count-draft">0</strong></div><p>Her yazı,<br><em>yeni bir başlangıç.</em></p></div>
+        <div class="list-toolbar"><div class="list-tabs" role="group" aria-label="Yazı durumu"><button class="active" data-filter="all" aria-pressed="true" type="button">Tüm yazılar</button><button data-filter="published" aria-pressed="false" type="button">Yayında</button><button data-filter="draft" aria-pressed="false" type="button">Taslaklar</button></div><label class="search-label"><span class="sr-only">Yazılarınızda ara</span><span aria-hidden="true">⌕</span><input id="post-search" type="search" placeholder="Bir yazı ara…" autocomplete="off"></label></div>
+        <div id="posts-list" class="posts-list" aria-live="polite"></div>
+        <p class="storage-note">Yazılar ve fotoğraflar sunucunun kalıcı diskinde saklanır. Düzenli yedek almayı unutmayın.</p>
+      </section>
+
+      <section id="editor-view" hidden aria-labelledby="editor-title">
+        <div class="editor-top"><button id="back-posts" class="quiet-link" type="button">← Yazılarıma dön</button><span id="post-status" class="status-badge">Taslak</span></div>
+        <div class="page-heading editor-heading"><div><p class="eyebrow">KELİMELERİNİZİN YERİ</p><h1 id="editor-title">Yeni bir sayfa.</h1><p id="save-state" class="muted" role="status">Henüz kaydedilmedi</p></div><div class="editor-actions"><button id="preview-post" class="button" type="button">Önizle</button><button id="save-post" class="button" type="button">Taslağı kaydet</button><button id="publish-post" class="button primary" type="button">Yayımla ↗</button><button id="unpublish-post" class="button" type="button" hidden>Yayından kaldır</button></div></div>
+        <form id="editor-form" class="editor-grid">
+          <div class="writing-column">
+            <div class="paper-card title-card"><label for="post-title">YAZI BAŞLIĞI</label><input id="post-title" class="title-input" placeholder="Bir başlıkla başlar…" required maxlength="300"><label for="post-excerpt">KISA AÇIKLAMA</label><textarea id="post-excerpt" rows="3" maxlength="600" placeholder="Okuyucuyu yazınıza davet eden birkaç cümle…"></textarea><p class="field-hint">Listelerde ve arama motorlarında görünür.</p></div>
+            <div class="paper-card writing-card"><div class="editor-mode-bar"><label for="post-body">YAZINIZ</label><div class="mode-tabs" role="group" aria-label="Editör türü"><button id="mode-markdown" type="button" class="active" aria-pressed="true">Markdown</button><button id="mode-rich" type="button" aria-pressed="false">Zengin metin</button></div></div>
+              <div id="rich-warning" class="conversion-note" hidden><p>Zengin editöre geçiş, Markdown biçimlendirmesini değiştirebilir. Mevcut metni birebir korumak için Markdown ile devam edin.</p><button id="enable-rich" class="button small" type="button">Zengin editörü aç</button><button id="cancel-rich" class="quiet-link" type="button">Markdown’da kal</button></div>
+              <textarea id="post-body" class="markdown-editor" rows="22" spellcheck="true" placeholder="İçinizden geldiği gibi yazın…"></textarea>
+              <div id="rich-container" hidden><div id="rich-editor"></div></div>
+              <div class="writing-footer"><button id="insert-image" class="quiet-link" type="button">▧ Fotoğraf ekle</button><span id="word-count">0 kelime</span></div>
+            </div>
+            <details class="markdown-help"><summary>Markdown ile nasıl yazarım?</summary><p><code>## Ara başlık</code> · <code>**kalın**</code> · <code>*italik*</code> · <code>[bağlantı](https://…)</code> · <code>&gt; alıntı</code></p><p>Fotoğraflar için “Fotoğraf ekle” düğmesini kullanın. Özel HTML blokları kayıtta korunur; okuyucuya gösterilirken güvenlik filtresinden geçer.</p></details>
+          </div>
+          <aside class="settings-column" aria-label="Yazı ayarları">
+            <section class="paper-card"><h2>Kapak fotoğrafı</h2><div id="cover-preview" class="cover-preview"><span aria-hidden="true">▧</span><p>Yazınıza bir pencere açın.</p></div><div class="cover-actions"><button id="choose-cover" class="button small" type="button">Fotoğraf seç / yükle</button><button id="remove-cover" class="quiet-link" type="button" hidden>Kaldır</button></div><label for="post-cover">Görsel adresi</label><input id="post-cover" type="text" placeholder="/uploads/… veya https://…"><label for="post-cover-alt">Alternatif metin</label><input id="post-cover-alt" maxlength="500" placeholder="Fotoğrafı kısaca tarif edin"><p class="field-hint">Ekran okuyucuları kullanan okuyucular içindir.</p></section>
+            <section class="paper-card"><h2>Yazının ayrıntıları</h2><label for="post-category">Kategori</label><input id="post-category" list="categories" placeholder="Örn. gunluk" maxlength="80"><datalist id="categories"><option value="edebiyat"><option value="siir"><option value="gunluk"><option value="bir-cumle"></datalist><label for="post-tags">Etiketler</label><input id="post-tags" placeholder="hatıra, sonbahar, Van"><p class="field-hint">Virgülle ayırın.</p><label for="post-slug">Yazı adresi</label><div class="slug-field"><span>/yazi/</span><input id="post-slug" placeholder="yazi-basligi" maxlength="160"></div><p class="field-hint">Adres değişirse önceki adres kalıcı olarak yönlendirilir.</p><label for="post-author">Yazar</label><input id="post-author" maxlength="160" value="Eşref Akbaş"><label for="post-date">Yazı tarihi</label><input id="post-date" type="datetime-local" step="1"><p class="field-hint">Tarih, cihazınızın saat diliminde gösterilir. İleri bir tarih otomatik yayımlama başlatmaz.</p></section>
+          </aside>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="media-dialog" class="media-dialog" aria-labelledby="media-title">
+    <div class="dialog-heading"><div><p class="eyebrow">GÖRSEL ARŞİVİNİZ</p><h2 id="media-title">Bir fotoğraf, bin kelime.</h2></div><button class="icon-button dialog-close" type="button" aria-label="Fotoğraf arşivini kapat">×</button></div>
+    <p class="muted media-intro">Bilgisayarınızdan veya telefonunuzdan yükleyin; yazılarınızda tekrar kullanın.</p>
+    <form id="upload-form" class="upload-form"><label id="drop-zone" class="drop-zone" for="upload-files"><span aria-hidden="true">↑</span><strong>Fotoğraf seçin veya buraya bırakın</strong><span id="files-label">JPEG, PNG, WebP veya GIF · dosya başına en fazla 10 MB</span><input id="upload-files" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple></label><div class="upload-fields"><div><label for="upload-alt">Alternatif metin</label><input id="upload-alt" maxlength="500" placeholder="Görselde ne var?"></div><div><label for="upload-caption">Fotoğraf açıklaması</label><input id="upload-caption" maxlength="1000" placeholder="Yazının içinde görünecek açıklama"></div><button class="button primary" id="upload-submit" type="submit">Fotoğrafları yükle</button></div><p class="field-hint">Birden fazla fotoğraf seçerseniz aynı metin uygulanır; ardından her fotoğrafı ayrı düzenleyebilirsiniz. Görseller en fazla 1920 piksele getirilip WebP olarak optimize edilir. GIF dosyaları durağan kareye dönüştürülür.</p></form>
+    <p id="media-status" role="status" aria-live="polite" class="muted"></p>
+    <div class="media-layout"><div id="media-grid" class="media-grid" aria-label="Yüklenen fotoğraflar"></div><form id="media-details" class="media-details" hidden><h3>Fotoğraf bilgileri</h3><img id="selected-preview" alt=""><p id="selected-dimensions" class="field-hint"></p><label for="selected-alt">Alternatif metin</label><input id="selected-alt" maxlength="500"><label for="selected-caption">Açıklama</label><textarea id="selected-caption" rows="3" maxlength="1000"></textarea><button class="button small" type="submit">Bilgileri kaydet</button><label for="selected-url">Kalıcı görsel adresi</label><input id="selected-url" readonly><p class="field-hint">Alternatif metni yazı içine ekledikten sonra, o yazının içindeki metni ayrıca düzenleyebilirsiniz.</p></form></div>
+    <div class="dialog-footer"><span id="selection-label" class="muted">Bir fotoğraf seçin.</span><div><button class="button dialog-close" type="button">Kapat</button><button id="use-media" class="button primary" type="button" disabled>Yazıya ekle</button></div></div>
+  </dialog>
+
+  <dialog id="preview-dialog" class="preview-dialog" aria-labelledby="preview-heading"><div class="dialog-heading"><p class="eyebrow">ÖNİZLEME · HENÜZ YAYIMLANMAZ</p><button type="button" class="icon-button preview-close" aria-label="Önizlemeyi kapat">×</button></div><article class="preview-article"><p id="preview-category" class="eyebrow"></p><h1 id="preview-heading"></h1><p id="preview-meta" class="muted"></p><img id="preview-cover" alt="" hidden><div id="preview-content" class="prose"></div></article></dialog>
+</body>
+</html>

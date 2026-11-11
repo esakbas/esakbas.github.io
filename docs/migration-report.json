@@ -1,0 +1,94 @@
+{
+  "verifiedAt": "2026-11-11T05:47:12.365Z",
+  "passed": true,
+  "sourceFilesVerified": 86,
+  "sourcePosts": 9,
+  "importedPosts": 9,
+  "exactPosts": 9,
+  "expectedComments": 0,
+  "matchedComments": 0,
+  "expectedImages": 1,
+  "matchedImages": 1,
+  "unreachableArticleImageUrls": [],
+  "orphanFirestorePostIds": [
+    "4759580384",
+    "4771315897",
+    "6257937942"
+  ],
+  "limitation": "Bu Firebase belge kimliklerinin GitHub yazı gövdeleri mevcut kaynakta bulunamadı. Ham Firebase belgeleri yedeklendi; bu yazıların taşındığı iddia edilmez.",
+  "matches": [
+    {
+      "issueId": "6210660748",
+      "title": "Yine bir Van akşamı, yine sonbahar…",
+      "sourceBodySha256": "c7aac39175130f98db37c4c671db1a667a3419e778854294dda44ca74eb779d6",
+      "importedBodySha256": "c7aac39175130f98db37c4c671db1a667a3419e778854294dda44ca74eb779d6",
+      "legacyUrl": "https://esakbas.github.io/#post-6210660748",
+      "newPath": "/yazi/yine-bir-van-aksami-yine-sonbahar"
+    },
+    {
+      "issueId": "5667381915",
+      "title": "Mazi",
+      "sourceBodySha256": "f210cb7f936f81c0c69464bbda27a2af4cdd9ab4f20eff689fea47eb62026bd4",
+      "importedBodySha256": "f210cb7f936f81c0c69464bbda27a2af4cdd9ab4f20eff689fea47eb62026bd4",
+      "legacyUrl": "https://esakbas.github.io/#post-5667381915",
+      "newPath": "/yazi/mazi"
+    },
+    {
+      "issueId": "5315720552",
+      "title": "Özlenene Mektup",
+      "sourceBodySha256": "4692959eb0351f18d095c8b7dd264622e33644961c0a78772cfb6b6fe4ab9312",
+      "importedBodySha256": "4692959eb0351f18d095c8b7dd264622e33644961c0a78772cfb6b6fe4ab9312",
+      "legacyUrl": "https://esakbas.github.io/#post-5315720552",
+      "newPath": "/yazi/ozlenene-mektup"
+    },
+    {
+      "issueId": "4864006971",
+      "title": "Huysuzluk ve Ben",
+      "sourceBodySha256": "86bef04e508009c4acba498750eb2e7c5018945ff06ddf2c7d662d0eadc8534f",
+      "importedBodySha256": "86bef04e508009c4acba498750eb2e7c5018945ff06ddf2c7d662d0eadc8534f",
+      "legacyUrl": "https://esakbas.github.io/#post-4864006971",
+      "newPath": "/yazi/huysuzluk-ve-ben"
+    },
+    {
+      "issueId": "4715157838",
+      "title": "Sabah'ın Yükü",
+      "sourceBodySha256": "568fe0c201d74970933d6287f555017545e3af371f626e21585e5f801b188e98",
+      "importedBodySha256": "568fe0c201d74970933d6287f555017545e3af371f626e21585e5f801b188e98",
+      "legacyUrl": "https://esakbas.github.io/#post-4715157838",
+      "newPath": "/yazi/sabah-in-yuku"
+    },
+    {
+      "issueId": "4682613944",
+      "title": "Belki de onu son defa görmemdi… ya da sonumdu.",
+      "sourceBodySha256": "ec456e0e8abf5aeb645e4888c4505565c740c2f67f8da57049adfbf68ab2b29d",
+      "importedBodySha256": "ec456e0e8abf5aeb645e4888c4505565c740c2f67f8da57049adfbf68ab2b29d",
+      "legacyUrl": "https://esakbas.github.io/#post-4682613944",
+      "newPath": "/yazi/belki-de-onu-son-defa-gormemdi-ya-da-sonumdu"
+    },
+    {
+      "issueId": "4660551847",
+      "title": "Bir Haziran Mevzusu...",
+      "sourceBodySha256": "7666eafaf2ed7dd89989fd3601cf062870f57d9391b60da3834f328b8ad71c2c",
+      "importedBodySha256": "7666eafaf2ed7dd89989fd3601cf062870f57d9391b60da3834f328b8ad71c2c",
+      "legacyUrl": "https://esakbas.github.io/#post-4660551847",
+      "newPath": "/yazi/bir-haziran-mevzusu"
+    },
+    {
+      "issueId": "4660386701",
+      "title": "...",
+      "sourceBodySha256": "db99066c69eadfc8f6a95a4e9465084e0fbd4be8e87ce642fc73ac5b3756d4dd",
+      "importedBodySha256": "db99066c69eadfc8f6a95a4e9465084e0fbd4be8e87ce642fc73ac5b3756d4dd",
+      "legacyUrl": "https://esakbas.github.io/#post-4660386701",
+      "newPath": "/yazi/yazi-7"
+    },
+    {
+      "issueId": "4628470338",
+      "title": "Gülün Ahı",
+      "sourceBodySha256": "89f9de97af2059cedb197b1822cb4a183c3af539baf8aca2479cca2883a32665",
+      "importedBodySha256": "89f9de97af2059cedb197b1822cb4a183c3af539baf8aca2479cca2883a32665",
+      "legacyUrl": "https://esakbas.github.io/#post-4628470338",
+      "newPath": "/yazi/gulun-ahi"
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "id": 11191157201,
+    "node_id": "LA_kwDOS1duuc8AAAACmwuB0Q",
+    "url": "https://api.github.com/repos/esakbas/esakbas.github.io/labels/bir-cumle",
+    "name": "bir-cumle",
+    "color": "d95d12",
+    "default": false,
+    "description": "✨ Bir Cümle yazıları",
+    "archived_at": null,
+    "archived_by": null
+  },
+  {
+    "id": 11188288706,
+    "node_id": "LA_kwDOS1duuc8AAAACmt-8wg",
+    "url": "https://api.github.com/repos/esakbas/esakbas.github.io/labels/edebiyat",
+    "name": "edebiyat",
+    "color": "8b5cf6",
+    "default": false,
+    "description": "✒️ Edebiyat yazıları",
+    "archived_at": null,
+    "archived_by": null
+  },
+  {
+    "id": 11188295587,
+    "node_id": "LA_kwDOS1duuc8AAAACmt_Xow",
+    "url": "https://api.github.com/repos/esakbas/esakbas.github.io/labels/gunluk",
+    "name": "gunluk",
+    "color": "10b981",
+    "default": false,
+    "description": "📓 Günlükler",
+    "archived_at": null,
+    "archived_by": null
+  },
+  {
+    "id": 11188291319,
+    "node_id": "LA_kwDOS1duuc8AAAACmt_G9w",
+    "url": "https://api.github.com/repos/esakbas/esakbas.github.io/labels/siir",
+    "name": "siir",
+    "color": "ec4899",
+    "default": false,
+    "description": "📜 Şiirler",
+    "archived_at": null,
+    "archived_by": null
+  }
+]

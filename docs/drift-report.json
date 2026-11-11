@@ -1,0 +1,153 @@
+{
+  "captured_at": "2026-11-11T05:47:11.861330+00:00",
+  "previous_captured_at": "2026-11-10T23:26:57.487374+00:00",
+  "repository": "esakbas/esakbas.github.io",
+  "github_rows": 10,
+  "blog_post_count": 9,
+  "pull_requests": 1,
+  "all_state_page_2_empty": true,
+  "added_post_ids": [],
+  "missing_post_ids": [],
+  "changed_posts": [],
+  "content_drift": false,
+  "github_comment_count": 0,
+  "github_comments_changed": false,
+  "firestore_stats_document_count": 12,
+  "firestore_stats_changes": [],
+  "firestore_comment_count": 0,
+  "firestore_comments_changed": false,
+  "firestore_orphan_post_ids": [
+    "4759580384",
+    "4771315897",
+    "6257937942"
+  ],
+  "orphan_body_status": "Not present in complete current all-state GitHub Issues response; no text invented.",
+  "images": [
+    {
+      "url": "https://avatars.githubusercontent.com/u/291925961?v=4",
+      "path": "images/6fef30fbf3f03aa6fed29424.png",
+      "mime": "image/png",
+      "bytes": 3302,
+      "sha256": "f626e5ed139d4987e46c768dac5b5b245e07cdd836d4fedf7444fb9fe60383c9",
+      "status": "backed_up"
+    }
+  ],
+  "image_changes": [],
+  "posts": [
+    {
+      "source_id": "6210660748",
+      "issue_number": 18,
+      "title": "Yine bir Van akşamı, yine sonbahar…",
+      "created_at": "2026-11-04T20:19:31Z",
+      "updated_at": "2026-11-04T20:19:31Z",
+      "body_sha256": "c7aac39175130f98db37c4c671db1a667a3419e778854294dda44ca74eb779d6",
+      "labels": [
+        "gunluk"
+      ],
+      "author_login": "esakbas"
+    },
+    {
+      "source_id": "5667381915",
+      "issue_number": 17,
+      "title": "Mazi",
+      "created_at": "2026-10-01T18:47:53Z",
+      "updated_at": "2026-10-01T18:52:42Z",
+      "body_sha256": "f210cb7f936f81c0c69464bbda27a2af4cdd9ab4f20eff689fea47eb62026bd4",
+      "labels": [
+        "gunluk"
+      ],
+      "author_login": "esakbas"
+    },
+    {
+      "source_id": "5315720552",
+      "issue_number": 16,
+      "title": "Özlenene Mektup",
+      "created_at": "2026-09-01T19:04:57Z",
+      "updated_at": "2026-09-01T19:04:57Z",
+      "body_sha256": "4692959eb0351f18d095c8b7dd264622e33644961c0a78772cfb6b6fe4ab9312",
+      "labels": [
+        "edebiyat",
+        "gunluk"
+      ],
+      "author_login": "esakbas"
+    },
+    {
+      "source_id": "4864006971",
+      "issue_number": 15,
+      "title": "Huysuzluk ve Ben",
+      "created_at": "2026-07-11T20:15:55Z",
+      "updated_at": "2026-07-11T20:15:55Z",
+      "body_sha256": "86bef04e508009c4acba498750eb2e7c5018945ff06ddf2c7d662d0eadc8534f",
+      "labels": [
+        "bir-cumle"
+      ],
+      "author_login": "esakbas"
+    },
+    {
+      "source_id": "4715157838",
+      "issue_number": 13,
+      "title": "Sabah'ın Yükü",
+      "created_at": "2026-06-22T09:14:40Z",
+      "updated_at": "2026-06-22T09:14:40Z",
+      "body_sha256": "568fe0c201d74970933d6287f555017545e3af371f626e21585e5f801b188e98",
+      "labels": [
+        "gunluk"
+      ],
+      "author_login": "esakbas"
+    },
+    {
+      "source_id": "4682613944",
+      "issue_number": 11,
+      "title": "Belki de onu son defa görmemdi… ya da sonumdu.",
+      "created_at": "2026-06-17T11:03:06Z",
+      "updated_at": "2026-06-17T11:04:12Z",
+      "body_sha256": "ec456e0e8abf5aeb645e4888c4505565c740c2f67f8da57049adfbf68ab2b29d",
+      "labels": [
+        "gunluk"
+      ],
+      "author_login": "esakbas"
+    },
+    {
+      "source_id": "4660551847",
+      "issue_number": 8,
+      "title": "Bir Haziran Mevzusu...",
+      "created_at": "2026-06-14T20:45:31Z",
+      "updated_at": "2026-06-14T20:45:31Z",
+      "body_sha256": "7666eafaf2ed7dd89989fd3601cf062870f57d9391b60da3834f328b8ad71c2c",
+      "labels": [
+        "gunluk"
+      ],
+      "author_login": "esakbas"
+    },
+    {
+      "source_id": "4660386701",
+      "issue_number": 7,
+      "title": "...",
+      "created_at": "2026-06-14T19:47:58Z",
+      "updated_at": "2026-06-14T22:38:35Z",
+      "body_sha256": "db99066c69eadfc8f6a95a4e9465084e0fbd4be8e87ce642fc73ac5b3756d4dd",
+      "labels": [
+        "edebiyat"
+      ],
+      "author_login": "esakbas"
+    },
+    {
+      "source_id": "4628470338",
+      "issue_number": 5,
+      "title": "Gülün Ahı",
+      "created_at": "2026-06-10T05:55:51Z",
+      "updated_at": "2026-06-10T05:55:51Z",
+      "body_sha256": "89f9de97af2059cedb197b1822cb4a183c3af539baf8aca2479cca2883a32665",
+      "labels": [
+        "bir-cumle"
+      ],
+      "author_login": "esakbas"
+    }
+  ],
+  "read_methods": {
+    "github": "Authenticated GitHub plugin fetch; page1+page2 all states, comments and reactions per issue. Repository labels plugin URL rejected; direct public REST fallback used for that endpoint only.",
+    "firebase": "Public read-only Firestore REST, complete known posts list and each known comments subcollection. Not administrative full project export."
+  },
+  "remote_mutations": 0,
+  "original_snapshot_changed": false
+}

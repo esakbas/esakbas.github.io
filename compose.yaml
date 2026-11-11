@@ -1,0 +1,16 @@
+services:
+  blog:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      DATA_DIR: /app/data
+      SITE_URL: ${SITE_URL:?Set SITE_URL to the public HTTPS origin}
+      TRUST_PROXY: "true"
+    volumes:
+      - hindiba-data:/app/data
+volumes:
+  hindiba-data:

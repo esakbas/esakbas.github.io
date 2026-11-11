@@ -1,85 +1,54 @@
-# 🌿 Hindiba | Eşref Akbaş - Hatıra Defteri
+# Hindiba — Eşref Akbaş'ın hatıra defteri
 
-> "Belki de şimdiye kadar ardından söylenebilecek en zarif benzetme 'Hindiba' idi…"
+Hindiba'nın mevcut Türkçe yazılarını koruyan okuyucu sitesi ve yönetim paneli. Yazı oluşturma, taslak, önizleme, yayımlama, yayından kaldırma ve fotoğraf yükleme panelden yapılır. Yeni yayımlama işlemleri GitHub Issues'a bağlı değildir.
 
-Kişisel edebiyat, şiir ve günlük yazıları blogu. GitHub Issues üzerinden içerik yönetimi ve Firebase entegrasyonlu yorum sistemi ile modern bir blog deneyimi sunar.
+Uygulama sade HTML/CSS/JavaScript ön yüzü, Node.js 24/Express sunucusu, SQLite veritabanı ve yerel kalıcı görsel depolaması kullanır. Zengin metin düzenleme isteğe bağlıdır; özgün Markdown metnini korumak için varsayılan düzenleyici Markdown'dır.
 
-## ✨ Özellikler
+## Hızlı başlangıç
 
-### 📝 İçerik Yönetimi
-- **GitHub Issues Entegrasyonu:** Blog yazıları doğrudan GitHub Issues üzerinden yönetilir
-- **Otomatik İçerik Çekme:** GitHub API ile yazılar otomatik olarak çekilir ve listelenir
-- **Markdown Desteği:** Yazılar Markdown formatında yazılır ve otomatik HTML'e dönüştürülür
-- **Kategori Sistemi:** GitHub Issues etiketleri (labels) ile kategorilendirme (Edebiyat, Şiir, Günlük, Bir Cümle)
-- **İçindekiler Tablosu:** Uzun yazılar için otomatik içindekiler oluşturma
-- **İlgili Yazılar:** Aynı kategorideki benzer yazıları gösterme
+Node.js **24 LTS** kurulu olmalıdır. Komutları bu dosyanın bulunduğu proje klasöründe çalıştırın.
 
-### 🎨 Tasarım & Kullanıcı Deneyimi
-- **🌙 Karanlık/Aydınlık Tema:** Otomatik tema değiştirme ve localStorage'da tercih saklama
-- **📱 Tam Responsive Tasarım:** Mobil, tablet ve masaüstü cihazlara tam uyum
-- **✨ Modern Animasyonlar:** CSS geçişleri ve animasyonlarla akıcı kullanıcı deneyimi
-- **📊 Okuma İlerleme Çubuğu:** Sayfa başında okuma ilerlemesini gösteren çubuk
-- **🔍 Gerçek Zamanlı Arama:** Başlık ve içerik üzerinde anlık arama
-- **🗂️ Arşiv ve Sıralama:** Yazıları yıla göre filtreleme ve eskiden yeniye / yeniden eskiye sıralama
-- **⌨️ Klavye Kısayolu:** `/` tuşuyla aramaya odaklanma ve filtreleri tek dokunuşla sıfırlama
-- **📖 Okumaya Devam Et:** Son açılan yazıya profil panelinden geri dönme
-- **📖 Okuma Süresi Hesaplama:** Her yazı için tahmini okuma süresi
-- **🔤 Yazı Boyutu Ayarı:** Kullanıcı tercihine göre yazı boyutunu değiştirme (+, -, reset)
-- **❤️ Yazı Kaydetme:** Beğenilen yazıları localStorage'da saklama
-- **📑 Kategori Filtreleme:** Kategorilere göre yazıları filtreleme
-- **🔄 Sonsuz Kaydırma Yerine Sayfalama:** Tüm yazılar tek sayfada, filtreleme ile erişim
+```sh
+npm ci
+cp .env.example .env
+npm run build
+npm run import
+npm run verify
+npm run admin:create
+npm run dev
+```
 
-### 💬 Yorum Sistemi (Firebase)
-- **💭 Gerçek Zamanlı Yorumlar:** Firebase Firestore ile anlık yorum güncellemeleri
-- **❤️ Beğeni Sistemi:** Yorumları beğenme ve beğeni geri alma
-- **👤 Anonim Yorum:** Kullanıcı adı ile veya anonim yorum yapabilme
-- **🚦 Spam Koruması:** 15 saniyelik yorum gönderme sınırı (cooldown)
-- **👁️ Görüntülenme Sayacı:** Her yazı için okunma sayısı takibi
-- **🔒 IP Bazlı Beğeni Limiti:** Aynı kullanıcının birden fazla beğenisini engelleme
+Windows'ta `cp` yerine `.env.example` dosyasının bir kopyasını `.env` adıyla oluşturabilirsiniz. Yönetici oluşturma komutu kullanıcı adı ve parolayı etkileşimli olarak ister. Parolayı komut satırına veya kaynak koda yazmayın. Hazır yönetici hesabı yoktur.
 
-### 🔗 Sosyal Entegrasyonlar
-- **📸 Instagram Profili:** `@esrefakbs`
-- **🐦 X (Twitter) Profili:** `@esrefakbs`
-- **🎵 Spotify Playlist:** Kişisel playlist bağlantısı
-- **🔗 Paylaşım Butonları:** Twitter'da paylaşma ve link kopyalama
+Okuyucu sitesi `http://localhost:3000`, panel `http://localhost:3000/admin` adresindedir. `.env` içindeki portu değiştirirseniz `SITE_URL` değerini de aynı adresle güncelleyin. `npm run import` paket içindeki kaynak yedeğini kullanır; yeniden çalıştırılması aynı yazıları çoğaltmaz ve panelde düzenlenmiş kayıtları ezmez.
 
-### 🛡️ Güvenlik & Performans
-- **XSS Koruması:** Tüm kullanıcı girdileri escape edilir
-- **URL Sanitization:** Güvenli URL protokol kontrolü
-- **Erişilebilirlik (A11y):** ARIA etiketleri, klavye navigasyonu, ekran okuyucu desteği
-- **Hata Yönetimi:** API hatalarında yedek içerik gösterme
-- **Performans Odaklı:** Minimum harici kütüphane kullanımı
-- **Hareket Azaltma Desteği:** `prefers-reduced-motion` medya sorgusu
+## İçerik ve yedek durumu
 
-## 🚀 Teknolojiler
+- GitHub kaynağından erişilebilen **9 gerçek blog yazısı** korunur. Yazı olmayan 1 pull request içerik olarak alınmaz.
+- Bilinen Firestore kaynakları okunmuştur: 12 istatistik belgesi ve 0 yorum. GitHub issue yorumu sayısı da 0'dır.
+- Firestore'daki üç ek kimliğin tam yazı metni mevcut GitHub API yanıtında yoktur; bu kayıtlar kurtarılmış yazı gibi gösterilmez. Kimlikler ve sınırlar [inceleme raporunda](docs/INCELEME.md) açıklanır.
+- Kod arşivi ve dış kaynakların ham REST yedeği, checksum bilgileriyle teslim edilir. Firebase'in tüm proje ayarları ve Auth kullanıcıları bu REST yedeğinin kapsamında değildir.
+- GitHub Issues ve Firebase'deki kaynak kayıtlar silinmemiştir. Canlı site değiştirilmemiş, ücretli hizmet başlatılmamıştır.
 
-| Teknoloji | Kullanım Amacı |
-|-----------|---------------|
-| **HTML5** | Sayfa yapısı |
-| **CSS3** | Stil, animasyonlar ve responsive tasarım |
-| **JavaScript (ES6+)** | Tüm dinamik işlevler |
-| **GitHub REST API** | Blog yazılarını çekme |
-| **Firebase Firestore** | Yorum ve beğeni sistemi |
-| **Firebase Auth** | Anonim kullanıcı girişi |
-| **Font Awesome 6** | İkonlar |
-| **LocalStorage API** | Kullanıcı tercihlerini saklama |
+## Günlük kullanım ve işletim
 
-## GitHub Pages'te yayımlama
+| İhtiyaç | Belge / komut |
+| --- | --- |
+| Yeni yazı ekleme, fotoğraf yükleme, taslak ve yayımlama | [Kullanım rehberi](docs/KULLANIM.md) |
+| Kurulum, ortam değişkenleri, testler ve dosya yapısı | [Kurulum rehberi](docs/KURULUM.md) |
+| Kaynakların incelenmesi, içerik sayıları ve erişim sınırları | [İnceleme raporu](docs/INCELEME.md) |
+| Ekonomik barındırma, yedekleme, canlı geçiş ve geri dönüş | [Yayın ve geri dönüş rehberi](docs/YAYIN-VE-GERI-DONUS.md) |
+| Eski GitHub Pages bağlantıları için yerel köprü hazırlama | `npm run pages:bridge -- --target https://NEW_DOMAIN --out work/pages-bridge` — yayımlama onayından sonra eski Pages kaynağında kullanılır. |
+| Son teslim sonuçları ve çalıştırılamayan kontroller | [Doğrulama raporu](docs/DOGRULAMA.md) |
+| Uygulama kontrolleri | `npm test` ve `npm run build` |
+| Aktarım karşılaştırması | `npm run verify` |
 
-Site, derleme adımı gerektirmeyen statik bir GitHub Pages sitesidir. `index.html`, `professional.css` ve `pp.jpg` depo kökünde bulunmalıdır.
+GitHub Pages bu sunucu uygulamasını çalıştıramaz. Canlı yayın için HTTPS ve kalıcı diskli bir Node.js ortamı gerekir. Ücretsiz deneme ortamının geçici diski, yazı ve fotoğraflar için uygun değildir. Seçilecek hizmetin güncel maliyeti ve geri dönüş planı onaylanmadan canlı yayına geçilmemelidir.
 
-1. Depoyu GitHub'da açın ve **Settings → Pages** bölümüne gidin.
-2. **Build and deployment → Deploy from a branch** seçeneğini belirleyin.
-3. Kaynak olarak `main` dalını ve `/(root)` klasörünü seçip **Save** düğmesine basın.
-4. Depodaki değişiklikleri `main` dalına gönderdiğinizde GitHub Pages siteyi yayımlar. Site URL'si `https://esakbas.github.io/` olur.
+## GitHub üzerinden otomatik kontroller
 
-Yazı listesi herkese açık depodaki etiketli GitHub Issues kayıtlarından okunur. Yeni yazı yayımlamak için bir issue açıp `edebiyat`, `siir`, `gunluk` veya `bir-cumle` etiketlerinden birini ekleyin. Yorumlar Firebase yapılandırmasına bağlıdır; Firebase Authentication'da anonim oturum açma etkin ve Firestore güvenlik kuralları yayına uygun olmalıdır.
+`codex/hindiba-cms-*` geliştirme dallarına gönderim ve `main` hedefli pull request açılması GitHub Actions kontrollerini başlatır. Akış Node.js 24 üzerinde derleme, 19 uygulama/içerik testi, gerçek kaynaklardan tekrar çalıştırılabilir aktarım, hash karşılaştırması, bağımlılık taraması ve Chromium ile yönetim paneli/okuyucu testlerini yürütür. Raporlar ve tarayıcı ekran görüntüleri ilgili Actions çalışmasının `hindiba-verification-*` çıktısındadır.
 
-Ana sayfa stilleri `professional.css` dosyasında tutulur; mevcut içerik kaynağını ve yorum altyapısını koruyarak sayfanın görsel sunumunu özelleştirebilirsiniz.
+Bu iş akışı siteyi yayımlamaz. `main` dalı ve eski kök `index.html`, CSS ve `pp.jpg` dosyaları korunur; Node.js uygulaması `src/` ve `public/` üzerinden çalışır. GitHub Pages mevcut statik siteyi sunmaya devam eder. Canlı yönetim paneli için ayrıca kalıcı diskli barındırma ve onaylı geçiş gerekir.
 
-## 📂 Dosya Yapısı
-hindiba-blog/
-├── index.html # Ana blog sayfası (HTML + CSS + JS)
-├── pp.jpg # Profil fotoğrafı
-├── README.md # Proje dokümantasyonu
-└── (GitHub Issues) # Blog içerikleri
+Tarayıcı testlerini kendi makinenizde çalıştırmak isterseniz `npm ci`, `npm run build`, `npx playwright install chromium` ve `npm run test:e2e` kullanın. Test kullanıcısı ve yazıları yalnızca geçici test veritabanında oluşturulur; gerçek `DATA_DIR` değiştirilmez.

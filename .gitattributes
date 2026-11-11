@@ -1,0 +1,2 @@
+# Raw source evidence must retain its exact bytes for SHA-256 verification.
+content/source-backup/** -text -whitespace
