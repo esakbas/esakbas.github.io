@@ -33,6 +33,9 @@ async function editorData(page) {
 async function memoryBackend(page, repoTree) {
   await page.addInitScript(({ repoTree }) => {
     window.repoFiles = repoTree;
+    // The official test backend enumerates nested collection folders by literal
+    // key, while its writer traverses segments. Share the same in-memory map.
+    window.repoFiles['content/posts'] = window.repoFiles.content.posts;
     window.repoFilesUnpublished = {};
     let cms;
     Object.defineProperty(window, 'CMS', {
@@ -94,7 +97,7 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   const suffix = randomUUID().slice(0, 8);
   const title = `Tarayıcı masası ${suffix}`;
   const slug = `tarayici-masasi-${suffix}`;
-  await page.getByLabel('Başlık', { exact: true }).fill(title);
+  await page.getByLabel(/^Başlık/).fill(title);
   await page.getByLabel(/^Kısa açıklama/).fill('Yalnızca tarayıcı belleğinde saklanan test yazısı.');
   await page.getByLabel(/^Yazı adresi/).fill(slug);
   await page.getByLabel(/^Kapak alternatif metni/).fill('Tarayıcı denemesi için üretilmiş fotoğraf');
