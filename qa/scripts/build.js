@@ -16,6 +16,15 @@ function safeSiteUrl(value) {
   if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password || parsed.pathname !== '/' || parsed.search || parsed.hash) throw new Error('SITE_URL tam kök HTTP(S) adresi olmalı.');
   return parsed.origin;
 }
+export function cloudflareOrigin(value) {
+  if (!value) return null;
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol !== 'https:' || !parsed.hostname.endsWith('.pages.dev')) return null;
+    const labels = parsed.hostname.split('.');
+    return 'https://' + labels.slice(-3).join('.');
+  } catch { return null; }
+}
 function staticLink(link) {
   if (!link.startsWith('/') || link.startsWith('//') || link.startsWith('/uploads/')) return link;
   const u = new URL(link, 'https://site.invalid');
@@ -54,8 +63,8 @@ export async function buildSite(options = {}) {
   const output = resolve(options.outputDir || '_site');
   const branch = options.branch ?? process.env.CF_PAGES_BRANCH ?? 'main';
   const productionBranch = 'main';
-  const siteUrl = safeSiteUrl(options.siteUrl || process.env.SITE_URL || 'http://localhost:3000');
-  if (process.env.CF_PAGES && (!process.env.SITE_URL || !siteUrl.startsWith('https:'))) throw new Error('Cloudflare Production ortamına gerçek HTTPS SITE_URL değerini ekleyin.');
+  const siteUrl = safeSiteUrl(options.siteUrl || process.env.SITE_URL || cloudflareOrigin(process.env.CF_PAGES_URL) || 'http://localhost:3000');
+  if (process.env.CF_PAGES && branch === productionBranch && !siteUrl.startsWith('https:')) throw new Error('Cloudflare Production ortamına gerçek HTTPS SITE_URL değerini ekleyin.');
   await mkdir(dirname(output), { recursive: true });
   const staging = await mkdtemp(join(dirname(output), '.hindiba-build-'));
   try {
