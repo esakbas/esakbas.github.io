@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { createHash, randomUUID } from 'node:crypto';
 import sharp from 'sharp';
+import { parseContentFile } from '../../scripts/export-content.js';
 
 const realTitle = 'Yine bir Van akşamı, yine sonbahar…';
 const privateMarker = 'HINDIBA_CI_ONLY_PRIVATE_DRAFT_40d9857d';
@@ -107,6 +108,31 @@ test('the unmodified CMS boots the Turkish GitHub login with the production admi
   expect(await page.evaluate(() => window.__memoryCmsActive || false)).toBe(false);
   await assertNoOverflow(page);
   await page.screenshot({ path: testInfo.outputPath('github-login.png'), fullPage: true });
+  await assertHealthy(page, errors);
+});
+
+test('an original published article opens immediately after login with its complete Markdown and original metadata', async ({ page, request }, testInfo) => {
+  const errors = await monitor(page);
+  const seed = await (await request.get('/__fixtures/repo.json')).json();
+  const expected = parseContentFile(seed.content.posts['github-6210660748.md'].content);
+  await memoryBackend(page, seed);
+  await page.goto('/admin/');
+  await page.getByRole('button', { name: 'Giriş', exact: true }).click();
+  // Opening an existing record exercises loading paths that creating a blank
+  // entry never uses. Keep this the first editor navigation after login.
+  await page.locator('a[href="#/collections/posts/entries/github-6210660748"]').click();
+  await expect(page.getByLabel(/^Başlık/)).toHaveValue(expected.metadata.title);
+  await expect(page.locator('.cms-editor-raw [data-slate-editor="true"]').first()).toBeVisible();
+  await expect.poll(async () => (await editorData(page))?.body).toBe(expected.body);
+  const data = await editorData(page);
+  expect(data.id).toBe(expected.metadata.id);
+  expect(data.created_at).toBe(expected.metadata.created_at);
+  expect(data.updated_at).toBe(expected.metadata.updated_at);
+  expect(data.published_at).toBe(expected.metadata.published_at);
+  expect(data.tags).toEqual(expected.metadata.tags);
+  await expect(page.frameLocator('iframe').locator('.hindiba-preview h1')).toHaveText(expected.metadata.title);
+  await assertNoOverflow(page);
+  await page.screenshot({ path: testInfo.outputPath('existing-article-editor.png'), fullPage: true });
   await assertHealthy(page, errors);
 });
 
@@ -234,6 +260,18 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   await page.getByText('Şimdi yayımla', { exact: true }).click();
   await expect.poll(() => publishedRecord(page, title)).toContain(title);
   await expect.poll(() => draftRecord(page, title)).toBeNull();
+  // Leave the editor and reopen the published file through its collection
+  // link, forcing a fresh existing-entry/media load instead of reusing a draft.
+  await page.evaluate(() => { window.location.hash = '#/collections/posts'; });
+  await page.locator('a[href^="#/collections/posts/entries/"]').filter({ hasText: title }).click();
+  await expect(page.getByLabel(/^Başlık/)).toHaveValue(title);
+  await expect(page.locator('.cms-editor-raw [data-slate-editor="true"]').first()).toBeVisible();
+  await expect.poll(async () => (await editorData(page))?.body).toBe(markdown);
+  expect((await editorData(page)).cover).toBe(cover);
+  await expect(preview.locator('h1')).toHaveText(title);
+  await expect(preview.locator('.preview-prose figcaption')).toHaveText(['Birinci açıklama', 'İkinci açıklama']);
+  await expect.poll(() => preview.locator('img').evaluateAll(images => images.map(img => img.naturalWidth))).toEqual([640, 640, 640]);
+  await assertNoOverflow(page);
   await page.getByRole('button', { name: 'Yayınlanan', exact: true }).click();
   page.once('dialog', dialog => dialog.accept());
   await page.getByText('Yayından Kaldır', { exact: true }).click();
