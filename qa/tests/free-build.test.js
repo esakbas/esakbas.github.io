@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, readdirSync, rmSync, existsSync, symlinkSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { stringify } from 'yaml';
 import sharp from 'sharp';
 import { exportContent, parseContentFile } from '../scripts/export-content.js';
@@ -101,6 +101,30 @@ test('static build retains the nine real articles, byte-exact Markdown, dates, p
   assert.deepEqual(new Set(articleLocations), new Set(parsed.map(post => siteUrl + '/yazi/' + post.metadata.slug)));
   assert.equal(articleLocations.length, 9);
   assert.ok(files(f.outputDir).every(file => !/\.md$|source-backup|github-issues|checksums\.json/.test(file)), 'raw source and backups must stay outside the static output');
+});
+
+test('OAuth secrets, local environment files and private source directories never enter the public static output', async t => {
+  const f = fixture(t), secret = 'FAKE-OAUTH-CLIENT-SECRET-' + randomUUID();
+  writeFileSync(join(f.root, '.env'), `GITHUB_CLIENT_SECRET=${secret}\n`);
+  writeFileSync(join(f.root, '.dev.vars'), `GITHUB_CLIENT_SECRET="${secret}"\n`);
+  const previous = process.env.GITHUB_CLIENT_SECRET;
+  try {
+    process.env.GITHUB_CLIENT_SECRET = secret;
+    await buildSite({ ...f, branch: 'main' });
+    const emitted = files(f.outputDir);
+    assert.ok(emitted.includes('index.html'));
+    assert.ok(emitted.includes('admin/index.html'), 'the editor itself must still be delivered');
+    assertNoValue(f.outputDir, secret);
+    for (const path of emitted) {
+      assert.doesNotMatch(path, /^(?:content|functions|src|tests|scripts)\//, 'application source directories must remain private');
+      assert.doesNotMatch(path, /(?:^|\/)(?:source-backup|\.env(?:\.[^/]*)?|\.dev\.vars)(?:\/|$)/, 'backups and environment files must remain private');
+      assert.ok(!path.endsWith('.md'), 'private Markdown article sources are never public assets');
+    }
+    assert.equal((readFileSync(join(f.outputDir, 'rss.xml'), 'utf8').match(/<item>/g) || []).length, 9);
+  } finally {
+    if (previous === undefined) delete process.env.GITHUB_CLIENT_SECRET;
+    else process.env.GITHUB_CLIENT_SECRET = previous;
+  }
 });
 
 test('draft article text, its referenced private image and every unreferenced image stay outside the public build', async t => {

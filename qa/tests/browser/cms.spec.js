@@ -92,7 +92,7 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   await page.goto('/admin/');
   await expect(page.getByRole('button', { name: 'Giriş', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Giriş', exact: true }).click();
-  await expect(page.getByText(realTitle, { exact: true }).first()).toBeVisible();
+  await expect(page.locator('a[href="#/collections/posts/entries/github-6210660748"]')).toContainText(realTitle);
   await page.getByLabel('Yazı türünde girdi oluştur', { exact: true }).click();
   const suffix = randomUUID().slice(0, 8);
   const title = `Tarayıcı masası ${suffix}`;
