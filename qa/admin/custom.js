@@ -3,6 +3,9 @@
 window.CMS_MANUAL_INIT = true;
 
 (() => {
+  // Root-relative public URLs bypass Decap's private-media resolver. Pass a
+  // relative filename to that resolver while keeping the saved URL unchanged.
+  const mediaAsset = (getAsset, value, field) => getAsset(typeof value === 'string' && value.startsWith('/uploads/') ? value.slice('/uploads/'.length) : value, field);
   const categoryNames = { edebiyat: 'Edebiyat', siir: 'Şiir', gunluk: 'Günlük', 'bir-cumle': 'Bir Cümle' };
   const slugify = value => String(value || '').toLocaleLowerCase('tr-TR').replace(/[çğıöşü]/g, c => ({ ç: 'c', ğ: 'g', ı: 'i', ö: 'o', ş: 's', ü: 'u' }[c])).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 150).replace(/-$/, '');
   const dateLabel = value => {
@@ -25,9 +28,10 @@ window.CMS_MANUAL_INIT = true;
       displayName: 'HindibaRawFirstMarkdown',
       getInitialState() { try { localStorage.setItem('cms.md-mode', 'raw'); } catch {} return {}; },
       focus() { this.control?.focus(); },
-      render() { return window.h(native.control, { ...this.props, ref: control => { this.control = control; } }); }
+      render() { return window.h(native.control, { ...this.props, getAsset: (value, field) => mediaAsset(this.props.getAsset, value, field), ref: control => { this.control = control; } }); }
     });
-    CMS.registerWidget('markdown', RawFirstMarkdown, native.preview, native.schema);
+    const MarkdownPreview = props => window.h(native.preview, { ...props, getAsset: (value, field) => mediaAsset(props.getAsset, value, field) });
+    CMS.registerWidget('markdown', RawFirstMarkdown, MarkdownPreview, native.schema);
   }
   function labelEditorSwitches() {
     const root = document.getElementById('nc-root');
@@ -50,7 +54,7 @@ window.CMS_MANUAL_INIT = true;
       toBlock: ({ image, alt, title }) => `![${escapeAlt(alt)}](${String(image || '').replace(/\s/g, '%20').replace(/\(/g, '%28').replace(/\)/g, '%29')}${title ? ` "${escapeTitle(title)}"` : ''})`,
       toPreview: ({ image, alt, title }, getAsset, fields) => {
         const imageField = fields?.find(field => field.get('widget') === 'image');
-        return window.h('figure', { className: 'hindiba-photo' }, window.h('img', { src: getAsset(image, imageField) || '', alt: alt || '', title: title || '' }), title ? window.h('figcaption', {}, title) : null);
+        return window.h('figure', { className: 'hindiba-photo' }, window.h('img', { src: mediaAsset(getAsset, image, imageField) || '', alt: alt || '', title: title || '' }), title ? window.h('figcaption', {}, title) : null);
       },
       fields: [
         { label: 'Fotoğraf', name: 'image', widget: 'image', choose_url: false, media_library: { allow_multiple: false, config: { max_file_size: 10485760 } } },
@@ -73,7 +77,7 @@ window.CMS_MANUAL_INIT = true;
           window.h('h1', {}, data.get('title') || 'Yeni bir sayfa.'),
           data.get('description') ? window.h('p', { className: 'preview-description' }, data.get('description')) : null,
           window.h('p', { className: 'preview-meta' }, `${data.get('author') || 'Eşref Akbaş'} · ${dateLabel(data.get('created_at'))}`),
-          cover ? window.h('figure', { className: 'preview-cover' }, window.h('img', { src: getAsset(cover) || '', alt: data.get('cover_alt') || '' })) : null,
+          cover ? window.h('figure', { className: 'preview-cover' }, window.h('img', { src: mediaAsset(getAsset, cover) || '', alt: data.get('cover_alt') || '' })) : null,
           window.h('div', { className: 'preview-prose' }, widgetFor('body')),
           window.h('footer', { className: 'preview-end' }, 'Yavaşça oku, kendinden bir şey bul.')
         );
