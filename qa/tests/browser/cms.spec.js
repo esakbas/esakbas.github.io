@@ -49,6 +49,8 @@ async function memoryBackend(page, repoTree) {
     // key, while its writer traverses segments. Share the same in-memory map.
     window.repoFiles['content/posts'] = window.repoFiles.content.posts;
     window.repoFilesUnpublished = {};
+    window.__nativeUploadAssets = [];
+    let assetCaptureInstalled = false;
     let cms;
     Object.defineProperty(window, 'CMS', {
       configurable: true,
@@ -59,6 +61,17 @@ async function memoryBackend(page, repoTree) {
         value.init = options => {
           // Production custom.js has already validated its unchanged GitHub config.
           // Swap only this test page to Decap's official, browser-memory backend.
+          if (!assetCaptureInstalled) {
+            const backend = value.getBackend('test-repo').BackendClass;
+            const persistEntry = backend.prototype.persistEntry;
+            backend.prototype.persistEntry = function(entry, persistOptions) {
+              // Keep the real AssetProxy before test-repo normalizes it into
+              // plain media records, which otherwise skip GitHub serialization.
+              window.__nativeUploadAssets.push(...(entry.assets || []));
+              return persistEntry.call(this, entry, persistOptions);
+            };
+            assetCaptureInstalled = true;
+          }
           window.__productionCmsConfig = { ...options.config.backend };
           window.__memoryCmsActive = true;
           return originalInit({ ...options, config: { ...options.config, backend: { ...options.config.backend, name: 'test-repo', login: true } } });
@@ -100,6 +113,7 @@ test('the unmodified CMS boots the Turkish GitHub login with the production admi
 test('the native CMS edits, previews, uploads original bytes and runs draft/publish/unpublish in its isolated memory backend', async ({ page, request }, testInfo) => {
   const errors = await monitor(page);
   const seed = await (await request.get('/__fixtures/repo.json')).json();
+  const productionConfig = await (await request.get('/admin/config.json')).json();
   await memoryBackend(page, seed);
   await page.goto('/admin/');
   await expect(page.getByRole('button', { name: 'Giriş', exact: true })).toBeVisible();
@@ -165,6 +179,51 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
     return { name: file.name, type: file.type, size: file.size, sha: [...new Uint8Array(sha)].map(byte => byte.toString(16).padStart(2, '0')).join('') };
   }, title);
   expect(uploaded).toEqual({ name: 'browser-fixture.png', type: 'image/png', size: original.length, sha: originalSha });
+  const nativeUpload = await page.evaluate(async productionConfig => {
+    const asset = window.__nativeUploadAssets.find(asset => asset.fileObj?.name === 'browser-fixture.png');
+    if (!asset || typeof asset.toBase64 !== 'function' || !asset.url?.startsWith('blob:')) {
+      throw new Error('The native uploaded AssetProxy was not captured before normalization.');
+    }
+    const backend = window.CMS.getBackend('github').init(productionConfig, { useWorkflow: true, initialWorkflowStatus: 'draft' });
+    const originalSha = asset.sha, hadSha = Object.hasOwn(asset, 'sha');
+    const calls = [];
+    let payload;
+    backend.currentUser = async () => ({ login: 'esakbas', name: 'Offline browser fixture' });
+    try {
+      // The configured main branch lets authenticate create the native API
+      // synchronously. Replace only its network boundary before it resumes.
+      const authenticating = backend.authenticate({ token: 'offline-fake-test-token' });
+      backend.api.request = async (path, options = {}) => {
+        const method = options.method || 'GET';
+        calls.push({ path, method });
+        if (path === '/repos/esakbas/hindiba-blog' && method === 'GET') {
+          return { owner: { login: 'esakbas' }, permissions: { push: true }, private: true };
+        }
+        if (path === '/repos/esakbas/hindiba-blog/git/blobs' && method === 'POST') {
+          payload = JSON.parse(options.body);
+          return { sha: '0123456789abcdef0123456789abcdef01234567' };
+        }
+        throw new Error('Unexpected request in the isolated native GitHub upload test.');
+      };
+      await authenticating;
+      // Keep this native method and AssetProxy.toBase64 unmodified: their
+      // fetch(blob:) must satisfy the real production admin connect-src CSP.
+      await backend.api.uploadBlob(asset);
+      return { payload, calls };
+    } finally {
+      if (hadSha) asset.sha = originalSha;
+      else delete asset.sha;
+      backend.logout();
+    }
+  }, productionConfig);
+  expect(nativeUpload.calls).toEqual([
+    { path: '/repos/esakbas/hindiba-blog', method: 'GET' },
+    { path: '/repos/esakbas/hindiba-blog/git/blobs', method: 'POST' }
+  ]);
+  expect(nativeUpload.payload.encoding).toBe('base64');
+  const nativeBytes = Buffer.from(nativeUpload.payload.content, 'base64');
+  expect(nativeBytes.equals(original)).toBe(true);
+  expect(createHash('sha256').update(nativeBytes).digest('hex')).toBe(originalSha);
   await expect.poll(() => preview.locator('img').evaluateAll(images => images.map(img => img.naturalWidth))).toEqual([640, 640, 640]);
   await page.screenshot({ path: testInfo.outputPath('cms-private-draft.png'), fullPage: true });
   await page.getByRole('button', { name: /^Durumu:/ }).click();
