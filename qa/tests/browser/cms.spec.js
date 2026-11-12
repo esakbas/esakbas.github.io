@@ -143,6 +143,11 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   await expect(preview.locator('.preview-cover img')).toHaveAttribute('alt', 'Tarayıcı denemesi için üretilmiş fotoğraf');
   await expect(preview.locator('.preview-prose img')).toHaveCount(2);
   await expect(preview.locator('.preview-prose figcaption')).toHaveText(['Birinci açıklama', 'İkinci açıklama']);
+  await expect.poll(() => preview.locator('img').evaluateAll(images => images.map(img => ({ width: img.naturalWidth, source: img.getAttribute('src') })))).toEqual([
+    { width: 640, source: expect.stringMatching(/^blob:/) },
+    { width: 640, source: expect.stringMatching(/^blob:/) },
+    { width: 640, source: expect.stringMatching(/^blob:/) }
+  ]);
   await page.getByRole('button', { name: 'Kaydet', exact: true }).click();
   await expect.poll(async () => (await draftRecord(page, title))?.status).toBe('draft');
   const draft = await draftRecord(page, title);
@@ -159,6 +164,7 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
     return { name: file.name, type: file.type, size: file.size, sha: [...new Uint8Array(sha)].map(byte => byte.toString(16).padStart(2, '0')).join('') };
   }, title);
   expect(uploaded).toEqual({ name: 'browser-fixture.png', type: 'image/png', size: original.length, sha: originalSha });
+  await expect.poll(() => preview.locator('img').evaluateAll(images => images.map(img => img.naturalWidth))).toEqual([640, 640, 640]);
   await page.screenshot({ path: testInfo.outputPath('cms-private-draft.png'), fullPage: true });
   await page.getByRole('button', { name: /^Durumu:/ }).click();
   await page.getByText('Hazır', { exact: true }).click();
