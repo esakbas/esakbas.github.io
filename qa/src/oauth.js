@@ -172,7 +172,9 @@ export async function handleCallback(request, env, dependencies = {}) {
   const requestFetch = dependencies.fetch || globalThis.fetch;
   try {
     const tokenResponse = await requestFetch('https://github.com/login/oauth/access_token', {
-      method: 'POST', redirect: 'error',
+      // Cloudflare supports manual/follow only. Reject redirects through the
+      // status check below so neither the secret nor token reaches another URL.
+      method: 'POST', redirect: 'manual',
       headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'Hindiba-CMS-OAuth' },
       body: new URLSearchParams({ client_id: config.clientId, client_secret: config.clientSecret, code: codes[0], redirect_uri: config.callbackUrl }),
     });
@@ -181,11 +183,11 @@ export async function handleCallback(request, env, dependencies = {}) {
     const token = tokenData.access_token;
     if (tokenData.error || typeof token !== 'string' || !token || token.length > 8192 || /[\u0000-\u0020\u007f]/.test(token) || (tokenData.token_type && tokenData.token_type.toLowerCase() !== 'bearer')) return response('GitHub giriş kodu kullanılamadı. Yönetim panelinden yeniden giriş yapın.', 401, { clearCookie: true });
     const headers = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'Hindiba-CMS-OAuth' };
-    const userResponse = await requestFetch(`${GITHUB_API}/user`, { headers, redirect: 'error' });
+    const userResponse = await requestFetch(`${GITHUB_API}/user`, { headers, redirect: 'manual' });
     if (!userResponse.ok) return response('GitHub hesabı doğrulanamadı.', 401, { clearCookie: true });
     const user = await userResponse.json();
     if (typeof user.login !== 'string' || user.login.toLowerCase() !== config.allowedUser.toLowerCase()) return response('Bu yönetim paneline giriş yetkiniz yok.', 403, { clearCookie: true });
-    const repoResponse = await requestFetch(`${GITHUB_API}/repos/${config.repository}`, { headers, redirect: 'error' });
+    const repoResponse = await requestFetch(`${GITHUB_API}/repos/${config.repository}`, { headers, redirect: 'manual' });
     if (!repoResponse.ok) return response('İçerik deposuna erişim yetkisi doğrulanamadı.', 403, { clearCookie: true });
     const repository = await repoResponse.json();
     if (repository.private !== true || repository.permissions?.push !== true || typeof repository.full_name !== 'string' || repository.full_name.toLowerCase() !== config.repository.toLowerCase() || repository.owner?.login?.toLowerCase() !== config.allowedUser.toLowerCase()) return response('Özel içerik deposu ve yazma yetkisi doğrulanamadı. Depo ayarlarını kontrol edin.', 403, { clearCookie: true });

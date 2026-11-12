@@ -94,9 +94,10 @@ test('successful callback exchanges the code server-side and checks account and 
   assert.equal(exchange.options.body.get('client_secret'), env.GITHUB_CLIENT_SECRET);
   assert.equal(exchange.options.body.get('redirect_uri'), `${env.CMS_ORIGIN}/callback`);
   assert.equal(exchange.options.body.get('code'), 'offline-code');
+  assert.equal(exchange.options.redirect, 'manual');
   for (const call of github.calls.slice(1)) {
     assert.equal(call.options.headers.Authorization, `Bearer ${token}`);
-    assert.equal(call.options.redirect, 'error');
+    assert.equal(call.options.redirect, 'manual');
   }
   const html = await result.text();
   assert.ok(html.includes('authorization:github:success:'));
@@ -112,14 +113,70 @@ test('successful callback exchanges the code server-side and checks account and 
   assert.ok(!html.includes('postMessage("*"'));
 });
 
+test('callback succeeds with Cloudflare-compatible fetch that rejects unsupported redirect modes', async () => {
+  const flow = await begin(), github = mockGitHub();
+  const cloudflareFetch = async (url, options = {}) => {
+    if (options.redirect !== undefined && !['follow', 'manual'].includes(options.redirect)) {
+      throw new TypeError('Unsupported redirect mode in Cloudflare fetch');
+    }
+    return github.fetch(url, options);
+  };
+  const result = await handleCallback(callbackRequest(flow), env, { now: () => NOW, fetch: cloudflareFetch });
+  assert.equal(result.status, 200);
+  assert.equal(github.calls.length, 3);
+  assert.ok(github.calls.every(call => call.options.redirect === 'manual'));
+  const html = await result.text();
+  assert.ok(html.includes('authorization:github:success:'));
+  assert.ok(!html.includes(env.GITHUB_CLIENT_SECRET));
+  assert.ok(!html.includes('offline-code'));
+});
+
+test('302 and 307 redirects at token, account or repository checks are rejected without following or leaking upstream data', async () => {
+  const stages = [
+    { url: 'https://github.com/login/oauth/access_token', status: 502 },
+    { url: 'https://api.github.com/user', status: 401 },
+    { url: `https://api.github.com/repos/${env.GITHUB_REPOSITORY}`, status: 403 }
+  ];
+  for (const upstreamStatus of [302, 307]) for (const [index, stage] of stages.entries()) {
+    const flow = await begin(), github = mockGitHub(), calls = [];
+    const code = 'offline-redirect-code', marker = 'UNTRUSTED-REDIRECT-RESPONSE';
+    const location = `https://external.invalid/capture?client_secret=${encodeURIComponent(env.GITHUB_CLIENT_SECRET)}&code=${code}&token=${token}`;
+    const fetch = async (url, options = {}) => {
+      calls.push({ url: String(url), options });
+      assert.ok(stages.some(candidate => candidate.url === String(url)), 'credentials must never be sent to an external redirect location');
+      assert.equal(options.redirect, 'manual');
+      if (String(url) === stage.url) {
+        return new Response(`${marker} ${env.GITHUB_CLIENT_SECRET} ${code} ${token}`, {
+          status: upstreamStatus,
+          headers: { Location: location, 'Content-Type': 'text/plain', 'X-Upstream-Secret': env.GITHUB_CLIENT_SECRET }
+        });
+      }
+      return github.fetch(url, options);
+    };
+    const result = await handleCallback(callbackRequest(flow, { code }), env, { now: () => NOW, fetch });
+    const body = await assertPrivateError(result, stage.status);
+    assert.equal(result.headers.get('location'), null);
+    const publicResponse = body + '\n' + [...result.headers].map(([name, value]) => `${name}: ${value}`).join('\n');
+    for (const privateValue of [env.GITHUB_CLIENT_SECRET, token, code, marker, location, flow.state]) {
+      assert.ok(!publicResponse.includes(privateValue), 'redirect failure must not echo upstream credentials, body, location or callback state');
+    }
+    assert.ok(!body.includes(String(upstreamStatus)), 'the public error must not echo the upstream redirect status');
+    assert.equal(calls.length, index + 1, 'no later identity or repository check may run after a redirect');
+    assert.deepEqual(calls.map(call => call.url), stages.slice(0, index + 1).map(candidate => candidate.url));
+  }
+});
+
 test('callback rejects missing, mismatched, duplicate and forged CSRF state before contacting GitHub', async () => {
   const flow = await begin();
+  // Alter meaningful signature bits, not the final base64url padding bits.
+  const signatureStart = flow.cookie.lastIndexOf('.') + 1;
+  const forgedCookie = flow.cookie.slice(0, signatureStart) + (flow.cookie[signatureStart] === 'A' ? 'B' : 'A') + flow.cookie.slice(signatureStart + 1);
   const requests = [
     callbackRequest(flow, { headers: { Cookie: '' } }),
     callbackRequest(flow, { state: '0'.repeat(64) }),
     callbackRequest(flow, { extraQuery: `&state=${flow.state}` }),
     callbackRequest(flow, { headers: { Cookie: `${flow.cookie}; ${flow.cookie}` } }),
-    callbackRequest(flow, { headers: { Cookie: flow.cookie.slice(0, -1) + (flow.cookie.endsWith('A') ? 'B' : 'A') } }),
+    callbackRequest(flow, { headers: { Cookie: forgedCookie } }),
   ];
   for (const request of requests) {
     const github = mockGitHub();
