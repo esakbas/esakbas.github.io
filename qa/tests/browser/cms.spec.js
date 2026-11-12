@@ -113,6 +113,7 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   await page.getByLabel(/^Kısa açıklama/).fill('Yalnızca tarayıcı belleğinde saklanan test yazısı.');
   await page.getByLabel(/^Yazı adresi/).fill(slug);
   await page.getByLabel(/^Kapak alternatif metni/).fill('Tarayıcı denemesi için üretilmiş fotoğraf');
+  await expect.poll(async () => Number.isNaN(Date.parse((await editorData(page))?.created_at))).toBe(false);
   let raw = page.locator('.cms-editor-raw [data-slate-editor="true"]').first();
   await expect(raw).toBeVisible();
   await typeMarkdown(raw, '## Bir başlangıç\n\n**Kalın başlangıç** ve kelimeler.');

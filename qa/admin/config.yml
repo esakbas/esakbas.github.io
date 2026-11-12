@@ -136,6 +136,8 @@ collections:
       - label: Yazı tarihi
         name: created_at
         widget: datetime
+        default: '{{now}}'
+        format: 'YYYY-MM-DDTHH:mm:ssZ'
         date_format: 'DD.MM.YYYY'
         time_format: 'HH:mm'
         hint: 'Mevcut yazının tarihi korunur. İleri tarih seçmek otomatik yayımlama başlatmaz.'
