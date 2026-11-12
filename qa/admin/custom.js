@@ -43,6 +43,7 @@ window.CMS_MANUAL_INIT = true;
     const ImageControl = window.createClass({
       displayName: 'HindibaPrivateImage',
       focus() { this.control?.focus?.(); },
+      getValidateValue() { return this.control?.getValidateValue?.() ?? this.props.value; },
       render() { return window.h(native.control, { ...this.props, getAsset: mediaResolver(this.props.getAsset), ref: control => { this.control = control; } }); }
     });
     const ImagePreview = props => window.h(native.preview, { ...props, getAsset: mediaResolver(props.getAsset) });
