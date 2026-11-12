@@ -6,6 +6,11 @@ window.CMS_MANUAL_INIT = true;
   // Root-relative public URLs bypass Decap's private-media resolver. Pass a
   // relative filename to that resolver while keeping the saved URL unchanged.
   const mediaAsset = (getAsset, value, field) => getAsset(typeof value === 'string' && value.startsWith('/uploads/') ? value.slice('/uploads/'.length) : value, field);
+  const mediaResolvers = new WeakMap();
+  const mediaResolver = getAsset => {
+    if (!mediaResolvers.has(getAsset)) mediaResolvers.set(getAsset, (value, field) => mediaAsset(getAsset, value, field));
+    return mediaResolvers.get(getAsset);
+  };
   const categoryNames = { edebiyat: 'Edebiyat', siir: 'Şiir', gunluk: 'Günlük', 'bir-cumle': 'Bir Cümle' };
   const slugify = value => String(value || '').toLocaleLowerCase('tr-TR').replace(/[çğıöşü]/g, c => ({ ç: 'c', ğ: 'g', ı: 'i', ö: 'o', ş: 's', ü: 'u' }[c])).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 150).replace(/-$/, '');
   const dateLabel = value => {
@@ -28,10 +33,20 @@ window.CMS_MANUAL_INIT = true;
       displayName: 'HindibaRawFirstMarkdown',
       getInitialState() { try { localStorage.setItem('cms.md-mode', 'raw'); } catch {} return {}; },
       focus() { this.control?.focus(); },
-      render() { return window.h(native.control, { ...this.props, getAsset: (value, field) => mediaAsset(this.props.getAsset, value, field), ref: control => { this.control = control; } }); }
+      render() { return window.h(native.control, { ...this.props, getAsset: mediaResolver(this.props.getAsset), ref: control => { this.control = control; } }); }
     });
-    const MarkdownPreview = props => window.h(native.preview, { ...props, getAsset: (value, field) => mediaAsset(props.getAsset, value, field) });
+    const MarkdownPreview = props => window.h(native.preview, { ...props, getAsset: mediaResolver(props.getAsset) });
     CMS.registerWidget('markdown', RawFirstMarkdown, MarkdownPreview, native.schema);
+  }
+  function registerImages(CMS) {
+    const native = CMS.getWidget('image');
+    const ImageControl = window.createClass({
+      displayName: 'HindibaPrivateImage',
+      focus() { this.control?.focus?.(); },
+      render() { return window.h(native.control, { ...this.props, getAsset: mediaResolver(this.props.getAsset), ref: control => { this.control = control; } }); }
+    });
+    const ImagePreview = props => window.h(native.preview, { ...props, getAsset: mediaResolver(props.getAsset) });
+    CMS.registerWidget('image', ImageControl, ImagePreview, native.schema);
   }
   function labelEditorSwitches() {
     const root = document.getElementById('nc-root');
@@ -124,7 +139,7 @@ window.CMS_MANUAL_INIT = true;
           rich: 'Zengin metin moduna geç', markdown: 'Markdown moduna geç'
         } }
       } } });
-      registerMarkdown(CMS); registerPhoto(CMS); registerPreview(CMS); registerSave(CMS);
+      registerImages(CMS); registerMarkdown(CMS); registerPhoto(CMS); registerPreview(CMS); registerSave(CMS);
       labelEditorSwitches();
       CMS.init({ config });
       document.getElementById('cms-startup').hidden = true;

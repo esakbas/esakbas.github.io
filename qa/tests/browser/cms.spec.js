@@ -134,6 +134,7 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   await assertNoOverflow(page);
   await page.getByRole('button', { name: 'Seçileni kullan', exact: true }).click();
   await expect.poll(async () => (await editorData(page))?.cover).toMatch(/^\/uploads\/browser-fixture\.png$/);
+  await expect.poll(() => page.locator('#nc-root img').evaluateAll(images => images.some(img => img.naturalWidth === 640 && img.src.startsWith('blob:')))).toBe(true);
   const cover = (await editorData(page)).cover;
   const markdown = `## Bir başlangıç\n\n**Kalın başlangıç** ve kelimeler.\n\n![Birinci fotoğraf](${cover} "Birinci açıklama")\n\n![İkinci fotoğraf](${cover} "İkinci açıklama")`;
   await typeMarkdown(raw, markdown);
