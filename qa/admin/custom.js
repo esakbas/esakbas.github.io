@@ -100,6 +100,16 @@ window.CMS_MANUAL_INIT = true;
       if (!/^https?:\/\//.test(config.site_url || '')) config.site_url = location.origin;
       config.display_url = config.site_url;
       const CMS = window.CMS;
+      // Decap's Turkish catalog omits these switch labels. Keep both editor
+      // modes named for keyboard and screen-reader users.
+      const turkish = CMS.getLocale('tr') || {};
+      const editor = turkish.editor || {};
+      const widgets = editor.editorWidgets || {};
+      CMS.registerLocale('tr', { ...turkish, editor: { ...editor, editorWidgets: {
+        ...widgets, markdown: { ...widgets.markdown, toggleMode: {
+          rich: 'Zengin metin moduna geç', markdown: 'Markdown moduna geç'
+        } }
+      } } });
       registerMarkdown(CMS); registerPhoto(CMS); registerPreview(CMS); registerSave(CMS);
       CMS.init({ config });
       document.getElementById('cms-startup').hidden = true;

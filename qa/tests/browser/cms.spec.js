@@ -30,6 +30,18 @@ async function assertNoOverflow(page) {
 async function editorData(page) {
   return page.evaluate(() => window.CMS.editor.getCurrentEntry()?.data || null);
 }
+async function typeMarkdown(control, value) {
+  // Real keyboard input exercises Slate on desktop and Android emulation;
+  // setting a contenteditable value directly bypasses its mobile input model.
+  await control.click();
+  await control.press('ControlOrMeta+A');
+  await control.press('Backspace');
+  const lines = value.split('\n');
+  for (let index = 0; index < lines.length; index++) {
+    if (index) await control.press('Enter');
+    if (lines[index]) await control.pressSequentially(lines[index]);
+  }
+}
 async function memoryBackend(page, repoTree) {
   await page.addInitScript(({ repoTree }) => {
     window.repoFiles = repoTree;
@@ -103,7 +115,7 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   await page.getByLabel(/^Kapak alternatif metni/).fill('Tarayıcı denemesi için üretilmiş fotoğraf');
   let raw = page.locator('.cms-editor-raw [data-slate-editor="true"]').first();
   await expect(raw).toBeVisible();
-  await raw.fill('## Bir başlangıç\n\n**Kalın başlangıç** ve kelimeler.');
+  await typeMarkdown(raw, '## Bir başlangıç\n\n**Kalın başlangıç** ve kelimeler.');
   await expect.poll(async () => (await editorData(page))?.body).toContain('**Kalın başlangıç**');
   await page.locator('.cms-editor-raw').getByLabel(/rich text|zengin/i).click();
   await expect(page.locator('.cms-editor-visual [data-slate-editor="true"]').first()).toBeVisible();
@@ -116,12 +128,12 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   const originalSha = createHash('sha256').update(original).digest('hex');
   await page.getByRole('button', { name: 'Bir resim seçin', exact: true }).click();
   await page.locator('input[type="file"]').setInputFiles({ name: 'browser-fixture.png', mimeType: 'image/png', buffer: original });
-  await page.getByText('browser-fixture.png', { exact: true }).first().click();
+  await expect(page.getByRole('button', { name: 'Seçileni kullan', exact: true })).toBeEnabled();
   await page.getByRole('button', { name: 'Seçileni kullan', exact: true }).click();
   await expect.poll(async () => (await editorData(page))?.cover).toMatch(/^\/uploads\/browser-fixture\.png$/);
   const cover = (await editorData(page)).cover;
   const markdown = `## Bir başlangıç\n\n**Kalın başlangıç** ve kelimeler.\n\n![Birinci fotoğraf](${cover} "Birinci açıklama")\n\n![İkinci fotoğraf](${cover} "İkinci açıklama")`;
-  await raw.fill(markdown);
+  await typeMarkdown(raw, markdown);
   await expect.poll(async () => (await editorData(page))?.body).toBe(markdown);
   const preview = page.frameLocator('iframe').locator('.hindiba-preview');
   await expect(preview.locator('h1')).toHaveText(title);
@@ -149,6 +161,7 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   await page.getByText('Hazır', { exact: true }).click();
   await expect.poll(async () => (await draftRecord(page, title))?.status).toBe('pending_publish');
   await page.getByRole('button', { name: 'Yayınla', exact: true }).click();
+  page.once('dialog', dialog => dialog.accept());
   await page.getByText('Şimdi yayımla', { exact: true }).click();
   await expect.poll(() => publishedRecord(page, title)).toContain(title);
   await expect.poll(() => draftRecord(page, title)).toBeNull();
