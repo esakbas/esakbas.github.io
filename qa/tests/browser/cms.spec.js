@@ -114,6 +114,7 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   await page.getByLabel(/^Yazı adresi/).fill(slug);
   await page.getByLabel(/^Kapak alternatif metni/).fill('Tarayıcı denemesi için üretilmiş fotoğraf');
   await expect.poll(async () => Number.isNaN(Date.parse((await editorData(page))?.created_at))).toBe(false);
+  await assertNoOverflow(page);
   let raw = page.locator('.cms-editor-raw [data-slate-editor="true"]').first();
   await expect(raw).toBeVisible();
   await typeMarkdown(raw, '## Bir başlangıç\n\n**Kalın başlangıç** ve kelimeler.');
@@ -130,6 +131,7 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   await page.getByRole('button', { name: 'Bir resim seçin', exact: true }).click();
   await page.locator('input[type="file"]').setInputFiles({ name: 'browser-fixture.png', mimeType: 'image/png', buffer: original });
   await expect(page.getByRole('button', { name: 'Seçileni kullan', exact: true })).toBeEnabled();
+  await assertNoOverflow(page);
   await page.getByRole('button', { name: 'Seçileni kullan', exact: true }).click();
   await expect.poll(async () => (await editorData(page))?.cover).toMatch(/^\/uploads\/browser-fixture\.png$/);
   const cover = (await editorData(page)).cover;

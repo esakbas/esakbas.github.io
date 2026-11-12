@@ -60,6 +60,12 @@ async function commitOutput(staging, output) {
   }
 }
 export async function buildSite(options = {}) {
+  // Workers Builds can create previews for private editorial branches, but do
+  // not provide CF_PAGES_BRANCH. This project uses Pages Functions: fail closed
+  // if it is accidentally connected to the Workers product instead of Pages.
+  if (process.env.WORKERS_CI === '1' || process.env.WORKERS_CI_BRANCH) {
+    throw new Error('Bu proje Cloudflare Pages için hazırlanmıştır. Workers Builds yerine Pages Git bağlantısını kullanın.');
+  }
   const output = resolve(options.outputDir || '_site');
   const branch = options.branch ?? process.env.CF_PAGES_BRANCH ?? 'main';
   const productionBranch = 'main';

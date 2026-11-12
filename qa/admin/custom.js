@@ -29,6 +29,16 @@ window.CMS_MANUAL_INIT = true;
     });
     CMS.registerWidget('markdown', RawFirstMarkdown, native.preview, native.schema);
   }
+  function labelEditorSwitches() {
+    const root = document.getElementById('nc-root');
+    const label = () => root.querySelectorAll('.cms-editor-raw [role="switch"], .cms-editor-visual [role="switch"]').forEach(control => {
+      // The upstream toggle drops its aria-label prop. Name the actual mounted
+      // element without replacing the native editor or its keyboard behavior.
+      control.setAttribute('aria-label', control.closest('.cms-editor-raw') ? 'Zengin metin moduna geç' : 'Markdown moduna geç');
+    });
+    new MutationObserver(label).observe(root, { subtree: true, childList: true, attributes: true, attributeFilter: ['aria-checked'] });
+    label();
+  }
   function registerPhoto(CMS) {
     const escapeAlt = text => String(text || '').replace(/[\\\[\]]/g, '\\$&').replace(/[\r\n]/g, ' ');
     const escapeTitle = text => String(text || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/[\r\n]/g, ' ');
@@ -111,6 +121,7 @@ window.CMS_MANUAL_INIT = true;
         } }
       } } });
       registerMarkdown(CMS); registerPhoto(CMS); registerPreview(CMS); registerSave(CMS);
+      labelEditorSwitches();
       CMS.init({ config });
       document.getElementById('cms-startup').hidden = true;
     } catch (error) { showError(error.message || 'Panel başlatılamadı.'); }

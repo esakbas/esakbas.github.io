@@ -180,6 +180,38 @@ test('non-main builds expose only noindex guard documents even if a draft branch
   }
 });
 
+test('accidental Workers Builds on main or private branches fail before changing the last safe Pages output', async t => {
+  const f = fixture(t), previous = { WORKERS_CI: process.env.WORKERS_CI, WORKERS_CI_BRANCH: process.env.WORKERS_CI_BRANCH };
+  try {
+    delete process.env.WORKERS_CI;
+    delete process.env.WORKERS_CI_BRANCH;
+    await buildSite({ ...f, branch: 'main' });
+    const safeOutput = snapshot(f.outputDir);
+    const marker = 'PRIVATE-WORKERS-BRANCH-' + randomUUID(), photo = 'private-workers-photo.png';
+    const source = addPost(f, { id: 'workers-private-post', slug: 'workers-private-post', status: 'published', title: marker, body: marker + `\n\n![Özel görsel](/uploads/${photo})`, cover: '/uploads/' + photo });
+    writeFileSync(join(f.mediaDir, photo), await sharp({ create: { width: 30, height: 20, channels: 3, background: '#336655' } }).png().toBuffer());
+    const originalSource = readFileSync(source), originalEntries = readdirSync(f.root).sort();
+    for (const variable of ['WORKERS_CI', 'WORKERS_CI_BRANCH']) {
+      delete process.env.WORKERS_CI;
+      delete process.env.WORKERS_CI_BRANCH;
+      process.env[variable] = variable === 'WORKERS_CI' ? '1' : 'cms/private';
+      for (const branch of ['main', 'cms/private']) {
+        await assert.rejects(() => buildSite({ ...f, branch }), /Cloudflare Pages.*Workers Builds/);
+        assert.deepEqual(snapshot(f.outputDir), safeOutput, `${variable}/${branch}: the last safe Pages site must remain byte-for-byte unchanged`);
+        assert.deepEqual(readdirSync(f.root).sort(), originalEntries, 'a rejected Workers build must not create staging or replacement output');
+        assertNoValue(f.outputDir, marker);
+        assertNoValue(f.outputDir, photo);
+        assert.deepEqual(readFileSync(source), originalSource);
+      }
+    }
+  } finally {
+    for (const [name, value] of Object.entries(previous)) {
+      if (value === undefined) delete process.env[name];
+      else process.env[name] = value;
+    }
+  }
+});
+
 test('only referenced published photos are optimized to WebP, stripped of EXIF and mapped in rendered pages without changing Markdown', async t => {
   const f = fixture(t), exifMarker = 'PRIVATE-CAMERA-EXIF-7bcf19';
   const original = await sharp({ create: { width: 2600, height: 1300, channels: 3, background: '#336655' } }).withExif({ IFD0: { Artist: exifMarker, Copyright: exifMarker } }).jpeg().toBuffer();
