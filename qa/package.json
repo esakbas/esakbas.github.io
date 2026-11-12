@@ -1,0 +1,25 @@
+{
+  "name": "hindiba-free-blog",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Hindiba: özel taslaklar ve ücretsiz statik blog",
+  "engines": {"node": ">=24 <25"},
+  "scripts": {
+    "build": "node scripts/build.js",
+    "export": "node scripts/export-content.js",
+    "verify": "node scripts/verify-content.js",
+    "test": "node --test --test-concurrency=1 tests/*.test.js",
+    "test:e2e": "playwright test",
+    "dev": "node scripts/serve.js",
+    "backup": "node scripts/backup.js",
+    "pages:bridge": "node scripts/pages-bridge.js"
+  },
+  "dependencies": {
+    "marked": "^17.0.0",
+    "sanitize-html": "^2.17.0",
+    "sharp": "0.35.5",
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {"@playwright/test": "1.65.0"}
+}

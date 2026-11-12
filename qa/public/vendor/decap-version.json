@@ -1,0 +1,507 @@
+{
+  "name": "decap-cms",
+  "version": "3.17.3",
+  "npmIntegrity": "sha512-aoNAV1throw76ieMmCVe5qb3EbhbbFdXwG+fTupQqvKVwJYnJVQiFdAwvWeP9+H5prNeXS6mrVbW9cxGD/m6tg==",
+  "files": [
+    {
+      "path": "cms.css",
+      "sha256": "5b2c933676f88c28aefa5db9ae482980bed8552dc07899670c9d5647512e5371",
+      "bytes": 277
+    },
+    {
+      "path": "103.decap-cms.js",
+      "sha256": "f38f520b4e8547e704a44f798ec37fc8fc6ae2be39924155d7feb0b3e008cd1c",
+      "bytes": 4625
+    },
+    {
+      "path": "1077.decap-cms.js",
+      "sha256": "51d0f62e3b2b0af01bd2a183d9bf2e9e07b3e6c1b13be2871557d0f119486d9f",
+      "bytes": 1142
+    },
+    {
+      "path": "117.decap-cms.js",
+      "sha256": "14a80c1e69cf5350c76c8e6c1c142f2e181648ff3896c2dcf27525519b8a9a68",
+      "bytes": 8160
+    },
+    {
+      "path": "1193.decap-cms.js",
+      "sha256": "da63d637c0bf27a176d75632b0fa6f70374a686723a8379d5291f4ef6948ef14",
+      "bytes": 1349
+    },
+    {
+      "path": "1577.decap-cms.js",
+      "sha256": "af18e272fd10d2ffe9b656e6edda4581e57a9e7990c30f378e3920a67f82f37a",
+      "bytes": 2751
+    },
+    {
+      "path": "1957.decap-cms.js",
+      "sha256": "a7599decc0052f0c03e09bd4a01da3ec832c9c6daaab0b668584da592df2cfc5",
+      "bytes": 3955
+    },
+    {
+      "path": "2031.decap-cms.js",
+      "sha256": "77d694383f1253b11fef839b7e7f7425ccbf2f04a8d0bfed5a1fc6745ec090c7",
+      "bytes": 2722
+    },
+    {
+      "path": "2035.decap-cms.js",
+      "sha256": "517a9db17d7688066bace35021961d7d1d7a626bef0c9dd91a5062ad5dfbf78b",
+      "bytes": 3520
+    },
+    {
+      "path": "21.decap-cms.js",
+      "sha256": "1d3bc148b681cb5cba39341a571c3529b2e5387c4e3a0ac47d6daa51c94f5f11",
+      "bytes": 18839
+    },
+    {
+      "path": "2363.decap-cms.js",
+      "sha256": "8a263747803827253ceb00bfc464fcc528258e86d2394b0d686a36dbde289a65",
+      "bytes": 2528
+    },
+    {
+      "path": "2369.decap-cms.js",
+      "sha256": "5d1eff2ba5bb1ad5efa6c88748b7979fb5b0949b1cde24470f71353dd3534bf1",
+      "bytes": 4487
+    },
+    {
+      "path": "2371.decap-cms.js",
+      "sha256": "b1cebf53a468345a8b45cddd84c06a52d72c54fb0edd4a44aec95d2139ab5211",
+      "bytes": 3255
+    },
+    {
+      "path": "2533.decap-cms.js",
+      "sha256": "52d50028a46d9e8e737768a9c8bf3b3154d81f19af45402b72414a75a8d8ba25",
+      "bytes": 2175
+    },
+    {
+      "path": "2598.decap-cms.js",
+      "sha256": "65ab8f38aa5149d92c1e785d344186bceb78b7b2280c542e00284dfdba51a29e",
+      "bytes": 19779
+    },
+    {
+      "path": "2777.decap-cms.js",
+      "sha256": "f94a5bcb49d0e7d05e59272ee1d30d23af705e62053c8d3102a4917b4f5853c8",
+      "bytes": 1919
+    },
+    {
+      "path": "2789.decap-cms.js",
+      "sha256": "7f4785d47123878ed00aa72c92cdcf959170f29cf6aa907e88dc0c082001e1ea",
+      "bytes": 4293
+    },
+    {
+      "path": "2821.decap-cms.js",
+      "sha256": "773291db92d1073fe62c59fa4a16fe897d67a38c67528ec66f62be6284bf4c94",
+      "bytes": 4186
+    },
+    {
+      "path": "2953.decap-cms.js",
+      "sha256": "103dc2efb3245185d2fa5419f22b075cce22cefddb9ab23b3f6307eec3189c39",
+      "bytes": 2242
+    },
+    {
+      "path": "2973.decap-cms.js",
+      "sha256": "6ab6d6dc4623b0e9a1a0b760a53402ced1b2412aad697576d5d9a3c44ee6c3d7",
+      "bytes": 17198
+    },
+    {
+      "path": "3037.decap-cms.js",
+      "sha256": "69cac9964840014f621a5b6a558fbd0503032bb3453f78e582516b04916dd055",
+      "bytes": 2504
+    },
+    {
+      "path": "3109.decap-cms.js",
+      "sha256": "6e81acbfb3da37c579d46d019b8cae58583d6ee10c18572d8a0d4f3c84857f51",
+      "bytes": 8150
+    },
+    {
+      "path": "315.decap-cms.js",
+      "sha256": "a0be489cecfab690a8339db7a7a60c05276f4c3304443fc45e3398784db6926c",
+      "bytes": 3014
+    },
+    {
+      "path": "3219.decap-cms.js",
+      "sha256": "58ddd5964d1b7041a3f24de81e5dcb5fe27e6e6fd2b5501c78b4f2c7e8107cdd",
+      "bytes": 1136
+    },
+    {
+      "path": "3763.decap-cms.js",
+      "sha256": "6185c0b2e8403d4043cc066ebe7c27c608c7b00bc343baed151d3411d512b8e2",
+      "bytes": 4331
+    },
+    {
+      "path": "3933.decap-cms.js",
+      "sha256": "ad8a6d7fb77051f7f0ca24fd8d40024fd4a6c806f0c8a58103d7189fb2cb09fb",
+      "bytes": 9749
+    },
+    {
+      "path": "4061.decap-cms.js",
+      "sha256": "cb4daca8eec5fc7abac02b785d66847b2e3588920cd549d18af278231999e61e",
+      "bytes": 9497
+    },
+    {
+      "path": "4149.decap-cms.js",
+      "sha256": "0e83393c224fcd10e1d44b2e7397c8b10f0ae4cf44dd713056cb6c006bd942c3",
+      "bytes": 11912
+    },
+    {
+      "path": "4229.decap-cms.js",
+      "sha256": "790226579437ce7a05f29c1cf491a32389a9ffa28fabd983d0cc2dd04b5a40cc",
+      "bytes": 7972
+    },
+    {
+      "path": "4277.decap-cms.js",
+      "sha256": "b91a772eb549766c48e293691769e0f9f01de246c23f0b5b7f3b9a06ec72a355",
+      "bytes": 11108
+    },
+    {
+      "path": "4329.decap-cms.js",
+      "sha256": "408b99b878d2800f4f99e691f28d470294ff29effc99481b695d95f181471d0d",
+      "bytes": 5307
+    },
+    {
+      "path": "4355.decap-cms.js",
+      "sha256": "b6dd5b7cb30a0c6ca230db0b41a3944990a1ec4af4c48f262fe15b5e3bbd0948",
+      "bytes": 2938
+    },
+    {
+      "path": "4928.decap-cms.js",
+      "sha256": "3381a3fbc1c47f11d8f5c38fd206708cea463636d699121f12ec5981795f71bf",
+      "bytes": 19823
+    },
+    {
+      "path": "5025.decap-cms.js",
+      "sha256": "f1344057e2ecbef409d339b12fe55c09793d9de2c7beb1b053dfd5f4cff1f83e",
+      "bytes": 47475
+    },
+    {
+      "path": "5047.decap-cms.js",
+      "sha256": "0cdfa9753fa5d0cf8b3596775f96a1e154737aba8170bca74091d4dfa02ea6b7",
+      "bytes": 1212
+    },
+    {
+      "path": "5121.decap-cms.js",
+      "sha256": "b05ff15d1b0a5bb8632b6de6cf627be746d5282e491744718a63ea579658d561",
+      "bytes": 5728
+    },
+    {
+      "path": "533.decap-cms.js",
+      "sha256": "16dfe7648cdd9a744cd93c46ccf90bcd54512aeeae784daaeb2708619edfeae7",
+      "bytes": 3071
+    },
+    {
+      "path": "5409.decap-cms.js",
+      "sha256": "ff11a67f3ecc444b2a7bc042bf3a5a5c1c0d5f67c0432867f4b0ff740938f19c",
+      "bytes": 7485
+    },
+    {
+      "path": "5415.decap-cms.js",
+      "sha256": "3e1a147f742993fcb7de12fa4321f20aa3daf37c00fbc4907e3740b0b9e4f6cb",
+      "bytes": 6019
+    },
+    {
+      "path": "545.decap-cms.js",
+      "sha256": "6cbb957dd003bb017000f76cfe2c7edd46df399063234617d22455abe80a7113",
+      "bytes": 5611
+    },
+    {
+      "path": "5749.decap-cms.js",
+      "sha256": "d040fd1cf6ffedd38ef9cff2fdc78b0f33a66cdd95eaf8d282ad1d0dedb6324a",
+      "bytes": 21140
+    },
+    {
+      "path": "5839.decap-cms.js",
+      "sha256": "912534ce4e443f22276e24c642b56742a62338224674ec96bc7c4b62308ce21a",
+      "bytes": 6211
+    },
+    {
+      "path": "5859.decap-cms.js",
+      "sha256": "d55fb36e351f74f3d8868c6931ed0542f26f1a6adb33a01aab6fa357d186bbad",
+      "bytes": 4114
+    },
+    {
+      "path": "5861.decap-cms.js",
+      "sha256": "e8fdf25fe4feaf29b53c02086b9795b76138c0c37f7c2e0aa6c7bb3b4fae1b28",
+      "bytes": 10883
+    },
+    {
+      "path": "5909.decap-cms.js",
+      "sha256": "c77131c6236d1b5e949c3df51a2af13e6c1648f02fcb69aaebe46b87544283b5",
+      "bytes": 2057
+    },
+    {
+      "path": "6069.decap-cms.js",
+      "sha256": "2c9caaadc2724696fc99c3b9146e42e46abf6774c36785c11a78ec624f9023c0",
+      "bytes": 6125
+    },
+    {
+      "path": "621.decap-cms.js",
+      "sha256": "8c08f4d9eeb1c104f1523608b4cd5fcd77f20439d288005382651ad9f6e0f6f6",
+      "bytes": 2079
+    },
+    {
+      "path": "6261.decap-cms.js",
+      "sha256": "fffa708f45edbaf178a633afab805e26c43383c536430920128d1566c4a1f9c2",
+      "bytes": 8666
+    },
+    {
+      "path": "6329.decap-cms.js",
+      "sha256": "f5db5470d07bd9a49fbf63499630ad838791658b1bdd3b79161ab996e5fb0574",
+      "bytes": 1969
+    },
+    {
+      "path": "6399.decap-cms.js",
+      "sha256": "c84cb29aa108b20212852498508426df0ae1e00ecbd638c008e71d246962df4b",
+      "bytes": 15914
+    },
+    {
+      "path": "6411.decap-cms.js",
+      "sha256": "98d648a80974a3cc9dafe056772615f5595d5b7d244450c9c1ddcfa0317a9e5c",
+      "bytes": 5056
+    },
+    {
+      "path": "6549.decap-cms.js",
+      "sha256": "442faca3345d4fe3f60df1d429fbb8493e1494120565caadb2f58407c2639526",
+      "bytes": 3722
+    },
+    {
+      "path": "6683.decap-cms.js",
+      "sha256": "43ec07e785584577e411771f6dd9f42423002d36461ca89c2e3a38e533e092b6",
+      "bytes": 1205
+    },
+    {
+      "path": "6893.decap-cms.js",
+      "sha256": "5ea9162a09716e49045c79c4ee389ef5a0e18182f78a00c55dc045434dbc2baf",
+      "bytes": 918
+    },
+    {
+      "path": "697.decap-cms.js",
+      "sha256": "3273e61caf7fa72bbabb7eff1158a545f8508ace00df2ef25791d5231b8afe9f",
+      "bytes": 3600
+    },
+    {
+      "path": "7.decap-cms.js",
+      "sha256": "efa153ed1afeb81e0286eea6bfc92f69e7cca3243143ebb8eb96a02023466faf",
+      "bytes": 6836
+    },
+    {
+      "path": "7045.decap-cms.js",
+      "sha256": "9a0248be2c8708bc2366537bf84eaabfc0ee5ce3ebe8e829eb66a2ed21345fa2",
+      "bytes": 4979
+    },
+    {
+      "path": "7113.decap-cms.js",
+      "sha256": "5aa1db6d8554cb57e53418023affbb1871df4dabf23fe1ff8c134d41ae171e64",
+      "bytes": 16382
+    },
+    {
+      "path": "7205.decap-cms.js",
+      "sha256": "59cd96e1107f1ffca102fc34447cfa89039200c89b61b73b7711fa50d6bf4482",
+      "bytes": 4158
+    },
+    {
+      "path": "7237.decap-cms.js",
+      "sha256": "96467febc0eb0ac377fcb05dc972bac87d611c7f7be047d5937234c2b84a6f60",
+      "bytes": 2345
+    },
+    {
+      "path": "7405.decap-cms.js",
+      "sha256": "41b04d6a8a95ac222d2c48c0fad8389887bd7b09805ea41f8505262478502dd3",
+      "bytes": 1288
+    },
+    {
+      "path": "7413.decap-cms.js",
+      "sha256": "136619bcddee6b48346fa9a481e8ab5a585352ad96f0f012419f8228bb055386",
+      "bytes": 27186
+    },
+    {
+      "path": "7477.decap-cms.js",
+      "sha256": "de9df3db0ad1abc6e97ad7105005fb3751e06468cd03559ba1a001f8fddd961a",
+      "bytes": 1254
+    },
+    {
+      "path": "7589.decap-cms.js",
+      "sha256": "3fa5f84e230a86ad072e69aaae02240733081efc4783ad118c411bce6a213083",
+      "bytes": 22399
+    },
+    {
+      "path": "7613.decap-cms.js",
+      "sha256": "0ca883c6fe6d3f630dd144255ea8c543504bd46cdffdb2ad8391f42158862f54",
+      "bytes": 2616
+    },
+    {
+      "path": "7621.decap-cms.js",
+      "sha256": "ae2d75ea946ce545d36eac61eedd7e4ac8fdcf7c1ab83a4db0b02bdc57d85a84",
+      "bytes": 774
+    },
+    {
+      "path": "7809.decap-cms.js",
+      "sha256": "ac27cebc5fc91eb723f989bd7f2ca7bb6e8a2173e52d01f1cd0342a0fbe1583d",
+      "bytes": 14386
+    },
+    {
+      "path": "7891.decap-cms.js",
+      "sha256": "6bb1c18bfcf0ee9bd33691e4a932077769453d259202a9351f25dcb9a9b0f934",
+      "bytes": 6582
+    },
+    {
+      "path": "7957.decap-cms.js",
+      "sha256": "f794bdbe24b0dec0b3e6269166c18e4359694cb722d821c47084f86c162e4526",
+      "bytes": 2736
+    },
+    {
+      "path": "8205.decap-cms.js",
+      "sha256": "62ae3108e35bc13a66c071668ee540c399b36a7d1307e9bb8c5c89fe9ea95f71",
+      "bytes": 4801
+    },
+    {
+      "path": "8229.decap-cms.js",
+      "sha256": "533254822778dc963ecc7f56335bdd70ab1de1f04fca99fb879cc8c0dcb14821",
+      "bytes": 7021
+    },
+    {
+      "path": "8241.decap-cms.js",
+      "sha256": "6e7f4675737f098d5277b0aa8547b9eb29e25574de172133bae63c486af5a7dc",
+      "bytes": 4191
+    },
+    {
+      "path": "8273.decap-cms.js",
+      "sha256": "62ad724a0c6a8dfc588bb078a5bd16d1c559915c068fbeb018ce104a496baab7",
+      "bytes": 3152
+    },
+    {
+      "path": "8333.decap-cms.js",
+      "sha256": "e921f7c29fb2ad4562228abb89b03dab978ab9c0e9fb0021636f4347fa5df719",
+      "bytes": 5999
+    },
+    {
+      "path": "8497.decap-cms.js",
+      "sha256": "e8f1770b714e2ec48410ca10a3dc4a162a954ba99c83144ffb0c92c674051cc0",
+      "bytes": 517
+    },
+    {
+      "path": "8573.decap-cms.js",
+      "sha256": "2828ea8c9d22440cd750cab304344c2eb9acdfb4309255994dd6a8072cf7568e",
+      "bytes": 5308
+    },
+    {
+      "path": "8677.decap-cms.js",
+      "sha256": "c7f719b09b4a6115ee9c0411705f733729ad80e435c0537c5ef3f9de9f33c026",
+      "bytes": 11658
+    },
+    {
+      "path": "8703.decap-cms.js",
+      "sha256": "61de45038ca10699dd9ff853c1471c412617364942080642cc1c746efb8ee51e",
+      "bytes": 5340
+    },
+    {
+      "path": "8973.decap-cms.js",
+      "sha256": "4a04edad39090b883c200dbd852a8cbdd8fa9faa47920bf3785d5e8089bc8028",
+      "bytes": 2879
+    },
+    {
+      "path": "9003.decap-cms.js",
+      "sha256": "c08bc22e1bcde6f8a7d514d4e3a7f568001512dcb5d6392c7d2dcacabad57bc3",
+      "bytes": 2379
+    },
+    {
+      "path": "9049.decap-cms.js",
+      "sha256": "07434fd511af29819aa5bf6a4bcd141c9dd6051d5859410d94567789dc8c9185",
+      "bytes": 1779
+    },
+    {
+      "path": "9109.decap-cms.js",
+      "sha256": "78bf602dba16e6b510f0e027fa26a5edb20d85b3004e23afde61cbd204e8ad34",
+      "bytes": 4167
+    },
+    {
+      "path": "9157.decap-cms.js",
+      "sha256": "7262a58f1269f4646284d006c9c2bc76d56f2a4775585ff4bf8e47e9d58f8e27",
+      "bytes": 960
+    },
+    {
+      "path": "9189.decap-cms.js",
+      "sha256": "f46b689399538e8c9a3bc871088da193284c37b60b85042ef0ff35ee2a3f9d8f",
+      "bytes": 6385
+    },
+    {
+      "path": "9469.decap-cms.js",
+      "sha256": "9ad30e1125954e2b273db9900b2664b48b93aec6f33ef074c4147cfc78867b6b",
+      "bytes": 20979
+    },
+    {
+      "path": "9493.decap-cms.js",
+      "sha256": "a88f55b2fd77f15fc74fd518125b92076a8d3ebef49e23022ed141df4713fe12",
+      "bytes": 10589
+    },
+    {
+      "path": "9571.decap-cms.js",
+      "sha256": "f66a12e8a3b18285650bd72d5117575cc0f3fb46bdd81a07d56807d303426858",
+      "bytes": 3257
+    },
+    {
+      "path": "9633.decap-cms.js",
+      "sha256": "9c8e96d4ffff25346ff172ecd269ec938d7ff0ceb7f6107ff2a50e086e4c2974",
+      "bytes": 6542
+    },
+    {
+      "path": "9661.decap-cms.js",
+      "sha256": "369a982f9c5f91e7d8d622a31869ba9c2debba33737a083019732573798d70e4",
+      "bytes": 2510
+    },
+    {
+      "path": "9691.decap-cms.js",
+      "sha256": "9ad359a740c0512ecae92af0e99b6725e2fd69f6bd5858cc1a0bbf333f918cda",
+      "bytes": 2122
+    },
+    {
+      "path": "9711.decap-cms.js",
+      "sha256": "f7c67c6fb9baba100b645257ba86a5a74b8572dce8a4e2a5ed24b2d716d7c12e",
+      "bytes": 8061
+    },
+    {
+      "path": "9733.decap-cms.js",
+      "sha256": "32c110180d0d8d79030e92d15c6cecd22e3994fe558718ed325bbb6486b55e6d",
+      "bytes": 2520
+    },
+    {
+      "path": "977.decap-cms.js",
+      "sha256": "42bc4088a20369ac4859392ccc28db3324b0f872e5ebb207aa83738e2d47ba1d",
+      "bytes": 37010
+    },
+    {
+      "path": "9829.decap-cms.js",
+      "sha256": "bf881346e6f95db3f3b69026595558b8b6ff7c23a8536b5e4c871ebafb0f49b3",
+      "bytes": 4377
+    },
+    {
+      "path": "997.decap-cms.js",
+      "sha256": "4bbcb902fe9b9d240018a48f0038a729cf97ef12f7171d302cf57e0874a89df5",
+      "bytes": 17476
+    },
+    {
+      "path": "decap-cms.js",
+      "sha256": "b96249532ab219c5a78b57ed4ac05eb92e6446819ac217ced6f81318a0d98e70",
+      "bytes": 4858826
+    },
+    {
+      "path": "cms.js.LICENSE.txt",
+      "sha256": "5d5f67f9d407f31bb83495125e3acaac7db5028e82e9352faf63483c71d98760",
+      "bytes": 6533
+    },
+    {
+      "path": "decap-cms.js.LICENSE.txt",
+      "sha256": "5d5f67f9d407f31bb83495125e3acaac7db5028e82e9352faf63483c71d98760",
+      "bytes": 6533
+    },
+    {
+      "path": "dd5d52671a5763720504.wasm",
+      "sha256": "b6085bb6702f144e9dc6016d58d230b34a84976bf0d080b7390b4b4b137d6ab7",
+      "bytes": 281261
+    },
+    {
+      "path": "f728dc876b39e5273411.wasm",
+      "sha256": "39c279269ec1163b987b6d69749458e3d5b03b9585f58b6ca5455b76b504a305",
+      "bytes": 345584
+    }
+  ]
+}

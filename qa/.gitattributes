@@ -1,0 +1,3 @@
+content/source-backup/** -text -whitespace
+public/vendor/** -text -whitespace
+content/posts/** -text -whitespace

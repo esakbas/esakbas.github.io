@@ -1,0 +1,152 @@
+# The build emits /admin/config.json from this YAML. custom.js manually initializes
+# CMS using that JSON and the current same-origin OAuth endpoints.
+backend:
+  name: github
+  repo: esakbas/hindiba-blog
+  branch: main
+  base_url: __SITE_URL__
+  site_domain: __SITE_HOST__
+  auth_endpoint: auth
+  auth_scope: repo
+  open_authoring: false
+  squash_merges: true
+  commit_messages:
+    create: 'Yazı ekle: {{slug}}'
+    update: 'Yazıyı düzenle: {{slug}}'
+    delete: 'Yazıyı sil: {{slug}}'
+    uploadMedia: 'Fotoğraf yükle: {{path}}'
+    deleteMedia: 'Fotoğrafı sil: {{path}}'
+
+locale: tr
+publish_mode: editorial_workflow
+site_url: __SITE_URL__
+display_url: __SITE_URL__
+logo:
+  src: /favicon.svg
+  show_in_header: true
+show_preview_links: true
+search: true
+media_folder: content/media
+public_folder: /uploads
+# Keep original upload bytes in the private repository. The site build validates
+# them and emits only referenced, optimized public WebP copies (maximum 1920 px).
+media_processing:
+  enabled: false
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: '-'
+
+collections:
+  - name: posts
+    label: Yazılar
+    label_singular: Yazı
+    description: 'Kaydet ile özel taslak hazırlayın; Yayımla ile okuyucularınıza açın. Kaldırmak için Sil yerine Yayından kaldır seçeneğini kullanın.'
+    folder: content/posts
+    create: true
+    delete: true
+    publish: true
+    extension: md
+    format: frontmatter
+    identifier_field: title
+    slug: '{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}-{{slug}}'
+    summary: '{{title}} · {{category}} · {{created_at}}'
+    preview_path: 'yazi/{{fields.slug}}/'
+    sortable_fields: [created_at, title, category]
+    view_filters:
+      - label: Edebiyat
+        field: category
+        pattern: '^edebiyat$'
+      - label: Şiir
+        field: category
+        pattern: '^siir$'
+      - label: Günlük
+        field: category
+        pattern: '^gunluk$'
+      - label: Bir Cümle
+        field: category
+        pattern: '^bir-cumle$'
+    editor:
+      preview: true
+      notes: false
+    fields:
+      - { name: id, widget: hidden, default: '', required: false }
+      - { name: legacy_id, widget: hidden, required: false }
+      - { name: source_key, widget: hidden, required: false }
+      - { name: source_file, widget: hidden, required: false }
+      - { name: source_body_sha256, widget: hidden, required: false }
+      - label: Başlık
+        name: title
+        widget: string
+        pattern: ['^.{1,300}$', 'Başlık 1–300 karakter olmalı.']
+      - label: Kısa açıklama
+        name: description
+        widget: text
+        required: false
+        pattern: ['^[\s\S]{0,600}$', 'Kısa açıklama en fazla 600 karakter olabilir.']
+        hint: 'Yazı listelerinde, arama motorlarında ve paylaşım önizlemesinde görünür.'
+      - label: Yazı adresi
+        name: slug
+        widget: string
+        required: false
+        hint: 'Boş bırakırsanız başlıktan oluşturulur. Yayımlanmış adresi değiştirirseniz önceki adresi aşağıdaki listeye ekleyin.'
+      - label: Eski yayımlanmış adresler
+        name: aliases
+        widget: list
+        required: false
+        default: []
+        hint: 'Adres değiştirdiğinizde önceki adresin yalnızca son bölümünü ekleyin; örneğin mazi. Yalnızca daha önce yayımlanan adresleri ekleyin.'
+      - label: Kapak fotoğrafı
+        name: cover
+        widget: image
+        required: false
+        choose_url: false
+        hint: 'JPEG, PNG veya WebP önerilir. Dosya başına en fazla 10 MB; özgün dosya özel depoda korunur. Yayımlanan kopya en fazla 1920 piksel WebP olarak hazırlanır.'
+        media_library:
+          allow_multiple: false
+          config:
+            max_file_size: 10485760
+      - label: Kapak alternatif metni
+        name: cover_alt
+        widget: string
+        required: false
+        pattern: ['^.{0,500}$', 'Alternatif metin en fazla 500 karakter olabilir.']
+        hint: 'Fotoğrafı ekran okuyucusu kullanan bir okuyucuya tarif edin.'
+      - label: Kategori
+        name: category
+        widget: select
+        default: gunluk
+        options:
+          - { label: Edebiyat, value: edebiyat }
+          - { label: Şiir, value: siir }
+          - { label: Günlük, value: gunluk }
+          - { label: Bir Cümle, value: bir-cumle }
+      - label: Etiketler
+        name: tags
+        widget: list
+        required: false
+        default: []
+        hint: 'Birden fazla etiket ekleyebilirsiniz.'
+      - label: Yazar
+        name: author
+        widget: string
+        default: Eşref Akbaş
+        pattern: ['^.{1,160}$', 'Yazar adı 1–160 karakter olmalı.']
+      - label: Yazı tarihi
+        name: created_at
+        widget: datetime
+        date_format: 'DD.MM.YYYY'
+        time_format: 'HH:mm'
+        hint: 'Mevcut yazının tarihi korunur. İleri tarih seçmek otomatik yayımlama başlatmaz.'
+      - { name: updated_at, widget: hidden, required: false }
+      - { name: published_at, widget: hidden, required: false }
+      - { name: status, widget: hidden, default: published }
+      - label: Yazınız
+        name: body
+        widget: markdown
+        modes: [raw, rich_text]
+        sanitize_preview: true
+        hint: 'Markdown metni olduğu gibi korur. Zengin metne geçiş biçimlendirmeyi değiştirebilir. Fotoğraf aracında alternatif metin ve görsel açıklaması girebilirsiniz.'
+        editor_components: [image, code-block]
+        buttons: [bold, italic, link, heading-two, heading-three, quote, bulleted-list, numbered-list, code]

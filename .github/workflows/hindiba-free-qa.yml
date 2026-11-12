@@ -1,0 +1,37 @@
+name: Hindiba ücretsiz sürüm doğrulaması
+on:
+  push:
+    branches: [codex/hindiba-free-qa-20261112]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: qa
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: qa/package-lock.json
+      - run: npm ci
+      - name: Yalnız önceden kamuya açık dokuz kaynak yazıyı test alanına aktar
+        run: npm run export
+      - run: npm test
+      - run: npm run build
+      - run: npm run verify -- --migration
+      - run: npm audit --audit-level=low
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hindiba-free-qa
+          path: |
+            qa/test-results/
+            qa/playwright-report/
+          retention-days: 7

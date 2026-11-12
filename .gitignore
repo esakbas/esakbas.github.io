@@ -1,0 +1,5 @@
+qa/node_modules/
+qa/_site/
+qa/work/
+qa/test-results/
+qa/playwright-report/
