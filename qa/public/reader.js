@@ -4,8 +4,14 @@ const stored = (key, fallback = '') => { try { return localStorage.getItem(key) 
 const save = (key, value) => { try { localStorage.setItem(key, value); } catch {} };
 function toast(message) { const el=$('#toast');if(!el)return;el.textContent=message;clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>{el.textContent='';},3500); }
 const theme = $('#theme-toggle');
-function setTheme(value) { document.documentElement.dataset.theme=value;theme?.setAttribute('aria-label',value==='dark'?'Açık temaya geç':'Koyu temaya geç');theme?.setAttribute('aria-pressed',String(value==='dark')); }
-setTheme(stored('theme',window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+function setTheme(value) {
+ const selected=value==='light'?'light':'dark';
+ document.documentElement.dataset.theme=selected;
+ $('meta[name="theme-color"]')?.setAttribute('content',selected==='light'?'#e6eaff':'#070a1a');
+ theme?.setAttribute('aria-label',selected==='dark'?'Açık temaya geç':'Koyu temaya geç');
+ theme?.setAttribute('aria-pressed',String(selected==='dark'));
+}
+setTheme(stored('theme','dark'));
 theme?.addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';save('theme',next);setTheme(next);});
 document.addEventListener('keydown',event=>{if(event.key==='/'&&!event.ctrlKey&&!event.metaKey&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)&&!document.activeElement?.isContentEditable){const search=$('#search');if(search){event.preventDefault();search.focus();}else location.assign('/ara');}});
 async function legacyRoute(){ const match=location.hash.match(/^#post-(\d+)$/);if(!match)return;try{const response=await fetch('/assets/legacy.json');if(!response.ok)throw Error();const data=await response.json(),path=(data.map||data)[match[1]];if(path&&path.startsWith('/yazi/'))location.replace(path);else toast('Bu eski yazının tam metni mevcut yedekte bulunamadı.');}catch{toast('Eski yazı bağlantısı şu anda açılamadı. Lütfen yeniden deneyin.');} }

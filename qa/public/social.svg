@@ -1,1 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="#f8f7f2"/><path d="M75 75H1125M75 555H1125" stroke="#d4d6c8"/><text x="85" y="155" font-size="55" font-family="Georgia,serif" fill="#243e36">hindiba.</text><text x="85" y="300" font-size="76" font-family="Georgia,serif" fill="#243e36">Biraz yavaşla.</text><text x="85" y="395" font-size="76" font-family="Georgia,serif" font-style="italic" fill="#8b5f30">Kelimeler burada.</text><text x="85" y="500" font-size="25" font-family="Georgia,serif" fill="#69716a">Eşref Akbaş’ın hatıra defteri</text><g fill="none" stroke="#858d66" stroke-width="2"><path d="M935 530c25-100 20-180 12-240M945 430c-80-15-100-50-110-85 80-5 110 45 110 85ZM951 365c65-15 95-60 100-100-65 10-95 65-100 100Z"/><circle cx="945" cy="220" r="65"/><circle cx="945" cy="220" r="9"/><path d="M945 220v-65m0 65v65m0-65h65m-65 0h-65m65 0 46-46m-46 46-46 46m46-46 46 46m-46-46-46-46"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="indigo"><stop stop-color="#6366f1" stop-opacity=".42"/><stop offset="1" stop-color="#6366f1" stop-opacity="0"/></radialGradient>
+    <radialGradient id="fuchsia"><stop stop-color="#d946ef" stop-opacity=".24"/><stop offset="1" stop-color="#d946ef" stop-opacity="0"/></radialGradient>
+    <radialGradient id="cyan"><stop stop-color="#22d3ee" stop-opacity=".16"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/></radialGradient>
+    <linearGradient id="glass" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".10"/><stop offset="1" stop-color="#ffffff" stop-opacity=".025"/></linearGradient>
+    <linearGradient id="light" x2="1" y2="1"><stop stop-color="#c7d2fe"/><stop offset=".55" stop-color="#e8b4f4"/><stop offset="1" stop-color="#67e8f9"/></linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#070a1a"/>
+  <ellipse cx="180" cy="60" rx="600" ry="430" fill="url(#indigo)"/>
+  <ellipse cx="1130" cy="100" rx="480" ry="420" fill="url(#fuchsia)"/>
+  <ellipse cx="900" cy="630" rx="450" ry="350" fill="url(#cyan)"/>
+  <rect x="38" y="34" width="1124" height="562" rx="35" fill="url(#glass)" stroke="#ffffff" stroke-opacity=".17"/>
+  <path d="M72 85Q72 68 89 68H1110" fill="none" stroke="#ffffff" stroke-opacity=".27"/>
+  <text x="88" y="152" font-size="55" font-family="Georgia,serif" fill="#eef0ff">hindiba.</text>
+  <text x="88" y="290" font-size="76" font-family="Georgia,serif" fill="#eef0ff">Biraz yavaşla.</text>
+  <text x="88" y="385" font-size="76" font-family="Georgia,serif" font-style="italic" fill="url(#light)">Kelimeler burada.</text>
+  <text x="88" y="510" font-size="25" font-family="Georgia,serif" fill="#aeb4d6">Eşref Akbaş’ın hatıra defteri</text>
+  <g fill="none" stroke="#a5b4fc" stroke-width="1.8" opacity=".8">
+    <path d="M955 535c25-100 20-180 12-240M965 435c-80-15-100-50-110-85 80-5 110 45 110 85ZM971 370c65-15 95-60 100-100-65 10-95 65-100 100Z"/>
+    <circle cx="965" cy="220" r="65"/><circle cx="965" cy="220" r="9"/>
+    <path d="M965 220v-65m0 65v65m0-65h65m-65 0h-65m65 0 46-46m-46 46-46 46m46-46 46 46m-46-46-46-46"/>
+  </g>
+</svg>

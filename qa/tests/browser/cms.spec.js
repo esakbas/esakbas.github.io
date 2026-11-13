@@ -349,7 +349,11 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
 
 test('the public-nine reader supports mobile layout, search, theme and legacy URLs without exposing a draft', async ({ page, request }, testInfo) => {
   const errors = await monitor(page);
+  await page.emulateMedia({ colorScheme: 'light' });
   await page.goto('/');
+  expect(await page.evaluate(() => matchMedia('(prefers-color-scheme: light)').matches)).toBe(true);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('#theme-toggle')).toHaveAttribute('aria-label', 'Açık temaya geç');
   await expect(page.getByRole('link', { name: realTitle, exact: true })).toBeVisible();
   await expect(page.locator('.posts-list .post-card')).toHaveCount(6);
   await assertNoOverflow(page);
@@ -357,7 +361,7 @@ test('the public-nine reader supports mobile layout, search, theme and legacy UR
   const search = await request.get('/assets/search-index.json');
   expect(await search.text()).not.toContain(privateMarker);
   expect((await request.get('/yazi/ozel-tarayici-taslagi/')).status()).toBe(404);
-  await page.screenshot({ path: testInfo.outputPath('reader-home.png'), fullPage: true });
+  await page.screenshot({ path: testInfo.outputPath('reader-home-dark.png'), fullPage: true });
   await page.keyboard.press('/');
   await expect(page.locator('#search')).toBeFocused();
   await page.locator('#search').fill('Van akşamı');
@@ -365,15 +369,67 @@ test('the public-nine reader supports mobile layout, search, theme and legacy UR
   await expect(page.locator('.posts-list .post-card')).toHaveCount(1);
   await expect(page.getByRole('link', { name: realTitle, exact: true })).toBeVisible();
   await page.locator('#theme-toggle').click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('#theme-toggle')).toHaveAttribute('aria-label', 'Koyu temaya geç');
+  expect(await page.evaluate(() => localStorage.getItem('theme'))).toBe('light');
   await page.locator('nav[aria-label="Ana gezinme"] a[href="/arsiv/"]').click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Hatırlamak için.');
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.reload();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Hatırlamak için.');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await assertNoOverflow(page);
-  await page.screenshot({ path: testInfo.outputPath('reader-archive-dark.png'), fullPage: true });
+  await page.screenshot({ path: testInfo.outputPath('reader-archive-light.png'), fullPage: true });
   await page.goto('/#post-6210660748');
   await expect(page).toHaveURL(/\/yazi\/yine-bir-van-aksami-yine-sonbahar\/$/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(realTitle);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await assertNoOverflow(page);
+  await assertHealthy(page, errors);
+});
+
+test('reader theme is chosen before deferred code and falls back to dark for invalid or unavailable storage', async ({ page }) => {
+  const errors = await monitor(page);
+  await page.emulateMedia({ colorScheme: 'light' });
+  const beforeReader = async expected => {
+    let release;
+    const gate = new Promise(resolve => { release = resolve; });
+    const holdReader = async route => { await gate;await route.continue(); };
+    await page.route('**/reader.js', holdReader);
+    try {
+      await page.goto('/', { waitUntil: 'commit' });
+      await expect(page.locator('html')).toHaveAttribute('data-theme', expected);
+    } finally {
+      release();
+    }
+    await page.waitForLoadState('load');
+    await page.unroute('**/reader.js', holdReader);
+    await expect(page.locator('html')).toHaveAttribute('data-theme', expected);
+  };
+  // The main reader bundle cannot establish these values while its request is
+  // held. Fresh visits must be dark even when the operating system is light.
+  await beforeReader('dark');
+  expect(await page.evaluate(() => matchMedia('(prefers-color-scheme: light)').matches)).toBe(true);
+  await page.evaluate(() => localStorage.setItem('theme', 'light'));
+  await beforeReader('light');
+  await page.evaluate(() => localStorage.setItem('theme', 'invalid-reader-theme'));
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+
+  await page.addInitScript(() => {
+    for (const method of ['getItem', 'setItem']) {
+      Object.defineProperty(Storage.prototype, method, {
+        configurable: true,
+        value() { throw new DOMException('Storage is unavailable in this fixture.', 'SecurityError'); }
+      });
+    }
+  });
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.locator('#theme-toggle').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await assertNoOverflow(page);
   await assertHealthy(page, errors);
 });
