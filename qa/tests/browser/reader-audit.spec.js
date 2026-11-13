@@ -59,6 +59,26 @@ test('readers can page through every original article and refresh a physical lat
   await noOverflow(page);
   await page.screenshot({ path: testInfo.outputPath('reader-audit-list-dark.png'), fullPage: true });
 
+  const firstCard = page.locator('.post-card').first();
+  const firstArticleHref = await firstCard.locator('h3 a').getAttribute('href');
+  const restingBorder = await firstCard.evaluate(node => getComputedStyle(node).borderColor);
+  await firstCard.locator('h3 a').focus();
+  await expect(firstCard.locator('h3 a')).toBeFocused();
+  expect(await firstCard.evaluate(node => getComputedStyle(node).borderColor)).not.toBe(restingBorder);
+  await firstCard.locator('h3 a').press('Enter');
+  await expect(page).toHaveURL(new RegExp(firstArticleHref.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'));
+  await page.goBack();
+  await expect(titles(page)).toHaveCount(6);
+  const cardBox = await firstCard.boundingBox();
+  await firstCard.click({ position: { x: 8, y: cardBox.height - 8 } });
+  await expect(page).toHaveURL(new RegExp(firstArticleHref.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'));
+  await page.goBack();
+  await expect(titles(page)).toHaveCount(6);
+  await firstCard.locator('.post-meta a').click();
+  await expect(page).toHaveURL(/\/kategori\//);
+  await page.goto('/');
+  await expect(titles(page)).toHaveCount(6);
+
   await pagination(page).getByRole('link', { name: '02', exact: true }).click();
   await expect(page).toHaveURL(/\/sayfa\/2\/$/);
   await expect(titles(page)).toHaveCount(3);
