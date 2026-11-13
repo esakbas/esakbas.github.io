@@ -90,7 +90,8 @@ collections:
         name: slug
         widget: string
         required: false
-        hint: 'Boş bırakırsanız başlıktan oluşturulur. Yayımlanmış adresi değiştirirseniz önceki adresi aşağıdaki listeye ekleyin.'
+        pattern: ['^(?=.{1,160}$)[a-z0-9]+(?:-[a-z0-9]+)*$', 'Adres en fazla 160 karakter olmalı; küçük Latin harfleri, rakam ve tire kullanın.']
+        hint: 'Boş bırakırsanız başlığa kısa kimlik eki eklenerek benzersiz adres oluşturulur. Elle girdiğiniz adres başka bir yazıda kullanılmamalı. Yayımlanmış adresi değiştirirseniz önceki adresi aşağıdaki listeye ekleyin.'
       - label: Eski yayımlanmış adresler
         name: aliases
         widget: list

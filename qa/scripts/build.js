@@ -7,6 +7,7 @@ import { parse as parseYaml } from 'yaml';
 import sharp from 'sharp';
 import { loadPosts } from '../src/content.js';
 import { buildMedia } from '../src/media.js';
+import { buildIcons } from '../src/icons.js';
 import { renderPage, postCard } from '../src/render.js';
 
 const root = resolve(import.meta.dirname, '..');
@@ -89,6 +90,7 @@ export async function buildSite(options = {}) {
     const posts = published.map(p => ({ ...p, cover: mapping[p.cover] || mapping[p.cover.split(/[?#]/)[0]] || p.cover }));
     // Only this audited public directory is copied. Never copy content/, work/, env or functions source.
     await cp(join(root, 'public'), staging, { recursive: true });
+    const icons = await buildIcons(join(root, 'public/favicon.svg'), staging);
     process.env.XDG_CACHE_HOME ||= join(root, 'work', '.cache');await mkdir(process.env.XDG_CACHE_HOME, { recursive: true });
     await sharp(join(root, 'public/social.svg')).resize(1200, 630).jpeg({ quality: 85 }).toFile(join(staging, 'social.jpg'));
     const redirects = [], currentSlugs = new Set(posts.map(p => p.slug)), usedAliases = new Set();
@@ -101,7 +103,7 @@ export async function buildSite(options = {}) {
     const generated = [];
     const render = async (route, pathname, query = {}, post = null) => {
       const canonical = siteUrl + route;
-      let html = renderPage({ pathname, query, posts, post, comments: [], siteUrl, imageMap: mapping });
+      let html = renderPage({ pathname, query, posts, post, comments: [], siteUrl, imageMap: mapping, icons });
       html = staticHtml(html, siteUrl).replace(/(<link rel="canonical" href=")[^"]+("\s*\/?>)/, `$1${canonical}$2`)
         .replace(/(<meta property="og:url" content=")[^"]+("\s*\/?>)/, `$1${canonical}$2`);
       await outputPage(staging, route, html);generated.push({ path: route, updated: post?.updated_at });
@@ -119,11 +121,16 @@ export async function buildSite(options = {}) {
         for (let page = 2; page <= Math.ceil(matching.length / 6); page++) await render(`${route}sayfa/${page}/`, pathname, { sayfa: String(page) });
       }
     }
-    await writeFile(join(staging, '404.html'), staticHtml(renderPage({ pathname: '/404', posts, siteUrl }), siteUrl));
+    await writeFile(join(staging, '404.html'), staticHtml(renderPage({ pathname: '/404', posts, siteUrl, icons }), siteUrl));
     const assets = join(staging, 'assets');await mkdir(assets, { recursive: true });
     await writeFile(join(assets, 'legacy.json'), JSON.stringify({ map: Object.fromEntries(posts.filter(p => p.legacy_id).map(p => [p.legacy_id, `/yazi/${p.slug}/`])) }));
     await writeFile(join(assets, 'search-index.json'), JSON.stringify(posts.map((p, i) => ({ id: p.legacy_id || p.id, title: p.title, body: p.body, category: p.category, tags: p.tags, created_at: p.created_at, url: `/yazi/${p.slug}/`, html: staticHtml(postCard(p, i), siteUrl) }))));
     await cp(join(root, 'admin'), join(staging, 'admin'), { recursive: true });
+    const adminIndex = join(staging, 'admin/index.html');
+    await writeFile(adminIndex, (await readFile(adminIndex, 'utf8'))
+      .replaceAll('href="/favicon.svg"', `href="${icons.svg}"`)
+      .replaceAll('href="/favicon.png"', `href="${icons.png}"`)
+      .replaceAll('href="/apple-touch-icon.png"', `href="${icons.apple}"`));
     const adminConfigPath = join(staging, 'admin/config.yml');
     const configText = (await readFile(adminConfigPath, 'utf8')).replaceAll('__SITE_URL__', siteUrl).replaceAll('__SITE_HOST__', new URL(siteUrl).host).replaceAll('__REPOSITORY__', process.env.GITHUB_REPOSITORY || 'esakbas/hindiba-blog');
     const config = parseYaml(configText);

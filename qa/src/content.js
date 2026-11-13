@@ -31,7 +31,7 @@ export function loadPosts(contentDir = 'content/posts') {
     return {
       id: value(m.id || basename(file, '.md')), legacy_id: m.legacy_id ? value(m.legacy_id) : null,
       source_key: value(m.source_key), title, slug, body,
-      excerpt: value(m.description || m.excerpt), cover: value(m.cover), cover_alt: value(m.cover_alt),
+      excerpt: value(Object.hasOwn(m, 'description') ? m.description : m.excerpt), cover: value(m.cover), cover_alt: value(m.cover_alt),
       category: value(m.category, 'gunluk'), tags, aliases, author: value(m.author, 'Eşref Akbaş'),
       created_at: created, updated_at: updated, published_at: value(m.published_at, created), status,
       source_file: file

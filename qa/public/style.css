@@ -97,8 +97,7 @@ h3 { line-height: 1.25; letter-spacing: -.5px; }
 
 /* Refracted edges stay visible even without backdrop-filter support. */
 .header-inner, .hero, .page-intro, .author-card, .category-list,
-.margin-note, #continue-reading, .article, .archive > section,
-.about-layout > .prose, .related-grid > article, .site-footer {
+.margin-note, #continue-reading, .about-layout > .prose, .site-footer {
   border: 1px solid var(--line);
   background: linear-gradient(135deg, var(--glass-light), transparent 52%), var(--panel);
   box-shadow: inset 0 1px 0 var(--rim), var(--shadow);
@@ -296,20 +295,22 @@ h3 { line-height: 1.25; letter-spacing: -.5px; }
 .search-shortcut { margin-left: auto; font-size: 9px; }
 kbd { font: 10px monospace; border: 1px solid var(--line); padding: 2px 5px; border-radius: 5px; background: var(--soft); }
 
-/* The cards use a light rim and translucent fill; only larger surfaces blur. */
+/* Writing stays on the page, separated by quiet rules rather than cards. */
 .post-card {
   display: flex;
   position: relative;
   gap: 18px;
-  padding: 25px 25px 23px;
-  margin-bottom: 14px;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background: linear-gradient(135deg, var(--glass-light), transparent 58%), var(--card);
-  box-shadow: inset 0 1px 0 var(--rim), var(--shadow);
-  transition: border-color .2s ease, transform .2s ease;
+  padding: 29px 0 28px;
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transition: border-color .2s ease;
 }
-.post-card:hover { transform: translateY(-2px); border-color: var(--line-bright); }
+.post-card:first-child { padding-top: 17px; }
+.post-card:hover { border-bottom-color: var(--line-bright); }
 .post-index { font: 11px Georgia, serif; color: var(--muted); padding-top: 3px; width: 18px; flex-shrink: 0; }
 .post-card-copy { flex: 1; min-width: 0; }
 .post-meta { display: flex; gap: 9px; align-items: center; flex-wrap: wrap; font-size: 10px; line-height: 1.5; letter-spacing: .1px; color: var(--muted); margin-bottom: 10px; }
@@ -354,7 +355,7 @@ kbd { font: 10px monospace; border: 1px solid var(--line); padding: 2px 5px; bor
 .page-intro h1 { font-size: 58px; margin-bottom: 20px; }
 .page-intro > .eyebrow { margin-bottom: 20px; }
 .intro-desc { font: 16px/1.8 Georgia, serif; color: var(--muted); margin: 0; }
-.archive > section { padding: 23px 27px 7px; border-radius: 24px; margin-bottom: 22px; }
+.archive > section { padding: 12px 0 0; margin-bottom: 33px; }
 .archive-year { display: flex; align-items: center; gap: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--line); margin-bottom: 3px; }
 .archive-year h2 { font-size: 37px; margin: 0; }
 .archive-year span { font-size: 11px; color: var(--muted); }
@@ -373,9 +374,9 @@ kbd { font: 10px monospace; border: 1px solid var(--line); padding: 2px 5px; bor
 .button { display: inline-flex; align-items: center; background: var(--button-bg); color: var(--button-text); padding: 12px 20px; border-radius: 999px; font: 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 .button:hover { color: var(--button-text); box-shadow: 0 0 0 4px var(--accent-soft); }
 
-/* A calmer, nearly opaque reading surface keeps long text comfortable. */
-.article-layout { display: grid; grid-template-columns: minmax(0, 800px) 1fr; gap: 32px; padding: 32px 0 50px; max-width: 1160px; margin: auto; }
-.article { min-width: 0; border-radius: 28px; padding: 36px 40px 12px; background: linear-gradient(135deg, var(--glass-light), transparent 48%), var(--reader); box-shadow: inset 0 1px 0 var(--rim), var(--large-shadow); }
+/* Comfortable line lengths and open margins make the text the reading surface. */
+.article-layout { display: grid; grid-template-columns: minmax(0, 740px) 1fr; gap: 64px; padding: 40px 0 50px; max-width: 1060px; margin: auto; }
+.article { min-width: 0; max-width: 740px; width: 100%; padding: 14px 0 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .back-link { font-size: 11px; color: var(--muted); display: inline-block; margin-bottom: 31px; }
 .article > .post-meta { font-size: 11px; margin-bottom: 19px; }
 .article h1 { font-size: clamp(38px, 4.5vw, 58px); line-height: 1.15; margin-bottom: 25px; overflow-wrap: anywhere; }
@@ -411,13 +412,13 @@ kbd { font: 10px monospace; border: 1px solid var(--line); padding: 2px 5px; bor
 .brand-flower svg { width: 25px; height: 35px; color: var(--accent); }
 .article-end p { font: italic 13px Georgia, serif; color: var(--muted); margin: 0; }
 .article-end button { margin-left: auto; font-size: 10px; }
-.related { padding: 0 0 50px; }
+.related { max-width: 1060px; margin: auto; padding: 0 0 50px; }
 .related .section-heading { display: block; }
 .related .section-heading h2 { font-size: 35px; }
-.related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.related-grid > article { min-width: 0; border-radius: 22px; padding: 24px; }
-.related-grid article + article { border-left: 1px solid var(--line); }
-.related-grid h3 { font-size: 24px; overflow-wrap: anywhere; }
+.related-grid { display: grid; grid-template-columns: 1fr; max-width: 740px; }
+.related-grid > article { min-width: 0; padding: 25px 0; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; }
+.related-grid article:last-child { border-bottom: 1px solid var(--line); }
+.related-grid h3 { font-size: 28px; margin-bottom: 12px; overflow-wrap: anywhere; }
 .related-grid p { font-size: 12px; color: var(--muted); line-height: 1.9; }
 .comments { margin-top: 30px; }
 .comments h2 { font-size: 28px; }
@@ -452,7 +453,7 @@ kbd { font: 10px monospace; border: 1px solid var(--line); padding: 2px 5px; bor
 
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .header-inner, .hero, .page-intro, .author-card, .margin-note,
-  .article, .about-layout > .prose, .site-footer, #toast {
+  .about-layout > .prose, .site-footer, #toast {
     -webkit-backdrop-filter: blur(18px) saturate(145%);
     backdrop-filter: blur(18px) saturate(145%);
   }
@@ -471,8 +472,7 @@ kbd { font: 10px monospace; border: 1px solid var(--line); padding: 2px 5px; bor
   .hero-art { height: 275px; }
   .hero-art > span { font-size: 12px; }
   .site-footer { margin-left: 40px; margin-right: 40px; }
-  .article-layout { grid-template-columns: minmax(0, 1fr) 100px; gap: 24px; }
-  .article { padding: 30px 29px 10px; }
+  .article-layout { grid-template-columns: minmax(0, 1fr) 100px; gap: 40px; }
   .post-card h3 { font-size: 26px; }
   .card-cover { width: 104px; }
 }
@@ -516,11 +516,10 @@ kbd { font: 10px monospace; border: 1px solid var(--line); padding: 2px 5px; bor
   .about-layout .prose p { font-size: 15px; }
   .article-layout { grid-template-columns: 1fr; padding-top: 24px; }
   .article-margin { display: none; }
-  .article { padding: 30px 28px 10px; border-radius: 25px; }
+  .article { padding: 14px 0 0; }
   .article h1 { font-size: 45px; letter-spacing: -1.5px; }
-  .related-grid { gap: 14px; }
-  .related-grid > article { padding: 19px; }
-  .related-grid h3 { font-size: 22px; }
+  .related-grid > article { padding: 23px 0; }
+  .related-grid h3 { font-size: 27px; }
   .prose { font-size: calc(var(--reading) * .96); }
 }
 @media (max-width: 480px) {
@@ -549,7 +548,7 @@ kbd { font: 10px monospace; border: 1px solid var(--line); padding: 2px 5px; bor
   .category-tabs a { padding: 8px 11px; }
   .filter-row { column-gap: 12px; row-gap: 6px; }
   .post-index { font-size: 9px; width: 12px; }
-  .post-card { gap: 12px; padding: 21px 17px 20px; border-radius: 21px; }
+  .post-card { gap: 12px; padding: 25px 0; }
   .post-card h3 { font-size: 25px; }
   .post-card p { font-size: 12px; line-height: 1.85; }
   .post-meta { font-size: 9px; gap: 7px; }
@@ -579,14 +578,14 @@ kbd { font: 10px monospace; border: 1px solid var(--line); padding: 2px 5px; bor
   .page-intro h1 { font-size: 39px; letter-spacing: -1.5px; }
   .page-intro .eyebrow { font-size: 8px; }
   .intro-desc { font-size: 15px; }
-  .archive > section { padding: 21px 19px 3px; }
+  .archive > section { padding-top: 10px; }
   .archive section > a { gap: 12px; }
   .archive a > span:not(:last-child) { font-size: 19px; }
   .archive small { display: none; }
   .about-layout { grid-template-columns: 1fr; gap: 24px; }
   .about-layout > img { max-height: 390px; width: 100%; object-position: 50% 40%; }
   .about-layout .prose h2 { font-size: 37px; }
-  .article { padding: 26px 22px 8px; border-radius: 24px; }
+  .article { padding-top: 10px; }
   .article h1 { font-size: 37px; line-height: 1.2; }
   .article-byline { gap: 7px; font-size: 10px; }
   .reading-actions { margin-left: 0; width: 100%; padding-top: 7px; }
@@ -596,16 +595,13 @@ kbd { font: 10px monospace; border: 1px solid var(--line); padding: 2px 5px; bor
   .prose pre { padding: 15px; font-size: 12px; }
   .article-end { flex-wrap: wrap; gap: 12px; }
   .article-end button { margin: 10px 0 0 40px; }
-  .related-grid { grid-template-columns: 1fr; }
-  .related-grid > article { padding: 23px; }
-  .related-grid article + article { border: 1px solid var(--line); }
+  .related-grid > article { padding: 23px 0; }
   .related-grid h3 { font-size: 26px; margin-bottom: 10px; }
   .related-grid p { margin-bottom: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .post-card:hover { transform: none; }
 }
 @media print {
   :root, [data-theme=light], [data-theme=dark] {

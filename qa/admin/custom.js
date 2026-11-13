@@ -115,7 +115,14 @@ window.CMS_MANUAL_INIT = true;
       const id = data.get('id') || crypto.randomUUID();
       const title = String(data.get('title') || '').trim();
       if (!title) throw new Error('Yazınıza bir başlık ekleyin.');
-      const slug = slugify(data.get('slug') || title) || `yazi-${id}`;
+      const givenSlug = String(data.get('slug') || '').trim();
+      if (givenSlug && (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(givenSlug) || givenSlug.length > 160)) {
+        throw new Error('Yazı adresinde yalnızca küçük Latin harfleri, rakam ve tire kullanın; adres en fazla 160 karakter olabilir.');
+      }
+      // The filename and public URL are separate. A short stable ID suffix makes
+      // automatically generated public URLs distinct even when titles repeat.
+      const shortId = String(id).replace(/[^a-z0-9]/gi, '').slice(-8).toLowerCase();
+      const slug = givenSlug || `${slugify(title) || 'yazi'}-${shortId}`;
       if (String(data.get('body') || '').length > 2_000_000) throw new Error('Yazı metni en fazla 2 milyon karakter olabilir.');
       // Do not trim, reformat, normalize or rehash the original article body/dates.
       data = data.set('id', id).set('title', title).set('slug', slug).set('updated_at', now);

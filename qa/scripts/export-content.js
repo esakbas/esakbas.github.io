@@ -6,18 +6,21 @@ import { stringify, parse } from 'yaml';
 
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 export function slugify(text) {
-  return text.toLocaleLowerCase('tr').replace(/[çğıöşü]/g, char => ({ ç:'c', ğ:'g', ı:'i', ö:'o', ş:'s', ü:'u' }[char])).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 100);
+  return text.toLocaleLowerCase('tr').replace(/[çğıöşü]/g, char => ({ ç:'c', ğ:'g', ı:'i', ö:'o', ş:'s', ü:'u' }[char])).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 100).replace(/-$/, '');
 }
 
 /** The returned bodyBytes is a slice of the original bytes; it is never trimmed. */
 export function parseContentFile(value) {
   const bytes = Buffer.isBuffer(value) ? value : Buffer.from(value, 'utf8');
-  if (!bytes.subarray(0, 4).equals(Buffer.from('---\n'))) throw new Error('Markdown dosyası YAML önbilgisiyle başlamalı.');
-  const end = bytes.indexOf(Buffer.from('\n---\n'), 4);
+  const start = bytes.subarray(0, 5).equals(Buffer.from('---\r\n')) ? 5 : bytes.subarray(0, 4).equals(Buffer.from('---\n')) ? 4 : 0;
+  if (!start) throw new Error('Markdown dosyası YAML önbilgisiyle başlamalı.');
+  const boundaries = ['\n---\n', '\n---\r\n'].map(value => ({ delimiter: Buffer.from(value), end: bytes.indexOf(Buffer.from(value), start) })).filter(value => value.end >= 0).sort((a, b) => a.end - b.end);
+  const { end = -1, delimiter } = boundaries[0] || {};
   if (end < 0) throw new Error('Markdown önbilgi kapanışı bulunamadı.');
-  const metadata = parse(bytes.subarray(4, end).toString('utf8'));
+  const metadataEnd = bytes[end - 1] === 13 ? end - 1 : end;
+  const metadata = parse(bytes.subarray(start, metadataEnd).toString('utf8'));
   if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) throw new Error('Markdown önbilgisi geçerli bir nesne olmalı.');
-  const bodyBytes = bytes.subarray(end + 5);
+  const bodyBytes = bytes.subarray(end + delimiter.length);
   return { metadata, bodyBytes, body: bodyBytes.toString('utf8') };
 }
 

@@ -1,7 +1,7 @@
 import http from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { resolve, join, sep } from 'node:path';
-const mime = { '.html':'text/html; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.css':'text/css; charset=utf-8', '.json':'application/json', '.yml':'text/yaml; charset=utf-8', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp', '.svg':'image/svg+xml', '.xml':'application/xml', '.txt':'text/plain', '.wasm':'application/wasm' };
+const mime = { '.html':'text/html; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.css':'text/css; charset=utf-8', '.json':'application/json', '.yml':'text/yaml; charset=utf-8', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp', '.svg':'image/svg+xml', '.ico':'image/x-icon', '.xml':'application/xml', '.txt':'text/plain', '.wasm':'application/wasm' };
 export function serveStatic({ rootDir = '_site', port = 3000, host = '127.0.0.1' } = {}) {
   const root = resolve(rootDir);
   async function headersFor(path) {
