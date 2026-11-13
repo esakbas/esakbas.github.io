@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import sharp from 'sharp';
@@ -9,7 +9,8 @@ import { renderMarkdown } from '../src/markdown.js';
 import { loadPosts } from '../src/content.js';
 import { buildIcons } from '../src/icons.js';
 import { stringify } from 'yaml';
-import { parseContentFile, slugify } from '../scripts/export-content.js';
+import { exportContent, parseContentFile, slugify } from '../scripts/export-content.js';
+import { buildSite } from '../scripts/build.js';
 
 const article = overrides => ({
   id: 'year-boundary', slug: 'yil-siniri', title: 'Yılın ilk notu',
@@ -115,4 +116,24 @@ test('the navy favicon has content-versioned SVG and valid PNG, Apple and ICO fa
   assert.ok(page.includes(`href="${icons.svg}"`));
   assert.ok(page.includes(`href="${icons.png}"`));
   assert.ok(page.includes(`href="${icons.apple}"`));
+});
+
+test('the unfiltered search page has a real later page while all search pages remain outside the sitemap', async t => {
+  const root = await mkdtemp(join(tmpdir(), 'hindiba-search-pages-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const contentDir = join(root, 'posts'), mediaDir = join(root, 'media'), outputDir = join(root, 'site');
+  await mkdir(mediaDir);
+  exportContent({ sourceDir: resolve(import.meta.dirname, '../content/source-backup'), outputDir: contentDir });
+  await buildSite({ contentDir, mediaDir, outputDir, branch: 'main', siteUrl: 'https://example.invalid' });
+  const first = await readFile(join(outputDir, 'ara/index.html'), 'utf8');
+  const second = await readFile(join(outputDir, 'ara/sayfa/2/index.html'), 'utf8');
+  assert.match(first, /href="\/ara\/sayfa\/2\/"/);
+  assert.equal((second.match(/class="post-card"/g) || []).length, 3);
+  assert.match(second, /rel="canonical" href="https:\/\/example.invalid\/ara\/sayfa\/2\/"/);
+  assert.match(second, /name="robots" content="noindex,nofollow"/);
+  assert.match(first, /name="yil" aria-label="Yıl"/);
+  assert.match(first, /name="sira" aria-label="Sıralama"/);
+  assert.doesNotMatch(await readFile(join(outputDir, 'sitemap.xml'), 'utf8'), /<loc>[^<]*\/ara\//);
+  const icon = first.match(/href="([^"]+)" sizes="any" type="image\/svg\+xml"/)[1];
+  assert.ok((await readFile(join(outputDir, 'admin/index.html'), 'utf8')).includes(`href="${icon}"`));
 });
