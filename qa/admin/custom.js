@@ -35,7 +35,10 @@ window.CMS_MANUAL_INIT = true;
       focus() { this.control?.focus(); },
       render() { return window.h(native.control, { ...this.props, getAsset: mediaResolver(this.props.getAsset), ref: control => { this.control = control; } }); }
     });
-    const MarkdownPreview = props => window.h(native.preview, { ...props, getAsset: mediaResolver(props.getAsset) });
+    // A saved article loads its private images asynchronously. Give the native
+    // Markdown preview a fresh resolver on each render so its memoized output
+    // cannot keep the temporary empty-image placeholder after media is ready.
+    const MarkdownPreview = props => window.h(native.preview, { ...props, getAsset: (value, field) => mediaAsset(props.getAsset, value, field) });
     CMS.registerWidget('markdown', RawFirstMarkdown, MarkdownPreview, native.schema);
   }
   function registerImages(CMS) {
