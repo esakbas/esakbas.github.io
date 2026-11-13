@@ -128,7 +128,7 @@ collections:
         widget: list
         required: false
         default: []
-        hint: 'Birden fazla etiket ekleyebilirsiniz.'
+        hint: 'Birden fazla etiket ekleyebilirsiniz. Küçük Latin harfleri, rakam ve tire kullanın; örneğin van-notlari.'
       - label: Yazar
         name: author
         widget: string

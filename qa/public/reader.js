@@ -9,7 +9,7 @@ const theme = $('#theme-toggle');
 function setTheme(value) {
  const selected=value==='light'?'light':'dark';
  document.documentElement.dataset.theme=selected;
- $('meta[name="theme-color"]')?.setAttribute('content',selected==='light'?'#e6eaff':'#070a1a');
+ $('meta[name="theme-color"]')?.setAttribute('content',selected==='light'?'#f1f2f6':'#080b14');
  theme?.setAttribute('aria-label',selected==='dark'?'Açık temaya geç':'Koyu temaya geç');
 }
 setTheme(stored('theme','dark'));

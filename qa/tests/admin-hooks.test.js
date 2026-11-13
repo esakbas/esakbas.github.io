@@ -52,7 +52,9 @@ async function hookFixture() {
   await domReady();
   assert.equal(startup.hidden, true);
   assert.equal(typeof save, 'function', 'the production bootstrap must register the preSave hook');
-  return async (data, metadata = {}) => save({ entry: new Fields({ collection: 'posts', ...metadata, data: data instanceof Fields ? data : new Fields(data) }) });
+  const run = async (data, metadata = {}) => save({ entry: new Fields({ collection: 'posts', ...metadata, data: data instanceof Fields ? data : new Fields(data) }) });
+  run.widgets = widgets;
+  return run;
 }
 function freshPost(overrides = {}) {
   return { title: 'İçimdeki Şiir', body: 'Bir paragraf.\n', created_at: '2026-11-13T08:42:15+03:00', ...overrides };
@@ -131,6 +133,24 @@ test('invalid manual addresses fail clearly instead of silently changing an inte
   const save = await hookFixture();
   for (const slug of ['Türkçe Adres', 'buyuk-Harf', 'iki--tire', '/yazi/adres', 'a'.repeat(161)]) {
     await assert.rejects(save(freshPost({ slug })), /Yazı adresinde yalnızca küçük Latin harfleri/);
+  }
+});
+
+test('unsafe categories and tags fail before a CMS save can break the public build', async () => {
+  const save = await hookFixture();
+  await assert.rejects(save(freshPost({ category: '../private' })), /geçerli bir kategori/);
+  for (const tags of [['..'], ['van/notlari'], ['Büyük Harf'], ['a'.repeat(81)]]) {
+    await assert.rejects(save(freshPost({ category: 'gunluk', tags })), /Etiketlerde küçük Latin/);
+  }
+  const valid = await save(freshPost({ category: 'gunluk', tags: ['van-notlari', '2026'] }));
+  assert.deepEqual(valid.get('tags'), ['van-notlari', '2026']);
+});
+
+test('image and Markdown controls tolerate Decap mounting before its media resolver exists', async () => {
+  const save = await hookFixture();
+  for (const name of ['image', 'markdown']) {
+    const control = save.widgets.get(name).control;
+    assert.doesNotThrow(() => control.render.call({ props: { value: '/uploads/erken.png' }, control: null }));
   }
 });
 

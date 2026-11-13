@@ -110,7 +110,7 @@ test('the navy favicon has content-versioned SVG and valid PNG, Apple and ICO fa
   assert.equal(ico.readUInt32LE(14), small.length);
   assert.deepEqual(ico.subarray(ico.readUInt32LE(18)), small);
   const next = join(root, 'changed.svg');
-  await writeFile(next, (await readFile(source, 'utf8')).replace('#c7d2fe', '#c4b5fd'));
+  await writeFile(next, (await readFile(source, 'utf8')).replace('#d7dcff', '#c4b5fd'));
   assert.notEqual((await buildIcons(next, root)).svg, icons.svg);
   const page = renderPage({ icons });
   assert.ok(page.includes(`href="${icons.svg}"`));

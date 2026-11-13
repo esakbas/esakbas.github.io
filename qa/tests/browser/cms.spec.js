@@ -109,6 +109,11 @@ test('the unmodified CMS boots the Turkish GitHub login with the production admi
   expect(await page.evaluate(() => window.__memoryCmsActive || false)).toBe(false);
   await assertNoOverflow(page);
   await page.screenshot({ path: testInfo.outputPath('github-login.png'), fullPage: true });
+  await page.evaluate(() => window.dispatchEvent(new Event('unhandledrejection')));
+  await expect(page.locator('#cms-runtime-error')).toContainText('Düzenleyici beklenmedik biçimde durdu.');
+  await page.getByRole('button', { name: 'Paneli yeniden yükle', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'GitHub ile Giriş', exact: true })).toBeVisible();
+  await expect(page.locator('#cms-runtime-error')).toHaveCount(0);
   await assertHealthy(page, errors);
 });
 

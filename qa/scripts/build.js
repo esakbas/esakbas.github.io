@@ -101,12 +101,12 @@ export async function buildSite(options = {}) {
     }
     await writeFile(join(staging, '_redirects'), redirects.join('\n') + (redirects.length ? '\n' : ''));
     const generated = [];
-    const render = async (route, pathname, query = {}, post = null) => {
+    const render = async (route, pathname, query = {}, post = null, forceNoindex = false) => {
       const canonical = siteUrl + route;
-      let html = renderPage({ pathname, query, posts, post, comments: [], siteUrl, imageMap: mapping, icons });
+      let html = renderPage({ pathname, query, posts, post, comments: [], siteUrl, imageMap: mapping, icons, forceNoindex });
       html = staticHtml(html, siteUrl).replace(/(<link rel="canonical" href=")[^"]+("\s*\/?>)/, `$1${canonical}$2`)
         .replace(/(<meta property="og:url" content=")[^"]+("\s*\/?>)/, `$1${canonical}$2`);
-      await outputPage(staging, route, html);generated.push({ path: route, updated: post?.updated_at });
+      await outputPage(staging, route, html);generated.push({ path: route, updated: post?.updated_at, noindex: forceNoindex });
     };
     await render('/', '/');
     for (let page = 2; page <= Math.ceil(posts.length / 6); page++) await render(`/sayfa/${page}/`, '/', { sayfa: String(page) });
@@ -118,7 +118,7 @@ export async function buildSite(options = {}) {
       for (const value of values) {
         const route = `/${kind}/${encodeURIComponent(value)}/`, pathname = route.replace(/\/$/, '');
         const matching = posts.filter(p => kind === 'kategori' ? p.category === value || p.tags.includes(value) : p.tags.includes(value));
-        await render(route, pathname);
+        await render(route, pathname, {}, null, matching.length === 0);
         for (let page = 2; page <= Math.ceil(matching.length / 6); page++) await render(`${route}sayfa/${page}/`, pathname, { sayfa: String(page) });
       }
     }
@@ -138,7 +138,7 @@ export async function buildSite(options = {}) {
     await writeFile(adminConfigPath, configText);await writeFile(join(staging, 'admin/config.json'), JSON.stringify(config));
     const rss = `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Hindiba | Eşref Akbaş</title><link>${escape(siteUrl)}</link><description>Edebiyat, şiir ve gündelik hayattan küçük notlar.</description><language>tr</language>${posts.map(p => `<item><title>${escape(p.title)}</title><link>${escape(siteUrl)}/yazi/${escape(p.slug)}/</link><guid isPermaLink="false">hindiba:${escape(p.id)}</guid><pubDate>${escape(new Date(p.created_at).toUTCString())}</pubDate><description>${escape(p.excerpt || p.body.slice(0, 300))}</description><dc:creator>${escape(p.author)}</dc:creator></item>`).join('')}</channel></rss>`;
     await writeFile(join(staging, 'rss.xml'), rss);
-    await writeFile(join(staging, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${generated.filter(p => !p.path.startsWith('/ara/')).map(p => `<url><loc>${escape(siteUrl + p.path)}</loc>${p.updated ? `<lastmod>${escape(p.updated)}</lastmod>` : ''}</url>`).join('')}</urlset>`);
+    await writeFile(join(staging, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${generated.filter(p => !p.path.startsWith('/ara/') && !p.noindex).map(p => `<url><loc>${escape(siteUrl + p.path)}</loc>${p.updated ? `<lastmod>${escape(new Date(p.updated).toISOString())}</lastmod>` : ''}</url>`).join('')}</urlset>`);
     await writeFile(join(staging, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /auth\nDisallow: /callback\nSitemap: ${siteUrl}/sitemap.xml\n`);
     await writeFile(join(staging, '_routes.json'), JSON.stringify({ version: 1, include: ['/auth', '/callback'], exclude: [] }));
     await writeFile(join(staging, '_headers'), `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n/admin/*\n  Cache-Control: no-store\n  X-Robots-Tag: noindex, nofollow\n  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data: blob:; connect-src 'self' blob: https://api.github.com https://github.com https://*.githubusercontent.com; font-src 'self' data:; worker-src 'self' blob:; frame-src 'self' blob:; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://github.com\n/vendor/*\n  Cache-Control: public, max-age=31536000, immutable\n`);

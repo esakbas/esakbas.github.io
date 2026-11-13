@@ -5,9 +5,15 @@ window.CMS_MANUAL_INIT = true;
 (() => {
   // Root-relative public URLs bypass Decap's private-media resolver. Pass a
   // relative filename to that resolver while keeping the saved URL unchanged.
-  const mediaAsset = (getAsset, value, field) => getAsset(typeof value === 'string' && value.startsWith('/uploads/') ? value.slice('/uploads/'.length) : value, field);
+  const mediaFallback = value => value || '';
+  const mediaAsset = (getAsset, value, field) => {
+    const source = typeof value === 'string' && value.startsWith('/uploads/') ? value.slice('/uploads/'.length) : value;
+    if (typeof getAsset !== 'function') return mediaFallback(source);
+    try { return getAsset(source, field); } catch { return mediaFallback(source); }
+  };
   const mediaResolvers = new WeakMap();
   const mediaResolver = getAsset => {
+    if (typeof getAsset !== 'function') return mediaFallback;
     if (!mediaResolvers.has(getAsset)) mediaResolvers.set(getAsset, (value, field) => mediaAsset(getAsset, value, field));
     return mediaResolvers.get(getAsset);
   };
@@ -24,6 +30,22 @@ window.CMS_MANUAL_INIT = true;
     const detail = document.createElement('p'); detail.textContent = message;
     const back = document.createElement('a'); back.href = '/'; back.textContent = 'Bloga dön';
     status.append(title, detail, back); status.hidden = false; status.setAttribute('role', 'alert');
+  }
+  function showRuntimeError() {
+    if (document.getElementById('cms-runtime-error')) return;
+    const box = document.createElement('section'); box.id = 'cms-runtime-error'; box.setAttribute('role', 'alert');
+    const title = document.createElement('strong'); title.textContent = 'Düzenleyici beklenmedik biçimde durdu.';
+    const detail = document.createElement('span'); detail.textContent = 'Kaydedilmemiş değişiklik varsa önce metni kopyalayın; ardından paneli yeniden yükleyin.';
+    const reload = document.createElement('button'); reload.type = 'button'; reload.textContent = 'Paneli yeniden yükle'; reload.addEventListener('click', () => location.reload());
+    const logout = document.createElement('button'); logout.type = 'button'; logout.textContent = 'Oturumu temizle'; logout.addEventListener('click', () => {
+      try { localStorage.removeItem('decap-cms-user'); } catch {}
+      location.assign('/admin/');
+    });
+    box.append(title, detail, reload, logout); document.body.append(box);
+  }
+  function guardRuntimeErrors() {
+    window.addEventListener?.('error', event => { if (event.error) showRuntimeError(); });
+    window.addEventListener?.('unhandledrejection', () => showRuntimeError());
   }
   function registerMarkdown(CMS) {
     const native = CMS.getWidget('markdown');
@@ -86,7 +108,10 @@ window.CMS_MANUAL_INIT = true;
     CMS.registerPreviewStyle('/admin/custom.css');
     CMS.registerPreviewTemplate('posts', window.createClass({
       displayName: 'HindibaPostPreview',
+      getInitialState() { return { failed: false }; },
+      componentDidCatch() { this.setState({ failed: true }); },
       render() {
+        if (this.state.failed) return window.h('p', { className: 'preview-error', role: 'alert' }, 'Önizleme şu anda gösterilemiyor; yazınızı düzenlemeye devam edebilirsiniz.');
         const { entry, getAsset, widgetFor } = this.props;
         const data = entry.get('data');
         const cover = data.get('cover');
@@ -119,13 +144,20 @@ window.CMS_MANUAL_INIT = true;
       if (givenSlug && (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(givenSlug) || givenSlug.length > 160)) {
         throw new Error('Yazı adresinde yalnızca küçük Latin harfleri, rakam ve tire kullanın; adres en fazla 160 karakter olabilir.');
       }
+      const category = String(data.get('category') || 'gunluk');
+      if (!Object.hasOwn(categoryNames, category)) throw new Error('Listeden geçerli bir kategori seçin.');
+      const rawTags = data.get('tags');
+      const tagValues = rawTags?.toJS ? rawTags.toJS() : (rawTags || []);
+      if (!Array.isArray(tagValues) || tagValues.some(tag => typeof tag !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(tag) || tag.length > 80)) {
+        throw new Error('Etiketlerde küçük Latin harfleri, rakam ve tire kullanın; örneğin van-notlari.');
+      }
       // The filename and public URL are separate. A short stable ID suffix makes
       // automatically generated public URLs distinct even when titles repeat.
       const shortId = String(id).replace(/[^a-z0-9]/gi, '').slice(-8).toLowerCase();
       const slug = givenSlug || `${slugify(title) || 'yazi'}-${shortId}`;
       if (String(data.get('body') || '').length > 2_000_000) throw new Error('Yazı metni en fazla 2 milyon karakter olabilir.');
       // Do not trim, reformat, normalize or rehash the original article body/dates.
-      data = data.set('id', id).set('title', title).set('slug', slug).set('updated_at', now);
+      data = data.set('id', id).set('title', title).set('slug', slug).set('category', category).set('updated_at', now);
       if (!data.get('created_at')) data = data.set('created_at', now);
       if (!data.get('published_at')) data = data.set('published_at', data.get('created_at'));
       if (!data.get('status')) data = data.set('status', 'published');
@@ -134,6 +166,7 @@ window.CMS_MANUAL_INIT = true;
   }
   async function initialize() {
     try {
+      guardRuntimeErrors();
       if (!window.CMS || !window.h || !window.createClass) throw new Error('Editör dosyaları yüklenemedi. Sayfayı yenileyip yeniden deneyin.');
       const response = await fetch('/admin/config.json', { cache: 'no-store', credentials: 'same-origin' });
       if (!response.ok) throw new Error('Yönetim yapılandırması bulunamadı. Site derlemesini kontrol edin.');

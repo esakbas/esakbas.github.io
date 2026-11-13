@@ -150,6 +150,23 @@ test('draft article text, its referenced private image and every unreferenced im
   assert.equal((readFileSync(join(f.outputDir, 'rss.xml'), 'utf8').match(/<item>/g) || []).length, 9);
 });
 
+test('unsafe taxonomy values fail before output changes and empty categories stay outside search indexing', async t => {
+  const f = fixture(t);
+  await buildSite({ ...f, branch: 'main' });
+  const safe = snapshot(f.outputDir);
+  const source = addPost(f, { id: 'unsafe-taxonomy', slug: 'unsafe-taxonomy' });
+  const parsed = parseContentFile(readFileSync(source));
+  parsed.metadata.tags = ['..'];
+  writeFileSync(source, Buffer.concat([Buffer.from(`---\n${stringify(parsed.metadata, { lineWidth: 0 })}---\n`), parsed.bodyBytes]));
+  await assert.rejects(buildSite({ ...f, branch: 'main' }), /Yazı etiketleri/);
+  assert.deepEqual(snapshot(f.outputDir), safe, 'a rejected taxonomy must preserve the last safe build');
+  rmSync(source);
+  await buildSite({ ...f, branch: 'main' });
+  const emptyCategory = readFileSync(join(f.outputDir, 'kategori/siir/index.html'), 'utf8');
+  assert.match(emptyCategory, /name="robots" content="noindex,nofollow"/);
+  assert.doesNotMatch(readFileSync(join(f.outputDir, 'sitemap.xml'), 'utf8'), /\/kategori\/siir\//);
+});
+
 test('non-main builds expose only noindex guard documents even if a draft branch labels its secret article published', async t => {
   const f = fixture(t), marker = 'UNPUBLISHED-BRANCH-SECRET-e32f4a', photo = 'unpublished-branch-image.png';
   addPost(f, { id: 'branch-private', slug: 'branch-private', status: 'published', title: marker, body: marker + `\n\n![Özel](/uploads/${photo})`, cover: '/uploads/' + photo });
