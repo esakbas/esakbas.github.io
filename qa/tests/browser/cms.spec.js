@@ -35,9 +35,15 @@ async function editorData(page) {
 async function typeMarkdown(control, value) {
   // Real keyboard input exercises Slate on desktop and Android emulation;
   // setting a contenteditable value directly bypasses its mobile input model.
-  await control.click();
-  await control.press('ControlOrMeta+A');
-  await control.press('Backspace');
+  let cleared = false;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await control.click();
+    await control.press('ControlOrMeta+A');
+    await control.press('Backspace');
+    cleared = (await control.innerText()).replace(/\u200b/g, '').trim() === '';
+    if (cleared) break;
+  }
+  expect(cleared, 'Slate Markdown editor should be empty before typing replacement content').toBe(true);
   const lines = value.split('\n');
   for (let index = 0; index < lines.length; index++) {
     if (index) await control.press('Enter');

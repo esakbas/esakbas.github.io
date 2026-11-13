@@ -61,12 +61,20 @@ test('readers can page through every original article and refresh a physical lat
 
   const firstCard = page.locator('.post-card').first();
   const firstArticleHref = await firstCard.locator('h3 a').getAttribute('href');
+  expect(await page.locator('.site-header').evaluate(node => getComputedStyle(node).position)).toBe('relative');
+  expect(Number.parseFloat(await firstCard.evaluate(node => getComputedStyle(node).borderTopLeftRadius))).toBeLessThanOrEqual(12);
   const restingBorder = await firstCard.evaluate(node => getComputedStyle(node).borderColor);
   await firstCard.locator('h3 a').focus();
   await expect(firstCard.locator('h3 a')).toBeFocused();
-  expect(await firstCard.evaluate(node => getComputedStyle(node).borderColor)).not.toBe(restingBorder);
+  await expect.poll(() => firstCard.evaluate(node => getComputedStyle(node).borderColor)).not.toBe(restingBorder);
   await firstCard.locator('h3 a').press('Enter');
   await expect(page).toHaveURL(new RegExp(firstArticleHref.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$'));
+  const articleBox = await page.locator('.article').boundingBox();
+  const viewport = page.viewportSize();
+  expect(articleBox.width).toBeLessThanOrEqual(820);
+  if (viewport.width > 760) {
+    expect(Math.abs(articleBox.x + articleBox.width / 2 - viewport.width / 2)).toBeLessThanOrEqual(2);
+  }
   await page.goBack();
   await expect(titles(page)).toHaveCount(6);
   const cardBox = await firstCard.boundingBox();
