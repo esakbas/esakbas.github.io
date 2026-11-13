@@ -9,7 +9,6 @@ function setTheme(value) {
  document.documentElement.dataset.theme=selected;
  $('meta[name="theme-color"]')?.setAttribute('content',selected==='light'?'#e6eaff':'#070a1a');
  theme?.setAttribute('aria-label',selected==='dark'?'Açık temaya geç':'Koyu temaya geç');
- theme?.setAttribute('aria-pressed',String(selected==='dark'));
 }
 setTheme(stored('theme','dark'));
 theme?.addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';save('theme',next);setTheme(next);});
