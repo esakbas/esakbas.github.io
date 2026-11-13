@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { createHash, randomUUID } from 'node:crypto';
 import sharp from 'sharp';
 import { parseContentFile } from '../../scripts/export-content.js';
+import { stringify } from 'yaml';
 
 const realTitle = 'Yine bir Van akşamı, yine sonbahar…';
 const privateMarker = 'HINDIBA_CI_ONLY_PRIVATE_DRAFT_40d9857d';
@@ -136,6 +137,70 @@ test('an original published article opens immediately after login with its compl
   await assertHealthy(page, errors);
 });
 
+test('the unchanged GitHub backend opens saved text and photo articles using only intercepted read requests', async ({ page, request }, testInfo) => {
+  const errors = await monitor(page);
+  const seed = await (await request.get('/__fixtures/repo.json')).json();
+  const posts = { ...seed.content.posts };
+  const photo = await sharp({ create: { width: 640, height: 360, channels: 3, background: '#63816a' } }).png().toBuffer();
+  const photoName = '20261113000000-existing-photo.md';
+  const photoMeta = { id: 'offline-existing-photo', title: 'Kaydedilmiş fotoğraflı yazı', slug: 'existing-photo', author: 'Offline fixture', status: 'published', category: 'gunluk', tags: [], cover: '/uploads/existing-photo.png', cover_alt: 'Bellekte oluşturulmuş fotoğraf', created_at: '2026-11-12T12:00:00Z', updated_at: '2026-11-12T12:00:00Z', published_at: '2026-11-12T12:00:00Z' };
+  const photoBody = 'Bu yazı yalnızca ağ sınırı taklit edilen tarayıcı testindedir.\n\n![Bir fotoğraf](/uploads/existing-photo.png "Fotoğraf açıklaması")\n';
+  posts[photoName] = { path: `content/posts/${photoName}`, content: `---\n${stringify(photoMeta)}---\n${photoBody}` };
+  const blobs = new Map();
+  const blob = bytes => {
+    const sha = createHash('sha1').update(bytes).digest('hex');
+    blobs.set(sha, { sha, size: bytes.length, encoding: 'base64', content: bytes.toString('base64') });
+    return sha;
+  };
+  const postTree = Object.entries(posts).map(([name, file]) => ({ path: name, type: 'blob', mode: '100644', sha: blob(Buffer.from(file.content)), size: Buffer.byteLength(file.content) }));
+  const mediaTree = [{ path: 'existing-photo.png', type: 'blob', mode: '100644', sha: blob(photo), size: photo.length }];
+  const fakeUser = { id: 1, login: 'esakbas', name: 'Offline browser fixture', email: 'fixture@example.invalid', avatar_url: '' };
+  const fakeRepo = { id: 2, name: 'hindiba-blog', full_name: 'esakbas/hindiba-blog', private: true, owner: fakeUser, default_branch: 'main', permissions: { push: true, admin: true } };
+  const requests = [], unexpected = [];
+  await page.route('https://api.github.com/**', async route => {
+    const req = route.request(), url = new URL(req.url()), path = decodeURIComponent(url.pathname);
+    const headers = { 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Methods': 'GET, OPTIONS', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, Cache-Control, X-GitHub-Api-Version, If-None-Match', 'Content-Type': 'application/json' };
+    if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers, body: '' });
+    requests.push({ method: req.method(), path });
+    if (req.method() !== 'GET') { unexpected.push(`${req.method()} ${path}`);return route.abort('blockedbyclient'); }
+    let body;
+    const repo = '/repos/esakbas/hindiba-blog';
+    if (path === '/user' || path === '/users/esakbas') body = fakeUser;
+    else if (path === repo) body = fakeRepo;
+    else if (path === `${repo}/git/trees/main:content/posts`) body = { sha: 'posts-tree', tree: postTree, truncated: false };
+    else if (path === `${repo}/git/trees/main:content/media`) body = { sha: 'media-tree', tree: mediaTree, truncated: false };
+    else if (path.startsWith(`${repo}/git/blobs/`)) body = blobs.get(path.split('/').at(-1));
+    else if (path === `${repo}/commits`) body = [{ sha: 'head-sha', commit: { author: { name: 'Offline fixture', date: '2026-11-12T12:00:00Z' } } }];
+    else if (path === `${repo}/pulls` || path === `${repo}/issues`) body = [];
+    else if (path.endsWith('/status')) body = { state: 'success', statuses: [] };
+    if (body === undefined) { unexpected.push(`${req.method()} ${path}`);return route.fulfill({ status: 404, headers, body: JSON.stringify({ message: 'Unmatched offline fixture request' }) }); }
+    return route.fulfill({ status: 200, headers, body: JSON.stringify(body) });
+  });
+  await page.route('https://www.githubstatus.com/**', route => route.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ components: [] }) }));
+  await page.addInitScript(() => {
+    localStorage.setItem('decap-cms-user', JSON.stringify({ backendName: 'github', token: 'gho_offline_browser_fixture_not_real', login: 'esakbas', name: 'Offline browser fixture' }));
+  });
+  await page.goto('/admin/');
+  await expect(page.locator('a[href="#/collections/posts/entries/github-6210660748"]')).toBeVisible();
+  expect(await page.evaluate(() => window.__memoryCmsActive || false)).toBe(false);
+  await page.locator('a[href="#/collections/posts/entries/github-6210660748"]').click();
+  const expected = parseContentFile(posts['github-6210660748.md'].content);
+  await expect(page.getByLabel(/^Başlık/)).toHaveValue(expected.metadata.title);
+  await expect(page.locator('.cms-editor-raw [data-slate-editor="true"]').first()).toBeVisible();
+  await expect.poll(async () => (await editorData(page))?.body).toBe(expected.body);
+  await page.evaluate(() => { location.hash = '#/collections/posts'; });
+  await page.locator(`a[href="#/collections/posts/entries/${photoName.slice(0, -3)}"]`).click();
+  await expect(page.getByLabel(/^Başlık/)).toHaveValue(photoMeta.title);
+  await expect(page.locator('.cms-editor-raw [data-slate-editor="true"]').first()).toBeVisible();
+  await expect.poll(async () => (await editorData(page))?.body).toBe(photoBody);
+  await expect.poll(() => page.frameLocator('iframe').locator('.hindiba-preview img').evaluateAll(images => images.map(img => img.naturalWidth))).toEqual([640, 640]);
+  expect(unexpected).toEqual([]);
+  expect(requests.every(req => req.method === 'GET')).toBe(true);
+  await assertNoOverflow(page);
+  await page.screenshot({ path: testInfo.outputPath('native-github-existing-editor.png'), fullPage: true });
+  await assertHealthy(page, errors);
+});
+
 test('the native CMS edits, previews, uploads original bytes and runs draft/publish/unpublish in its isolated memory backend', async ({ page, request }, testInfo) => {
   const errors = await monitor(page);
   const seed = await (await request.get('/__fixtures/repo.json')).json();
@@ -260,14 +325,15 @@ test('the native CMS edits, previews, uploads original bytes and runs draft/publ
   await page.getByText('Şimdi yayımla', { exact: true }).click();
   await expect.poll(() => publishedRecord(page, title)).toContain(title);
   await expect.poll(() => draftRecord(page, title)).toBeNull();
+  const savedPublished = parseContentFile(await publishedRecord(page, title));
   // Leave the editor and reopen the published file through its collection
   // link, forcing a fresh existing-entry/media load instead of reusing a draft.
   await page.evaluate(() => { window.location.hash = '#/collections/posts'; });
   await page.locator('a[href^="#/collections/posts/entries/"]').filter({ hasText: title }).click();
   await expect(page.getByLabel(/^Başlık/)).toHaveValue(title);
   await expect(page.locator('.cms-editor-raw [data-slate-editor="true"]').first()).toBeVisible();
-  await expect.poll(async () => (await editorData(page))?.body).toBe(markdown);
-  expect((await editorData(page)).cover).toBe(cover);
+  await expect.poll(async () => (await editorData(page))?.body).toBe(savedPublished.body);
+  expect((await editorData(page)).cover).toBe(savedPublished.metadata.cover);
   await expect(preview.locator('h1')).toHaveText(title);
   await expect(preview.locator('.preview-prose figcaption')).toHaveText(['Birinci açıklama', 'İkinci açıklama']);
   await expect.poll(() => preview.locator('img').evaluateAll(images => images.map(img => img.naturalWidth))).toEqual([640, 640, 640]);
