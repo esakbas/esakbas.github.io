@@ -35,10 +35,7 @@ window.CMS_MANUAL_INIT = true;
       focus() { this.control?.focus(); },
       render() { return window.h(native.control, { ...this.props, getAsset: mediaResolver(this.props.getAsset), ref: control => { this.control = control; } }); }
     });
-    // A saved article loads its private images asynchronously. Give the native
-    // Markdown preview a fresh resolver on each render so its memoized output
-    // cannot keep the temporary empty-image placeholder after media is ready.
-    const MarkdownPreview = props => window.h(native.preview, { ...props, getAsset: (value, field) => mediaAsset(props.getAsset, value, field) });
+    const MarkdownPreview = props => window.h(native.preview, { ...props, getAsset: mediaResolver(props.getAsset) });
     CMS.registerWidget('markdown', RawFirstMarkdown, MarkdownPreview, native.schema);
   }
   function registerImages(CMS) {
@@ -93,6 +90,10 @@ window.CMS_MANUAL_INIT = true;
         const { entry, getAsset, widgetFor } = this.props;
         const data = entry.get('data');
         const cover = data.get('cover');
+        const bodyWidget = widgetFor('body');
+        // Decap memoizes this outer widget on getAsset. A saved article's
+        // asynchronous media load must invalidate its initial placeholder.
+        const bodyPreview = bodyWidget ? window.h(bodyWidget.type, { ...bodyWidget.props, getAsset: (value, field) => mediaAsset(getAsset, value, field) }) : null;
         return window.h('article', { className: 'hindiba-preview' },
           window.h('div', { className: 'preview-brand', 'aria-hidden': true }, 'hindiba.'),
           window.h('p', { className: 'preview-eyebrow' }, `${categoryNames[data.get('category')] || data.get('category') || 'HATIRA DEFTERİNDEN'} · ÖNİZLEME`),
@@ -100,7 +101,7 @@ window.CMS_MANUAL_INIT = true;
           data.get('description') ? window.h('p', { className: 'preview-description' }, data.get('description')) : null,
           window.h('p', { className: 'preview-meta' }, `${data.get('author') || 'Eşref Akbaş'} · ${dateLabel(data.get('created_at'))}`),
           cover ? window.h('figure', { className: 'preview-cover' }, window.h('img', { src: mediaAsset(getAsset, cover) || '', alt: data.get('cover_alt') || '' })) : null,
-          window.h('div', { className: 'preview-prose' }, widgetFor('body')),
+          window.h('div', { className: 'preview-prose' }, bodyPreview),
           window.h('footer', { className: 'preview-end' }, 'Yavaşça oku, kendinden bir şey bul.')
         );
       }
